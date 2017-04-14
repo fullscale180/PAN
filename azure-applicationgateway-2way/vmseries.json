@@ -138,7 +138,7 @@
       "metadata": {
         "artifactsBaseUrl": "",
         "description": "URL to acquire other VM-Series for Azure templates"
-      },
+      }
     },
     "MgmtPublicIPAddressName": {
       "type": "string",
@@ -222,7 +222,7 @@
     }
   },
   "variables": {
-    "availabilitySetName": "[concat('firewallAvSet', substring(uniqueString(resourceGroup().id), 0, 4))]",
+    "availabilitySetName": "[concat('firewallAvSet-', substring(uniqueString(resourceGroup().id), 0, 4))]",
     "rgname": "[resourceGroup().id]",
     "imagePublisher": "paloaltonetworks",
     "imageOffer" : "vmseries1",
@@ -382,7 +382,7 @@
           },
           "BootstrapUriSizeGB": {
             "value": "[parameters('BootstrapUriSizeGB')]"
-          },
+          }
         }
       }
     }

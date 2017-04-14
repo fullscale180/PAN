@@ -141,7 +141,7 @@
        "metadata": {
           "description": "Azure VM size for backend VMs.  Not all sizes are available in all regions."
        },
-       "defaultValue": "Standard_D1"
+       "defaultValue": "Standard_D1_v2"
     },
     "firewallModel": {
        "type": "string",
@@ -176,13 +176,21 @@
        "metadata": {
           "description": "Azure VM size for VM-Series"
        },
-       "defaultValue": "Standard_D3"
+       "defaultValue": "Standard_D3_v2"
     },
     "MgmtPublicIPAddressName": {
       "type": "string",
       "metadata": {
         "description": "DNS Name prefix of public IP resource for Management interface of VM-Series firewall.  Name must be globally unique."
-      }
+      },
+       "defaultValue": "mgmtIP"
+    },
+    "MgmtPublicIPDnsName": {
+      "type": "string",
+      "metadata": {
+        "description": "DNS Name prefix of public IP resource for Management interface of VM-Series firewall.  Name must be globally unique."
+      },
+       "defaultValue": "mgmtDns"
     },
     "storageAccountName": {
       "type": "string",
@@ -260,8 +268,7 @@
     "vmseriesURL" : "[concat(variables('baseUrl'),'/vmseries.json')]"
   },
   "resources": [
-    {
-      "name": "SetupNSG",
+    {      "name": "SetupNSG",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2015-01-01",
       "properties": { 
@@ -284,10 +291,8 @@
             "value": "[parameters('virtualNetworkAddressPrefix')]"
           }
         }
-      }
-    },
-    {
-      "name": "SetupVNET",
+      }},
+    {      "name": "SetupVNET",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2015-01-01",
       "dependsOn": [
@@ -340,30 +345,29 @@
                "value": "[parameters('backendSubnetPrefix')]"
           }
         }
-      }
-    },
-     {
-      "name": "SettingUpStorageAccount",
-      "type": "Microsoft.Resources/deployments",
-      "apiVersion": "2015-01-01",
-      "properties": {
-        "mode": "Incremental",
-        "templateLink": {
-          "uri": "[variables('storageAccountSetupURL')]",
-          "contentVersion": "1.0.0.0"
-        },
-        "parameters": {
-          "location": {
-            "value": "[variables('location')]"
-          },
-          "storageAccountType": {
-            "value": "[parameters('storageAccountType')]"
-          },
-          "storageAccountName": {
-            "value": "[parameters('storageAccountName')]"
-          }
-        }
-      }
+      }},
+    {      
+		"name": "SetUpStorageAccount",
+		"type": "Microsoft.Resources/deployments",
+		"apiVersion": "2015-01-01",
+		"properties": {
+			"mode": "Incremental",
+			"templateLink": {
+				"uri": "[variables('storageAccountSetupURL')]",
+				"contentVersion": "1.0.0.0"
+			},
+			"parameters": {
+				"location": {
+					"value": "[variables('location')]"
+				},
+				"storageAccountType": {
+					"value": "[parameters('storageAccountType')]"
+				},
+				"storageAccountName": {
+					"value": "[parameters('storageAccountName')]"
+				}
+			}
+		}
      },
      {
       "name": "SetupVMSeries",
@@ -437,7 +441,7 @@
                "value": "[parameters('MgmtPublicIPAddressName')]"
           },
           "storageAccountName": {
-               "value": "[reference('SettingUpStorageAccount').outputs.sid.value]"
+               "value": "[reference('SetUpStorageAccount').outputs.sid.value]"
           },
           "storageAccountNewOrExisting": {
                "value": "[parameters('storageAccountNewOrExisting')]"
@@ -454,8 +458,7 @@
         }
        }
      },
-    {
-      "name": "SetupPublicLoadBalancer",
+    {      "name": "SetupPublicLoadBalancer",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2015-01-01",
       "dependsOn": [
@@ -487,8 +490,7 @@
         }
        }
      },
-    {
-      "name": "SetupInternalLoadBalancer",
+    {      "name": "SetupInternalLoadBalancer",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2015-01-01",
       "dependsOn": [
@@ -503,7 +505,7 @@
         },
         "parameters": {
           "storageAccountName": {
-               "value": "[reference('SettingUpStorageAccount').outputs.sid.value]"
+               "value": "[reference('SetUpStorageAccount').outputs.sid.value]"
           },
           "virtualNetworkName": {
                "value": "[reference('SetupVNET').outputs.vnetName.value]"
