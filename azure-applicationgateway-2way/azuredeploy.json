@@ -268,7 +268,7 @@
 		"firewallVmNameIn": "[concat(parameters('firewallVmName'), '-In')]",
 		"firewallVmNameOut": "[concat(parameters('firewallVmName'), '-Out')]",
 		"firewallVmCount": 2,
-		"baseUrl": "https://raw.githubusercontent.com/fullscale180/PAN/tree/master/azure-applicationgateway-2way",
+		"baseUrl": "https://raw.githubusercontent.com/fullscale180/PAN/master/azure-applicationgateway-2way",
 		// "baseUrl" : "https://raw.githubusercontent.com/PaloAltoNetworks/azure-applicationgateway/master/",
 		"nsgURL": "[concat(variables('baseUrl'),'/nsg-new.json')]",
 		"vnetURL": "[concat(variables('baseUrl'),'/vnet-', parameters('virtualNetworkNewOrExisting'),'.json')]",
