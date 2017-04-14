@@ -2,26 +2,47 @@
   "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
+	"appGatewayName" :{
+		"value": "appGateway"
+	},
+	"appGatewayDnsName" : {
+		"value":"appGatewayDns"
+	},
+    "appGatewaySubnetName": {
+      "value": "Gateway"
+    },
+    "backendSubnetName": {
+      "value": "backendSubnet"
+    },
+    "internalLoadBalancerName": {
+      "value": "privateLB"
+    },
     "networkSecurityGroupInboundSrcIP": {
       "value": "0.0.0.0/0"
     },
+    "virtualNetworkNewOrExisting": {
+      "value": "new"
+    },
+	"virtualNetworkName" : {
+		"value": "vnet-pan"
+	},
     "virtualNetworkAddressPrefix": {
       "value": "192.168.0.0/16"
     },
-    "virtualNetworkNewOrExisting": {
-      "value": "existing"
-    },
+	"MgmtPublicIPAddressName" : {
+		"value": "mgmtip"
+	},
     "username": {
-      "value": "DEFAULT-USER"
+      "value": "dennisan"
     },
     "password": {
-      "value": "DEFAULT-PASSWORD"
-    },
-    "storageAccountName": {
-      "value": "DEFAULT-STORAGE"
+      "value": "P@ssword1234"
     },
     "storageAccountNewOrExisting": {
-      "value": "existing"
+      "value": "new"
+    },
+    "storageAccountName": {
+      "value": "dapanstorage"
     }
   }
 }
