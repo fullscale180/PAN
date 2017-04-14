@@ -12,10 +12,7 @@
       "value": "Gateway"
     },
     "backendSubnetName": {
-      "value": "backendSubnet"
-    },
-    "internalLoadBalancerName": {
-      "value": "privateLB"
+      "value": "Backend"
     },
     "networkSecurityGroupInboundSrcIP": {
       "value": "0.0.0.0/0"

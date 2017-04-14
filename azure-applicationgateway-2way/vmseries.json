@@ -237,13 +237,13 @@
 
   },
   "resources": [
-    {
+    {	// availabilitySets
       "apiVersion": "2015-05-01-preview",
       "type": "Microsoft.Compute/availabilitySets",
       "name": "[variables('availabilitySetName')]",
       "location": "[resourceGroup().location]"
     },
-    {
+    {	// SettingUpPublicIPs[x]
       "name": "[concat('SettingUpPublicIPs', copyindex())]",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2015-01-01",
@@ -273,7 +273,7 @@
         }
       }
     },
-    {
+    {	// SetupNetworkInterfaces[x]
       "name": "[concat('SetupNetworkInterfaces', copyindex())]",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2015-01-01",
@@ -321,7 +321,7 @@
         }
       }
     },
-    {
+    {	// VMSeries-Firewall-VM
       "name": "[concat('VMSeries-Firewall-VM', copyindex())]",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2015-01-01",

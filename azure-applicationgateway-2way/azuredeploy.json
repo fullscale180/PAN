@@ -85,7 +85,7 @@
 		},
 		"appGatewayName": {
 			"type": "string",
-			"defaultValue": "myAppGw",
+			"defaultValue": "applicationGateway",
 			"metadata": {
 				"description": "App Gateway name - used to identify resource in Azure portal"
 			}
@@ -110,9 +110,16 @@
 				"description": "CIDR for App Gateway"
 			}
 		},
-		"internalLoadBalancerName": {
+		"inboundLoadBalancerName": {
 			"type": "string",
-			"defaultValue": "myPrivateLB",
+			"defaultValue": "inboundLB",
+			"metadata": {
+				"description": "Internal Load Balancer name - used to identify resource in Azure portal"
+			}
+		},
+		"outboundLoadBalancerName": {
+			"type": "string",
+			"defaultValue": "inboundLB",
 			"metadata": {
 				"description": "Internal Load Balancer name - used to identify resource in Azure portal"
 			}
@@ -258,6 +265,8 @@
 		"location": "[resourceGroup().location]",
 		"rgname": "[resourceGroup().name]",
 		"LoadBalancerType": "layer-7",
+		"firewallVmNameIn": "[concat(parameters('firewallVmName'), '-In')]",
+		"firewallVmNameOut": "[concat(parameters('firewallVmName'), '-Out')]",
 		"firewallVmCount": 2,
 		"baseUrl": "https://raw.githubusercontent.com/fullscale180/PAN/tree/master/azure-applicationgateway-2way",
 		// "baseUrl" : "https://raw.githubusercontent.com/PaloAltoNetworks/azure-applicationgateway/master/",
@@ -269,7 +278,7 @@
 		"vmseriesURL": "[concat(variables('baseUrl'),'/vmseries.json')]"
 	},
 	"resources": [
-		{
+		{	// Setup NSG
 			"name": "SetupNSG",
 			"type": "Microsoft.Resources/deployments",
 			"apiVersion": "2015-01-01",
@@ -295,7 +304,7 @@
 				}
 			}
 		},
-		{
+		{	// SetupVNET
 			"name": "SetupVNET",
 			"type": "Microsoft.Resources/deployments",
 			"apiVersion": "2015-01-01",
@@ -351,7 +360,7 @@
 				}
 			}
 		},
-		{
+		{	// SetUpStorageAccount
 			"name": "SetUpStorageAccount",
 			"type": "Microsoft.Resources/deployments",
 			"apiVersion": "2015-01-01",
@@ -374,8 +383,8 @@
 				}
 			}
 		},
-		{
-			"name": "SetupVMSeries",
+		{	// SetupInboundVMSeries
+			"name": "SetupInboundVMSeries",
 			"type": "Microsoft.Resources/deployments",
 			"apiVersion": "2015-01-01",
 			"dependsOn": [
@@ -395,7 +404,7 @@
 						"value": "[variables('firewallVmCount')]"
 					},
 					"vmName": {
-						"value": "[parameters('firewallVmName')]"
+						"value": "[variables('firewallVmNameIn')]"
 					},
 					"imageSku": {
 						"value": "[parameters('firewallModel')]"
@@ -463,13 +472,102 @@
 				}
 			}
 		},
-		{
+		{	// SetupOutboundVMSeries
+			"name": "SetupOutboundVMSeries",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2015-01-01",
+			"dependsOn": [
+				"Microsoft.Resources/deployments/SetupVNET"
+			],
+			"properties": {
+				"mode": "Incremental",
+				"templateLink": {
+					"uri": "[variables('vmseriesURL')]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"lbName": {
+						"value": "[parameters('appGatewayName')]"
+					},
+					"vmCount": {
+						"value": "[variables('firewallVmCount')]"
+					},
+					"vmName": {
+						"value": "[variables('firewallVmNameOut')]"
+					},
+					"imageSku": {
+						"value": "[parameters('firewallModel')]"
+					},
+					"vmSize": {
+						"value": "[parameters('firewallVmSize')]"
+					},
+					"virtualNetworkName": {
+						"value": "[reference('SetupVNET').outputs.vnetName.value]"
+					},
+					"virtualNetworkExistingRGName": {
+						"value": "[variables('rgname')]"
+					},
+					"subnet0Name": {
+						"value": "[parameters('MgmtSubnetName')]"
+					},
+					"subnet1Name": {
+						"value": "[parameters('untrustedSubnetName')]"
+					},
+					"subnet2Name": {
+						"value": "[parameters('trustedSubnetName')]"
+					},
+					"subnetLBName": {
+						"value": "[parameters('appGatewaySubnetName')]"
+					},
+					"subnet0Prefix": {
+						"value": "[parameters('mgmtSubnetPrefix')]"
+					},
+					"subnet1Prefix": {
+						"value": "[parameters('untrustedSubnetPrefix')]"
+					},
+					"subnet2Prefix": {
+						"value": "[parameters('trustedSubnetPrefix')]"
+					},
+					"subnetLBPrefix": {
+						"value": "[parameters('appGatewaySubnetPrefix')]"
+					},
+					"adminUsername": {
+						"value": "[parameters('username')]"
+					},
+					"adminPassword": {
+						"value": "[parameters('password')]"
+					},
+					"baseUrl": {
+						"value": "[variables('baseUrl')]"
+					},
+					"MgmtPublicIPAddressName": {
+						"value": "[parameters('MgmtPublicIPAddressName')]"
+					},
+					"storageAccountName": {
+						"value": "[reference('SetUpStorageAccount').outputs.sid.value]"
+					},
+					"storageAccountNewOrExisting": {
+						"value": "[parameters('storageAccountNewOrExisting')]"
+					},
+					"storageAccountType": {
+						"value": "[parameters('storageAccountType')]"
+					},
+					"authenticationType": {
+						"value": "[parameters('authenticationType')]"
+					},
+					"sshKey": {
+						"value": "[parameters('sshPublicKey')]"
+					}
+				}
+			}
+		},
+		{	// SetupPublicLoadBalancer
 			"name": "SetupPublicLoadBalancer",
 			"type": "Microsoft.Resources/deployments",
 			"apiVersion": "2015-01-01",
 			"dependsOn": [
 				"Microsoft.Resources/deployments/SetupVNET",
-				"Microsoft.Resources/deployments/SetupVMSeries"
+				"Microsoft.Resources/deployments/SetupInboundVMSeries"
 			],
 			"properties": {
 				"mode": "Incremental",
@@ -491,18 +589,18 @@
 						"value": "[parameters('appGatewaySubnetName')]"
 					},
 					"backendIPAddresses": {
-						"value": "[reference('SetupVMSeries').outputs.UntrustPrivateIPAddresses.value]"
+						"value": "[reference('SetupInboundVMSeries').outputs.UntrustPrivateIPAddresses.value]"
 					}
 				}
 			}
 		},
-		{
+		{	// SetupInternalLoadBalancer
 			"name": "SetupInternalLoadBalancer",
 			"type": "Microsoft.Resources/deployments",
 			"apiVersion": "2015-01-01",
 			"dependsOn": [
 				"Microsoft.Resources/deployments/SetupVNET",
-				"Microsoft.Resources/deployments/SetupVMSeries"
+				"Microsoft.Resources/deployments/SetupInboundVMSeries"
 			],
 			"properties": {
 				"mode": "Incremental",
@@ -520,8 +618,11 @@
 					"virtualNetworkExistingRGName": {
 						"value": "[variables('rgname')]"
 					},
-					"lbName": {
-						"value": "[parameters('internalLoadBalancerName')]"
+					"inboundLbName": {
+						"value": "[parameters('inboundLoadBalancerName')]"
+					},
+					"outboundLbName": {
+						"value": "[parameters('outboundLoadBalancerName')]"
 					},
 					"adminUsername": {
 						"value": "[parameters('username')]"
