@@ -267,6 +267,8 @@
 		"LoadBalancerType": "layer-7",
 		"firewallVmNameIn": "[concat(parameters('firewallVmName'), '-In')]",
 		"firewallVmNameOut": "[concat(parameters('firewallVmName'), '-Out')]",
+		"mgmtPublicIPAddressNameIn": "[concat(parameters('MgmtPublicIPAddressName'), '-In')]",
+		"mgmtPublicIPAddressNameOut": "[concat(parameters('MgmtPublicIPAddressName'), '-Out')]",
 		"firewallVmCount": 2,
 		"baseUrl": "https://raw.githubusercontent.com/fullscale180/PAN/master/azure-applicationgateway-2way",
 		// "baseUrl" : "https://raw.githubusercontent.com/PaloAltoNetworks/azure-applicationgateway/master/",
@@ -452,7 +454,7 @@
 						"value": "[variables('baseUrl')]"
 					},
 					"MgmtPublicIPAddressName": {
-						"value": "[parameters('MgmtPublicIPAddressName')]"
+						"value": "[variables('mgmtPublicIPAddressNameIn')]"
 					},
 					"storageAccountName": {
 						"value": "[reference('SetUpStorageAccount').outputs.sid.value]"
@@ -541,7 +543,7 @@
 						"value": "[variables('baseUrl')]"
 					},
 					"MgmtPublicIPAddressName": {
-						"value": "[parameters('MgmtPublicIPAddressName')]"
+						"value": "[variables('mgmtPublicIPAddressNameOut')]"
 					},
 					"storageAccountName": {
 						"value": "[reference('SetUpStorageAccount').outputs.sid.value]"
