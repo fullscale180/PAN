@@ -16,7 +16,7 @@
     }
   },
   "variables": {
-    "mgmt": "[concat('mgmtIP-', parameters('MgmtPublicIPAddressName'))]"
+    "mgmt": "[parameters('MgmtPublicIPAddressName'))]"
   },
   "resources": [
     {
