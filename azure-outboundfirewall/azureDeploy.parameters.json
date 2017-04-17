@@ -8,7 +8,7 @@
     "password": {
       "value": "P@ssword1234"
     },
-    "storageAccountName": {
+    "storageName": {
       "value": "storage"
     }
   }
