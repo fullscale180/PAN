@@ -16,7 +16,7 @@
     }
   },
   "variables": {
-	  "dnsName": "[toLower(parameters('publicIPAddressName')]"
+	  "dnsName": "[toLower(parameters('publicIPAddressName'))]"
   },
   "resources": [
     {
