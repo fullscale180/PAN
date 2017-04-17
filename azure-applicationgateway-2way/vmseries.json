@@ -321,7 +321,7 @@
           "virtualNetworkExistingRGName": {
             "value": "[parameters('virtualNetworkExistingRGName')]"
           },
-          "mgmtPublicIPName": {
+          "publicIPAddressName": {
             "value": "[concat(parameters('mgmtPublicIPName'), copyindex())]"
           },
           "baseUrl": {
