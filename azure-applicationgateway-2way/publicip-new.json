@@ -27,7 +27,7 @@
       "properties": {
         "publicIPAllocationMethod": "[parameters('publicIPAddressType')]",
         "dnsSettings": {
-          "domainNameLabel": "[variables(dnsName)]"
+          "domainNameLabel": "[variables('dnsName')]" 
         }
       }
     }
