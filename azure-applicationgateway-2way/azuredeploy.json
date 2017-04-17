@@ -276,6 +276,7 @@
 		"vnetURL": "[concat(variables('baseUrl'),'/vnet-', parameters('virtualNetworkNewOrExisting'),'.json')]",
 		"publicLBURL": "[concat(variables('baseUrl'),'/public-lb-', variables('LoadBalancerType'), '.json')]",
 		"privateLBURL": "[concat(variables('baseUrl'),'/private-lb-', parameters('authenticationType'),'.json')]",
+		"storageAccountName": "[toLower(concat(resourceGroup().name, parameters('storageAccountName')))]",
 		"storageAccountSetupURL": "[concat(variables('baseUrl'),'/storageAccount-',parameters('storageAccountNewOrExisting'),'.json')]",
 		"vmseriesURL": "[concat(variables('baseUrl'),'/vmseries.json')]"
 	},
@@ -380,7 +381,7 @@
 						"value": "[parameters('storageAccountType')]"
 					},
 					"storageAccountName": {
-						"value": "[parameters('storageAccountName')]"
+						"value": "[variables('storageAccountName')]"
 					}
 				}
 			}

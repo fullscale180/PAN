@@ -39,7 +39,7 @@
       "value": "new"
     },
     "storageAccountName": {
-      "value": "dapanstorage"
+      "value": "storage"
     }
   }
 }
