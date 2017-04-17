@@ -265,10 +265,8 @@
 		"location": "[resourceGroup().location]",
 		"rgname": "[resourceGroup().name]",
 		"LoadBalancerType": "layer-7",
-		"firewallVmNameIn": "[concat(parameters('firewallVmName'), '-In')]",
-		"firewallVmNameOut": "[concat(parameters('firewallVmName'), '-Out')]",
-		"mgmtPublicIPAddressNameIn": "[concat(parameters('MgmtPublicIPAddressName'), '-in')]",
-		"mgmtPublicIPAddressNameOut": "[concat(parameters('MgmtPublicIPAddressName'), '-out')]",
+		"firewallVmName": "[concat(parameters('firewallVmName')]",
+		"mgmtPublicIPAddressName": "[concat(parameters('MgmtPublicIPAddressName')]",
 		"firewallVmCount": 2,
 		"baseUrl": "https://raw.githubusercontent.com/fullscale180/PAN/master/azure-applicationgateway-2way",
 		// "baseUrl" : "https://raw.githubusercontent.com/PaloAltoNetworks/azure-applicationgateway/master/",
@@ -407,7 +405,7 @@
 						"value": "[variables('firewallVmCount')]"
 					},
 					"vmName": {
-						"value": "[variables('firewallVmNameIn')]"
+						"value": "[variables('firewallVmName')]"
 					},
 					"imageSku": {
 						"value": "[parameters('firewallModel')]"
@@ -455,7 +453,7 @@
 						"value": "[variables('baseUrl')]"
 					},
 					"MgmtPublicIPAddressName": {
-						"value": "[variables('mgmtPublicIPAddressNameIn')]"
+						"value": "[variables('mgmtPublicIPAddressName')]"
 					},
 					"storageAccountName": {
 						"value": "[reference('SetUpStorageAccount').outputs.sid.value]"
@@ -562,97 +560,6 @@
 				}
 			}
 		},
-		{	// SetupOutboundVMSeries
-			"name": "SetupOutboundVMSeries",
-			"type": "Microsoft.Resources/deployments",
-			"apiVersion": "2015-01-01",
-			"dependsOn": [
-				"Microsoft.Resources/deployments/SetupVNET",
-				"Microsoft.Resources/deployments/SetupInboundVMSeries",
-				"Microsoft.Resources/deployments/SetupInternalLoadBalancer"
-			],
-			"properties": {
-				"mode": "Incremental",
-				"templateLink": {
-					"uri": "[variables('vmseriesURL')]",
-					"contentVersion": "1.0.0.0"
-				},
-				"parameters": {
-					"lbName": {
-						"value": "[parameters('appGatewayName')]"
-					},
-					"vmCount": {
-						"value": "[variables('firewallVmCount')]"
-					},
-					"vmName": {
-						"value": "[variables('firewallVmNameOut')]"
-					},
-					"imageSku": {
-						"value": "[parameters('firewallModel')]"
-					},
-					"vmSize": {
-						"value": "[parameters('firewallVmSize')]"
-					},
-					"virtualNetworkName": {
-						"value": "[reference('SetupVNET').outputs.vnetName.value]"
-					},
-					"virtualNetworkExistingRGName": {
-						"value": "[variables('rgname')]"
-					},
-					"subnet0Name": {
-						"value": "[parameters('MgmtSubnetName')]"
-					},
-					"subnet1Name": {
-						"value": "[parameters('untrustedSubnetName')]"
-					},
-					"subnet2Name": {
-						"value": "[parameters('trustedSubnetName')]"
-					},
-					"subnetLBName": {
-						"value": "[parameters('appGatewaySubnetName')]"
-					},
-					"subnet0Prefix": {
-						"value": "[parameters('mgmtSubnetPrefix')]"
-					},
-					"subnet1Prefix": {
-						"value": "[parameters('untrustedSubnetPrefix')]"
-					},
-					"subnet2Prefix": {
-						"value": "[parameters('trustedSubnetPrefix')]"
-					},
-					"subnetLBPrefix": {
-						"value": "[parameters('appGatewaySubnetPrefix')]"
-					},
-					"adminUsername": {
-						"value": "[parameters('username')]"
-					},
-					"adminPassword": {
-						"value": "[parameters('password')]"
-					},
-					"baseUrl": {
-						"value": "[variables('baseUrl')]"
-					},
-					"MgmtPublicIPAddressName": {
-						"value": "[variables('mgmtPublicIPAddressNameOut')]"
-					},
-					"storageAccountName": {
-						"value": "[reference('SetUpStorageAccount').outputs.sid.value]"
-					},
-					"storageAccountNewOrExisting": {
-						"value": "[parameters('storageAccountNewOrExisting')]"
-					},
-					"storageAccountType": {
-						"value": "[parameters('storageAccountType')]"
-					},
-					"authenticationType": {
-						"value": "[parameters('authenticationType')]"
-					},
-					"sshKey": {
-						"value": "[parameters('sshPublicKey')]"
-					}
-				}
-			}
-		}
 	],
 	"outputs": {}
 }
