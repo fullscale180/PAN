@@ -270,7 +270,7 @@
           "location": {
             "value": "[variables('location')]"
           },
-          "mgmtPublicIPName": {
+          "publicIPAddressName": {
             "value": "[concat(variables('inMgmtPublicIPName'), copyindex())]"
           },
           "publicIPAddressType": {
