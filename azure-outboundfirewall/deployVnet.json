@@ -8,7 +8,7 @@
 		},
 		"virtualNetworkName": {
 			"type": "string",
-			"defaultValue": "vnet-FW",
+			"defaultValue": "vnet",
 			"metadata": {
 				"description": "VNET name"
 			}

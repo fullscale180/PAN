@@ -40,7 +40,7 @@
 
 		"virtualNetworkName": {
 			"type": "string",
-			"defaultValue": "vnet-PAN",
+			"defaultValue": "vnet",
 			"metadata": {
 				"description": "Virtual Network Name"
 			}
@@ -231,6 +231,31 @@
 		//"vmseriesURL": "[concat(variables('baseUrl'),'/vmseries.json')]"
 	},
 	"resources": [
+
+		{	// Deploy Storage
+			"name": "deployStorage",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2015-01-01",
+			"properties": {
+				"mode": "Incremental",
+				"templateLink": {
+					"uri": "[variables('deployStorageURL')]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"location": {
+						"value": "[variables('location')]"
+					},
+					"storageAccountType": {
+						"value": "[parameters('storageType')]"
+					},
+					"storageAccountName": {
+						"value": "[variables('storageName')]"
+					}
+				}
+			}
+		},
+
 		{	// Deploy NSG
 			"name": "deployNsg",
 			"type": "Microsoft.Resources/deployments",
@@ -258,35 +283,13 @@
 			}
 		},
 
-		{	// Deploy Storage
-			"name": "deployStorage",
-			"type": "Microsoft.Resources/deployments",
-			"apiVersion": "2015-01-01",
-			"properties": {
-				"mode": "Incremental",
-				"templateLink": {
-					"uri": "[variables('deployStorageURL')]",
-					"contentVersion": "1.0.0.0"
-				},
-				"parameters": {
-					"location": {
-						"value": "[variables('location')]"
-					},
-					"storageAccountType": {
-						"value": "[parameters('storageType')]"
-					},
-					"storageAccountName": {
-						"value": "[variables('storageName')]"
-					}
-				}
-			}
-		},
-
 		{	// Deploy VNet
-			"name": "deployVNET",
+			"name": "deployVnet",
 			"type": "Microsoft.Resources/deployments",
 			"apiVersion": "2015-01-01",
-			"dependsOn": [],
+			"dependsOn": [
+				"Microsoft.Resources/deployments/SetupNsg"
+			],
 			"properties": {
 				"mode": "Incremental",
 				"templateLink": {
@@ -313,7 +316,7 @@
 						"value": "[parameters('trustedSubnetName')]"
 					},
 					"subnetLBName": {
-						"value": "[parameters('appGatewaySubnetName')]"
+						"value": "[parameters('gatewaySubnetName')]"
 					},
 					"subnetWWWName": {
 						"value": "[parameters('backendSubnetName')]"
@@ -328,7 +331,7 @@
 						"value": "[parameters('trustedSubnetPrefix')]"
 					},
 					"subnetLBPrefix": {
-						"value": "[parameters('appGatewaySubnetPrefix')]"
+						"value": "[parameters('gatewaySubnetPrefix')]"
 					},
 					"subnetWWWPrefix": {
 						"value": "[parameters('backendSubnetPrefix')]"
@@ -336,6 +339,7 @@
 				}
 			}
 		}
+
 	],
 	"outputs": {}
 }
