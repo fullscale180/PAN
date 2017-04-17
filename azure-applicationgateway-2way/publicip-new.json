@@ -16,13 +16,12 @@
     }
   },
   "variables": {
-    "mgmt": "[parameters('MgmtPublicIPAddressName'))]"
   },
   "resources": [
     {
       "apiVersion": "2015-06-15",
       "type": "Microsoft.Network/publicIPAddresses",
-      "name": "[variables('mgmt')]",
+      "name": "[parameters('MgmtPublicIPAddressName')]",
       "location": "[parameters('location')]",
       "properties": {
         "publicIPAllocationMethod": "[parameters('publicIPAddressType')]",
@@ -34,11 +33,11 @@
   ],
   "outputs": {
     "publicIpId": {
-      "value": "[resourceId(concat('Microsoft.Network','/','publicIPAddresses'),variables('mgmt'))]",
+      "value": "[resourceId(concat('Microsoft.Network','/','publicIPAddresses'),parameters('MgmtPublicIPAddressName'))]",
       "type": "string"
     },
     "fqdn": {
-      "value": "[reference(resourceId('Microsoft.Network/publicIPAddresses',variables('mgmt')),providers('Microsoft.Network', 'publicIPAddresses').apiVersions[0]).dnsSettings.fqdn]",
+      "value": "[reference(resourceId('Microsoft.Network/publicIPAddresses',parameters('MgmtPublicIPAddressName')),providers('Microsoft.Network', 'publicIPAddresses').apiVersions[0]).dnsSettings.fqdn]",
       "type": "string"
     }
   }
