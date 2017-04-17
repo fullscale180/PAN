@@ -226,10 +226,9 @@
 		"rgname": "[resourceGroup().name]",
 		"storageName": "[toLower(concat(parameters('storageName')))]",
 
-		"nsgURL": "[concat(variables('baseUrl'),'/nsg-new.json')]",
-		"publicLBURL": "[concat(variables('baseUrl'),'/public-lb-', variables('LoadBalancerType'), '.json')]",
-		"privateLBURL": "[concat(variables('baseUrl'),'/private-lb-', parameters('authenticationType'),'.json')]",
-		"vmseriesURL": "[concat(variables('baseUrl'),'/vmseries.json')]"
+		//"publicLBURL": "[concat(variables('baseUrl'),'/public-lb-', variables('LoadBalancerType'), '.json')]",
+		//"privateLBURL": "[concat(variables('baseUrl'),'/private-lb-', parameters('authenticationType'),'.json')]",
+		//"vmseriesURL": "[concat(variables('baseUrl'),'/vmseries.json')]"
 	},
 	"resources": [
 		{	// Deploy NSG
