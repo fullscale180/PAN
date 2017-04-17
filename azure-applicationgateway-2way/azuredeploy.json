@@ -384,8 +384,8 @@
 				}
 			}
 		},
-		{	// SetupInboundVMSeries
-			"name": "SetupInboundVMSeries",
+		{	// SetupVMSeriesFirewall
+			"name": "SetupVMSeriesFirewall",
 			"type": "Microsoft.Resources/deployments",
 			"apiVersion": "2015-01-01",
 			"dependsOn": [
@@ -479,7 +479,7 @@
 			"apiVersion": "2015-01-01",
 			"dependsOn": [
 				"Microsoft.Resources/deployments/SetupVNET",
-				"Microsoft.Resources/deployments/SetupInboundVMSeries"
+				"Microsoft.Resources/deployments/SetupVMSeriesFirewall"
 			],
 			"properties": {
 				"mode": "Incremental",
@@ -501,7 +501,7 @@
 						"value": "[parameters('appGatewaySubnetName')]"
 					},
 					"backendIPAddresses": {
-						"value": "[reference('SetupInboundVMSeries').outputs.UntrustPrivateIPAddresses.value]"
+						"value": "[reference('SetupVMSeriesFirewall').outputs.UntrustPrivateIPAddresses.value]"
 					}
 				}
 			}
@@ -512,7 +512,7 @@
 			"apiVersion": "2015-01-01",
 			"dependsOn": [
 				"Microsoft.Resources/deployments/SetupVNET",
-				"Microsoft.Resources/deployments/SetupInboundVMSeries"
+				"Microsoft.Resources/deployments/SetupVMSeriesFirewall"
 			],
 			"properties": {
 				"mode": "Incremental",

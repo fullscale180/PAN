@@ -222,7 +222,8 @@
     }
   },
   "variables": {
-    "availabilitySetName": "[concat('firewallAvSet-', substring(uniqueString(resourceGroup().id), 0, 4))]",
+    "inFirewallAvSetName": "[concat('inFirewallAvSet-', substring(uniqueString(resourceGroup().id), 0, 4))]",
+    "outFirewallAvSetName": "[concat('outFirewallAvSet-', substring(uniqueString(resourceGroup().id), 0, 4))]",
     "rgname": "[resourceGroup().id]",
     "imagePublisher": "paloaltonetworks",
     "imageOffer" : "vmseries1",
@@ -240,7 +241,13 @@
     {	// availabilitySets
       "apiVersion": "2015-05-01-preview",
       "type": "Microsoft.Compute/availabilitySets",
-      "name": "[variables('availabilitySetName')]",
+      "name": "[variables('inFirewallAvSetName')]",
+      "location": "[resourceGroup().location]"
+    },
+    {	// availabilitySets
+      "apiVersion": "2015-05-01-preview",
+      "type": "Microsoft.Compute/availabilitySets",
+      "name": "[variables('outFirewallAvSetName')]",
       "location": "[resourceGroup().location]"
     },
     {	// SettingUpPublicIPs[x]
@@ -328,7 +335,7 @@
       "dependsOn": [
         "SettingUpPublicIPsLoop",
         "NetworkInterfaceLoop",
-        "[concat('Microsoft.Compute/availabilitySets/', variables('availabilitySetName'))]"
+        "[concat('Microsoft.Compute/availabilitySets/', variables('inFirewallAvSetName'))]"
       ],
       "copy": {
           "name": "VirtualMachineLoop",
@@ -347,8 +354,8 @@
           "vmName": {
             "value": "[concat(parameters('vmName'), copyindex())]"
           },
-          "availabilitySetName": {
-            "value": "[variables('availabilitySetName')]"
+          "inFirewallAvSetName": {
+            "value": "[variables('inFirewallAvSetName')]"
           },
           "imageSku": {
             "value": "[parameters('imageSku')]"
