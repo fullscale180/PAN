@@ -140,7 +140,7 @@
         "description": "URL to acquire other VM-Series for Azure templates"
       }
     },
-    "MgmtPublicIPAddressName": {
+    "mgmtPublicIPName": {
       "type": "string",
       "defaultValue": "vm-servies-pib-mgmt",
       "metadata": {
@@ -224,6 +224,8 @@
   "variables": {
     "inFirewallAvSetName": "[concat('inFirewallAvSet-', substring(uniqueString(resourceGroup().id), 0, 4))]",
     "outFirewallAvSetName": "[concat('outFirewallAvSet-', substring(uniqueString(resourceGroup().id), 0, 4))]",
+	"inMgmtPublicIPName" : "inMgmtPublicIP-",
+	"outMgmtPublicIPName": "outMgmtPublic-",
     "rgname": "[resourceGroup().id]",
     "imagePublisher": "paloaltonetworks",
     "imageOffer" : "vmseries1",
@@ -231,7 +233,7 @@
     "nicName": "[parameters('vmName')]",
     "publicIPAddressType": "Dynamic",
     "nsgSetupURL" : "[concat(parameters('baseUrl'),'/nsg-new.json')]",
-    "SettingUpPublicIPUrl": "[concat(parameters('baseUrl'),'/publicip-new.json')]",
+    "setupPublicIPUrl": "[concat(parameters('baseUrl'),'/publicip-new.json')]",
     "setupNICsURL": "[concat(parameters('baseUrl'),'/setupNICS-new.json')]",
     "vmTemplateUrl": "[concat(parameters('baseUrl'), '/virtual-machine-', parameters('authenticationType'),'-bs-', parameters('Bootstrap'), '.json')]",
     "location": "[resourceGroup().location]"
@@ -250,26 +252,26 @@
       "name": "[variables('outFirewallAvSetName')]",
       "location": "[resourceGroup().location]"
     },
-    {	// SettingUpPublicIPs[x]
-      "name": "[concat('SettingUpPublicIPs', copyindex())]",
+    {	// SetupPublicIPs[x]
+      "name": "[concat('SetupPublicIPs', copyindex())]",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2015-01-01",
       "copy": {
-          "name": "SettingUpPublicIPsLoop",
+          "name": "SetupPublicIPsLoop",
           "count": "[parameters('vmCount')]"
       },
       "properties": {
         "mode": "Incremental",
         "templateLink": {
-          "uri": "[variables('SettingUpPublicIPUrl')]",
+          "uri": "[variables('setupPublicIPUrl')]",
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
           "location": {
             "value": "[variables('location')]"
           },
-          "MgmtPublicIPAddressName": {
-            "value": "[concat(parameters('MgmtPublicIPAddressName'),copyindex())]"
+          "mgmtPublicIPName": {
+            "value": "[concat(variables('inMgmtPublicIPName'), copyindex())]"
           },
           "publicIPAddressType": {
             "value": "[variables('publicIPAddressType')]"
@@ -285,7 +287,7 @@
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2015-01-01",
       "dependsOn": [
-        "SettingUpPublicIPsLoop"
+        "SetupPublicIPsLoop"
       ],
       "copy": {
           "name": "NetworkInterfaceLoop",
@@ -319,8 +321,8 @@
           "virtualNetworkExistingRGName": {
             "value": "[parameters('virtualNetworkExistingRGName')]"
           },
-          "MgmtPublicIPAddressName": {
-            "value": "[concat(parameters('MgmtPublicIPAddressName'), copyindex())]"
+          "mgmtPublicIPName": {
+            "value": "[concat(parameters('mgmtPublicIPName'), copyindex())]"
           },
           "baseUrl": {
             "value": "[parameters('baseUrl')]"
@@ -333,7 +335,7 @@
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2015-01-01",
       "dependsOn": [
-        "SettingUpPublicIPsLoop",
+        "SetupPublicIPsLoop",
         "NetworkInterfaceLoop",
         "[concat('Microsoft.Compute/availabilitySets/', variables('inFirewallAvSetName'))]"
       ],
