@@ -119,7 +119,7 @@
 		},
 		"outboundLoadBalancerName": {
 			"type": "string",
-			"defaultValue": "inboundLB",
+			"defaultValue": "outboundLB",
 			"metadata": {
 				"description": "Internal Load Balancer name - used to identify resource in Azure portal"
 			}
