@@ -24,7 +24,7 @@ Get-AzureRmSubscription -SubscriptionName "Visual Studio Enterprise" | Select-Az
 #-----------------------------------------------------
 # Create a new deployment
 #-----------------------------------------------------
-set-location 'D:\All Projects\FS180 Clients\PAN\azure-applicationgateway-2way'
+cd 'D:\All Projects\FS180 Clients\PAN\azure-applicationgateway-2way'
 
 $deployName = "AzureDeploy"
 $location = "westus2"
