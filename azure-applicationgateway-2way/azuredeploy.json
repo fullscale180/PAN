@@ -266,7 +266,7 @@
 		"rgname": "[resourceGroup().name]",
 		"LoadBalancerType": "layer-7",
 		"firewallVmName": "[concat(parameters('firewallVmName')]",
-		"mgmtPublicIPAddressName": "[concat(parameters('MgmtPublicIPAddressName')]",
+		"mgmtPublicIPAddressName": "[concat(parameters('MgmtPublicIPAddressName'))]",
 		"firewallVmCount": 2,
 		"baseUrl": "https://raw.githubusercontent.com/fullscale180/PAN/master/azure-applicationgateway-2way",
 		// "baseUrl" : "https://raw.githubusercontent.com/PaloAltoNetworks/azure-applicationgateway/master/",
