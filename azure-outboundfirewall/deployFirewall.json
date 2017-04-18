@@ -181,7 +181,7 @@
 		},
 		"mgmtPublicIPDnsName": {
 			"type": "string",
-			"defaultValue": "pan-mgmt-",
+			"defaultValue": "panmgmt",
 			"metadata": {
 				"description": "DNS Name for mgmt interface"
 			}
