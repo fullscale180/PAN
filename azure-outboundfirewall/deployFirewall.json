@@ -219,7 +219,7 @@
 			"properties": {
 				"publicIPAllocationMethod": "Dynamic",
 				"dnsSettings": {
-					"domainNameLabel": "[parameters('mgmtPublicIPDnsName')]"
+					"domainNameLabel":  "[concat(parameters('mgmtPublicIPDnsName'), copyindex())]"
 				}
 			}
 		},
