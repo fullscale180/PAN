@@ -187,12 +187,6 @@
 			}
 		},
 
-		"lbName": {
-			"type": "string",
-			"metadata": {
-				"description": "Public Load Balancer name"
-			}
-		},
 		"baseUrl": {
 			"type": "string",
 			"metadata": {
@@ -200,7 +194,6 @@
 				"description": "URL to acquire other VM-Series for Azure templates"
 			}
 		},
-
 		"storageAccountNewOrExisting": {
 			"type": "string",
 			"defaultValue": "new",

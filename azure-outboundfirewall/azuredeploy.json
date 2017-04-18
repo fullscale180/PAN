@@ -175,7 +175,7 @@
 			"metadata": {
 				"description": "Azure VM size for VM-Series"
 			},
-			"defaultValue": "Standard_D3_v2"
+			"defaultValue": "Standard_D3"
 		},
 		"mgmtPublicIPName": {
 			"type": "string",
@@ -388,7 +388,7 @@
 					},
 					"vmSize": {
 						"value": "[parameters('backendVmSize')]"
-					},
+					}
 				}
 			}
 		},
@@ -408,19 +408,19 @@
 					"contentVersion": "1.0.0.0"
 				},
 				"parameters": {
+					"location": {
+						"value": "[variables('location')]"
+					},
 					"storageName": {
 						"value": "[parameters('storageName')]"
 					},
 					"virtualNetworkName": {
 						"value": "[parameters('virtualNetworkName')]"
 					},
-					// "loadBalancerName": {
-					// 	"value": "[parameters('outboundLoadBalancerName')]"
-					// },
-					"untrustSubnetName": {
+					"untrustedSubnetName": {
 						"value": "[parameters('untrustedSubnetName')]"
 					},
-					"trustSubnetName": {
+					"trustedSubnetName": {
 						"value" : "[parameters('trustedSubnetName')]"
 					},
 
@@ -434,8 +434,8 @@
 						"value": "[parameters('sshPublicKey')]"
 					},
 					"vmSize": {
-						"value": "[parameters('backendVmSize')]"
-					},
+						"value": "[parameters('firewallVmSize')]"
+					}
 				}
 			}
 		}
