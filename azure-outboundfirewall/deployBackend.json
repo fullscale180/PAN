@@ -46,7 +46,7 @@
 		},
 
 		// VM parameters
-		"numberOfInstances": {
+		"vmCount": {
 			"type": "int",
 			"maxValue": 5,
 			"minValue": 1,
@@ -81,13 +81,6 @@
 			"defaultValue": "vm-",
 			"metadata": {
 				"description": "This is the prefix name for the virtual machines"
-			}
-		},
-		"networkInterfaceName": {
-			"type": "string",
-			"defaultValue": "nic-",
-			"metadata": {
-				"description": "This is the prefix name for the network interface"
 			}
 		},
 		"vmSize": {
@@ -192,11 +185,11 @@
 		{ // network interface[]
 			"apiVersion": "2015-05-01-preview",
 			"type": "Microsoft.Network/networkInterfaces",
-			"name": "[concat(parameters('networkInterfaceName'), copyindex())]",
+			"name": "[concat(parameters('virtualMachineName'), copyindex(), '-nic')]",
 			"location": "[resourceGroup().location]",
 			"copy": {
 				"name": "nicLoop",
-				"count": "[parameters('numberOfInstances')]"
+				"count": "[parameters('vmCount')]"
 			},
 			"dependsOn": [
 				"[concat('Microsoft.Network/loadBalancers/', parameters('loadBalancerName'))]"
@@ -226,11 +219,11 @@
 			"name": "[concat(parameters('virtualMachineName'), copyindex())]",
 			"copy": {
 				"name": "virtualMachineLoop",
-				"count": "[parameters('numberOfInstances')]"
+				"count": "[parameters('vmCount')]"
 			},
 			"location": "[resourceGroup().location]",
 			"dependsOn": [
-				"[concat('Microsoft.Network/networkInterfaces/', parameters('networkInterfaceName'), copyindex())]",
+				"[concat('Microsoft.Network/networkInterfaces/', parameters('virtualMachineName'), copyindex(), '-nic')]",
 				"[concat('Microsoft.Compute/availabilitySets/', parameters('avSetName'))]"
 			],
 			"properties": {
@@ -264,7 +257,7 @@
 				"networkProfile": {
 					"networkInterfaces": [
 						{
-							"id": "[resourceId('Microsoft.Network/networkInterfaces',concat(parameters('networkInterfaceName'),copyindex()))]"
+							"id": "[resourceId('Microsoft.Network/networkInterfaces',concat(parameters('virtualMachineName'),copyindex(),'-nic'))]"
 						}
 					]
 				},
@@ -281,7 +274,7 @@
 			"type": "Microsoft.Compute/virtualMachines/extensions",
 			"copy": {
 				"name": "apacheLoop",
-				"count": "[parameters('numberOfInstances')]"
+				"count": "[parameters('vmCount')]"
 			},
 			"location": "[resourceGroup().location]",
 			"apiVersion": "2015-06-15",

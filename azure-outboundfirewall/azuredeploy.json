@@ -223,21 +223,24 @@
 			}
 		}
 	},
+	
 	"variables": {
-		"baseUrl": "https://raw.githubusercontent.com/fullscale180/PAN/master/azure-outboundfirewall",
-		"deployStorageURL": "[concat(variables('baseUrl'),'/deployStorage.json')]",
-		"deployNsgURL": "[concat(variables('baseUrl'),'/deployNsg.json')]",
-		"deployVnetURL": "[concat(variables('baseUrl'),'/deployVnet.json')]",
-		"deployBackendURL": "[concat(variables('baseUrl'),'/deployBackend.json')]",
+		"baseUrl"          : "https: //raw.githubusercontent.com/fullscale180/PAN/master/azure-outboundfirewall",
+		"deployStorageURL" : "[concat(variables('baseUrl'),'/deployStorage.json')]",
+		"deployNsgURL"     : "[concat(variables('baseUrl'),'/deployNsg.json')]",
+		"deployVnetURL"    : "[concat(variables('baseUrl'),'/deployVnet.json')]",
+		"deployBackendURL" : "[concat(variables('baseUrl'),'/deployBackend.json')]",
+		"deployFirewallURL": "[concat(variables('baseUrl'),'/deployFirewall.json')]",
 
-		"location": "[resourceGroup().location]",
-		"rgname": "[resourceGroup().name]",
-		"storageName": "[toLower(concat(parameters('storageName')))]",
+		"location"   : "[resourceGroup().location]",
+		"rgname"     : "[resourceGroup().name]",
+		"storageName": "[toLower(concat(parameters('storageName')))]"
 
 		//"publicLBURL": "[concat(variables('baseUrl'),'/public-lb-', variables('LoadBalancerType'), '.json')]",
 		//"privateLBURL": "[concat(variables('baseUrl'),'/private-lb-', parameters('authenticationType'),'.json')]",
 		//"vmseriesURL": "[concat(variables('baseUrl'),'/vmseries.json')]"
 	},
+
 	"resources": [
 
 		{	// Deploy Storage
@@ -314,34 +317,34 @@
 					"virtualNetworkAddressPrefix": {
 						"value": "[parameters('virtualNetworkAddressPrefix')]"
 					},
-					"subnet0Name": {
+					"mgmtSubnetName": {
 						"value": "[parameters('MgmtSubnetName')]"
 					},
-					"subnet1Name": {
+					"untrustSubnetName": {
 						"value": "[parameters('untrustedSubnetName')]"
 					},
-					"subnet2Name": {
+					"trustSubnetName": {
 						"value": "[parameters('trustedSubnetName')]"
 					},
-					"subnetLBName": {
+					"frontendSubnetName": {
 						"value": "[parameters('frontendSubnetName')]"
 					},
-					"subnetWWWName": {
+					"backendSubnetName": {
 						"value": "[parameters('backendSubnetName')]"
 					},
-					"subnet0Prefix": {
+					"mgmtSubnetPrefix": {
 						"value": "[parameters('mgmtSubnetPrefix')]"
 					},
-					"subnet1Prefix": {
+					"untrustSubnetPrefix": {
 						"value": "[parameters('untrustedSubnetPrefix')]"
 					},
-					"subnet2Prefix": {
+					"trustSubnetPrefix": {
 						"value": "[parameters('trustedSubnetPrefix')]"
 					},
-					"subnetLBPrefix": {
+					"frontendSubnetPrefix": {
 						"value": "[parameters('frontendSubnetPrefix')]"
 					},
-					"subnetWWWPrefix": {
+					"backendSubnetPrefix": {
 						"value": "[parameters('backendSubnetPrefix')]"
 					}
 				}
@@ -378,6 +381,52 @@
 					"backendSubnetName": {
 						"value" : "[parameters('backendSubnetName')]"
 					},
+					"adminUsername": {
+						"value": "[parameters('username')]"
+					},
+					"adminPassword": {
+						"value": "[parameters('password')]"
+					},
+					"sshKey": {
+						"value": "[parameters('sshPublicKey')]"
+					},
+					"vmSize": {
+						"value": "[parameters('backendVmSize')]"
+					},
+				}
+			}
+		},
+
+		{	// Deploy Firewall
+			"name": "deployFirewall",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2015-01-01",
+			"dependsOn": [
+				"Microsoft.Resources/deployments/deployVNet",
+				"Microsoft.Resources/deployments/deployBackend"
+			],
+			"properties": {
+				"mode": "Incremental",
+				"templateLink": {
+					"uri": "[variables('deployFirewallURL')]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"storageName": {
+						"value": "[parameters('storageName')]"
+					},
+					"virtualNetworkName": {
+						"value": "[parameters('virtualNetworkName')]"
+					},
+					"loadBalancerName": {
+						"value": "[parameters('outboundLoadBalancerName')]"
+					},
+					"frontendSubnetName": {
+						"value": "[parameters('frontendSubnetName')]"
+					},
+					"backendSubnetName": {
+						"value" : "[parameters('backendSubnetName')]"
+					},
 
 					"adminUsername": {
 						"value": "[parameters('username')]"
@@ -394,6 +443,9 @@
 				}
 			}
 		}
+
+
+
 	],
 	"outputs": {}
 }

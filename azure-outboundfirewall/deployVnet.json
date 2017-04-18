@@ -20,70 +20,70 @@
 				"description": "CIDR for vnet"
 			}
 		},
-		"subnet0Name": {
+		"mgmtSubnetName": {
 			"type": "string",
 			"defaultValue": "Mgmt",
 			"metadata": {
 				"description": "Subnet for Management"
 			}
 		},
-		"subnet1Name": {
+		"untrustSubnetName": {
 			"type": "string",
 			"defaultValue": "Untrust",
 			"metadata": {
 				"description": "Subnet for Untrust"
 			}
 		},
-		"subnet2Name": {
+		"trustSubnetName": {
 			"type": "string",
 			"defaultValue": "Trust",
 			"metadata": {
 				"description": "Subnet for Trust"
 			}
 		},
-		"subnetLBName": {
+		"frontendSubnetName": {
 			"type": "string",
 			"defaultValue": "UntrustLB",
 			"metadata": {
 				"description": "Subnet for App Gateway"
 			}
 		},
-		"subnetWWWName": {
+		"backendSubnetName": {
 			"type": "string",
 			"defaultValue": "backendSubnet",
 			"metadata": {
 				"description": "Subnet for backend WWW"
 			}
 		},
-		"subnet0Prefix": {
+		"mgmtSubnetPrefix": {
 			"type": "string",
 			"defaultValue": "192.168.0.0/24",
 			"metadata": {
 				"description": "Mgmt subnet CIDR"
 			}
 		},
-		"subnet1Prefix": {
+		"untrustSubnetPrefix": {
 			"type": "string",
 			"defaultValue": "192.168.1.0/24",
 			"metadata": {
 				"description": "Untrust subnet CIDR"
 			}
 		},
-		"subnet2Prefix": {
+		"trustSubnetPrefix": {
 			"type": "string",
 			"defaultValue": "192.168.2.0/24",
 			"metadata": {
 				"description": "Trust subnet CIDR"
 			}
 		},
-		"subnetLBPrefix": {
+		"frontendSubnetPrefix": {
 			"type": "string",
 			"defaultValue": "192.168.3.0/24",
 			"metadata": {
 				"description": "App Gateway CIDR"
 			}
 		},
-		"subnetWWWPrefix": {
+		"backendSubnetPrefix": {
 			"type": "string",
 			"defaultValue": "192.168.4.0/24",
 			"metadata": {
@@ -92,47 +92,47 @@
 		}
 	},
 	"variables": {
-		"location": "[resourceGroup().location]",
-		"rgname": "[resourceGroup().id]",
-		"vnetname": "[parameters('virtualNetworkName')]",
-		"vnetID": "[resourceId('Microsoft.Network/virtualNetworks',variables('vnetname'))]",
-		"subnet0Ref": "[concat(variables('vnetID'),'/subnets/',parameters('subnet0Name'))]",
-		"subnet1Ref": "[concat(variables('vnetID'),'/subnets/',parameters('subnet1Name'))]",
-		"subnet2Ref": "[concat(variables('vnetID'),'/subnets/',parameters('subnet2Name'))]",
-		"subnetLBRef": "[concat(variables('vnetID'),'/subnets/',parameters('subnetLBName'))]",
-		"subnetWWWRef": "[concat(variables('vnetID'),'/subnets/',parameters('subnetWWWName'))]",
+		"location"         : "[resourceGroup().location]",
+		"rgname"           : "[resourceGroup().id]",
+		"vnetname"         : "[parameters('virtualNetworkName')]",
+		"vnetID"           : "[resourceId('Microsoft.Network/virtualNetworks',variables('vnetname'))]",
+		"mgmtSubnetRef"    : "[concat(variables('vnetID'),'/subnets/',parameters('mgmtSubnetName'))]",
+		"untrustSubnetRef" : "[concat(variables('vnetID'),'/subnets/',parameters('untrustSubnetName'))]",
+		"trustSubnetRef"   : "[concat(variables('vnetID'),'/subnets/',parameters('trustSubnetName'))]",
+		"frontendSubnetRef": "[concat(variables('vnetID'),'/subnets/',parameters('frontendSubnetName'))]",
+		"backendSubnetRef" : "[concat(variables('vnetID'),'/subnets/',parameters('backendSubnetName'))]",
 		"subnets": [
 			{
-				"name": "[parameters('subnet0Name')]",
+				"name": "[parameters('mgmtSubnetName')]",
 				"properties": {
-					"addressPrefix": "[parameters('subnet0Prefix')]",
+					"addressPrefix": "[parameters('mgmtSubnetPrefix')]",
 					"networkSecurityGroup": {
 						"id": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('nsgName'))]"
 					}
 				}
 			},
 			{
-				"name": "[parameters('subnet1Name')]",
+				"name": "[parameters('untrustSubnetName')]",
 				"properties": {
-					"addressPrefix": "[parameters('subnet1Prefix')]"
+					"addressPrefix": "[parameters('untrustSubnetPrefix')]"
 				}
 			},
 			{
-				"name": "[parameters('subnet2Name')]",
+				"name": "[parameters('trustSubnetName')]",
 				"properties": {
-					"addressPrefix": "[parameters('subnet2Prefix')]"
+					"addressPrefix": "[parameters('trustSubnetPrefix')]"
 				}
 			},
 			{
-				"name": "[parameters('subnetLBName')]",
+				"name": "[parameters('frontendSubnetName')]",
 				"properties": {
-					"addressPrefix": "[parameters('subnetLBPrefix')]"
+					"addressPrefix": "[parameters('frontendSubnetPrefix')]"
 				}
 			},
 			{
-				"name": "[parameters('subnetWWWName')]",
+				"name": "[parameters('backendSubnetName')]",
 				"properties": {
-					"addressPrefix": "[parameters('subnetWWWPrefix')]"
+					"addressPrefix": "[parameters('backendSubnetPrefix')]"
 				}
 			},
 		]
