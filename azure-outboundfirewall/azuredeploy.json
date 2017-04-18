@@ -144,7 +144,6 @@
 			"defaultValue": "panmgmt"
 		},
 		
-
 		"firewallModel": {
 			"type": "string",
 			"defaultValue": "byol",
@@ -178,7 +177,7 @@
 			"metadata": {
 				"description": "Azure VM size for VM-Series"
 			},
-			"defaultValue": "Standard_D3"
+			"defaultValue": "Standard_D3_v2"
 		},
 		"backendVmSize": {
 			"type": "string",
