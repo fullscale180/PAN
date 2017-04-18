@@ -46,22 +46,13 @@
 		},
 
 		// VM parameters
-		"adminUsername": {
-			"type": "string",
+		"numberOfInstances": {
+			"type": "int",
+			"maxValue": 5,
+			"minValue": 1,
+			"defaultValue": 2,
 			"metadata": {
-				"description": "Admin username"
-			}
-		},
-		"adminPassword": {
-			"type": "securestring",
-			"metadata": {
-				"description": "Admin password"
-			}
-		},
-		"sshKey": {
-			"type": "string",
-			"metadata": {
-				"description": "ssh public key for admin user authentication"
+				"description": "The number of backend VM instances"
 			}
 		},
 		"imagePublisher": {
@@ -111,31 +102,38 @@
 				"description": "This is the allowed list of VM sizes"
 			}
 		},
-		"numberOfInstances" : {
-			"type": "int",
-			"maxValue": 5,
-			"minValue": 1,
-			"defaultValue": 2,
+		"adminUsername": {
+			"type": "string",
 			"metadata": {
-				"description": "The number of backend VM instances"
+				"description": "Admin username"
+			}
+		},
+		"adminPassword": {
+			"type": "securestring",
+			"metadata": {
+				"description": "Admin password"
+			}
+		},
+		"sshKey": {
+			"type": "string",
+			"metadata": {
+				"description": "ssh public key for admin user authentication"
 			}
 		},
 	},
+
 	"variables": {
 		"vnetId": "[resourceId('Microsoft.Network/virtualNetworks/', parameters('virtualNetworkName'))]",
-		"outboundLBId": "[resourceId('Microsoft.Network/loadBalancers', parameters('loadBalancerName'))]",
-		"frontendSubnetRef": "[concat(variables('vnetId'),'/subnets/',parameters ('frontendSubnetName'))]",
-		"backendSubnetRef": "[concat(variables('vnetId'),'/subnets/',parameters ('backendSubnetName'))]",
+		"lbId": "[resourceId('Microsoft.Network/loadBalancers', parameters('loadBalancerName'))]",
 	},
-	"resources": [
 
+	"resources": [
 		{ // availability set
 			"apiVersion": "2015-05-01-preview",
 			"type": "Microsoft.Compute/availabilitySets",
 			"name": "[parameters('avSetName')]",
 			"location": "[resourceGroup().location]"
 		},
-
 		{ // outbound loadBalancer
 			"apiVersion": "2015-05-01-preview",
 			"type": "Microsoft.Network/loadBalancers",
@@ -147,7 +145,7 @@
 						"name": "LoadBalancerFrontend",
 						"properties": {
 							"subnet": {
-								"id": "[variables('backendSubnetRef')]"
+								"id": "[concat(variables('vnetId'),'/subnets/',parameters ('backendSubnetName'))]"
 							},
 							"privateIPAllocationMethod": "Dynamic"
 						},
@@ -162,13 +160,13 @@
 					{
 						"properties": {
 							"frontendIPConfiguration": {
-								"id": "[concat(resourceId('Microsoft.Network/loadBalancers', parameters('loadBalancerName')), '/frontendIpConfigurations/LoadBalancerFrontend')]"
+								"id": "[concat(variables(lbId), '/frontendIpConfigurations/LoadBalancerFrontend')]"
 							},
 							"backendAddressPool": {
-								"id": "[concat(resourceId('Microsoft.Network/loadBalancers', parameters('loadBalancerName')), '/backendAddressPools/BackendPool1')]"
+								"id": "[concat(variables(lbId), '/backendAddressPools/BackendPool1')]"
 							},
 							"probe": {
-								"id": "[concat(resourceId('Microsoft.Network/loadBalancers', parameters('loadBalancerName')), '/probes/lbprobe')]"
+								"id": "[concat(variables(lbId), '/probes/lbprobe')]"
 							},
 							"protocol": "Tcp",
 							"frontendPort": 80,
@@ -191,7 +189,6 @@
 				]
 			}
 		},
-
 		{ // network interface[]
 			"apiVersion": "2015-05-01-preview",
 			"type": "Microsoft.Network/networkInterfaces",
@@ -215,7 +212,7 @@
 							},
 							"loadBalancerBackendAddressPools": [
 								{
-									"id": "[concat(variables('outboundLBId'), '/backendAddressPools/BackendPool1')]"
+									"id": "[concat(variables('lbId'), '/backendAddressPools/BackendPool1')]"
 								}
 							]
 						}
@@ -223,7 +220,6 @@
 				]
 			}
 		},
-
 		{ // virtualMachines[]
 			"apiVersion": "2015-06-15",
 			"type": "Microsoft.Compute/virtualMachines",
@@ -279,36 +275,33 @@
 					}
 				}
 			}
+		},
+		{ // virtualMachines/extensions[]
+			"name": "[concat(parameters('virtualMachineName'), copyindex(), '/installcustomscript')]",
+			"type": "Microsoft.Compute/virtualMachines/extensions",
+			"copy": {
+				"name": "apacheLoop",
+				"count": "[parameters('numberOfInstances')]"
+			},
+			"location": "[resourceGroup().location]",
+			"apiVersion": "2015-06-15",
+			"dependsOn": [
+				"virtualMachineLoop"
+			],
+			"tags": {
+				"displayName": "scriptextensiondemo"
+			},
+			"properties": {
+				"publisher": "Microsoft.Azure.Extensions",
+				"type": "CustomScript",
+				"typeHandlerVersion": "2.0",
+				"autoUpgradeMinorVersion": true,
+				"settings": {
+					"commandToExecute": "apt-get -y update && apt-get install -y apache2"
+				}
+			}
 		}
 	],
-
+	
 	"outputs": {}
 }
-
-
-
-
-// {	// virtualMachines/extensions[]
-// 	"name": "[concat(parameters('vmNamePrefix'), substring(uniqueString(resourceGroup().id), 0, 4), '-', copyindex(), '/installcustomscript')]",
-// 	"type": "Microsoft.Compute/virtualMachines/extensions",
-// 	"copy": {
-// 		"name": "apacheLoop",
-// 		"count": "[variables('numberOfInstances')]"
-// 	},
-// 	"location": "[resourceGroup().location]",
-// 	"apiVersion": "2015-06-15",
-// 	"dependsOn": ["virtualMachineLoop"],
-// 	"tags": {
-// 		"displayName": "scriptextensiondemo"
-// 	},
-// 	"properties": {
-// 		"publisher": "Microsoft.Azure.Extensions",
-// 		"type": "CustomScript",
-// 		"typeHandlerVersion": "2.0",
-// 		"autoUpgradeMinorVersion": true,
-// 		"settings": {
-// 			"commandToExecute": "apt-get -y update && apt-get install -y apache2"
-// 			}
-// 		}
-// 	}
-// 
