@@ -118,7 +118,7 @@
 			"type": "string",
 			"metadata": {
 				"description": "Name of the Virtual Network (VNET)"
-			},
+			}
 		},
 		"mgmtSubnetName": {
 			"type": "string",

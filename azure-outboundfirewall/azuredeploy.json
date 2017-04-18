@@ -420,6 +420,9 @@
 					"virtualNetworkName": {
 						"value": "[parameters('virtualNetworkName')]"
 					},
+					"mgmtSubnetName": {
+						"value": "[parameters('mgmtSubnetName')]"
+					},
 					"untrustedSubnetName": {
 						"value": "[parameters('untrustedSubnetName')]"
 					},
