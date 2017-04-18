@@ -208,7 +208,7 @@
 						"properties": {
 							"privateIPAllocationMethod": "Dynamic",
 							"subnet": {
-								"id": "[variables('backendSubnetRef')]"
+								"id": "[concat(variables('vnetId'),'/subnets/',parameters ('backendSubnetName'))]"
 							},
 							"loadBalancerBackendAddressPools": [
 								{
