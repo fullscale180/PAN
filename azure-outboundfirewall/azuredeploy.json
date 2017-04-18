@@ -94,14 +94,14 @@
 				"description": "CIDR for Trusted Network"
 			}
 		},
-		"gatewaySubnetName": {
+		"frontendSubnetName": {
 			"type": "string",
 			"defaultValue": "Gateway",
 			"metadata": {
 				"description": "Subnet for App Gateway"
 			}
 		},
-		"gatewaySubnetPrefix": {
+		"frontendSubnetPrefix": {
 			"type": "string",
 			"defaultValue": "192.168.3.0/24",
 			"metadata": {
@@ -221,6 +221,7 @@
 		"deployStorageURL": "[concat(variables('baseUrl'),'/deployStorage.json')]",
 		"deployNsgURL": "[concat(variables('baseUrl'),'/deployNsg.json')]",
 		"deployVnetURL": "[concat(variables('baseUrl'),'/deployVnet.json')]",
+		"deployBackendURL": "[concat(variables('baseUrl'),'/deployBackend.json')]",
 
 		"location": "[resourceGroup().location]",
 		"rgname": "[resourceGroup().name]",
@@ -316,7 +317,7 @@
 						"value": "[parameters('trustedSubnetName')]"
 					},
 					"subnetLBName": {
-						"value": "[parameters('gatewaySubnetName')]"
+						"value": "[parameters('frontendSubnetName')]"
 					},
 					"subnetWWWName": {
 						"value": "[parameters('backendSubnetName')]"
@@ -331,15 +332,67 @@
 						"value": "[parameters('trustedSubnetPrefix')]"
 					},
 					"subnetLBPrefix": {
-						"value": "[parameters('gatewaySubnetPrefix')]"
+						"value": "[parameters('frontendSubnetPrefix')]"
 					},
 					"subnetWWWPrefix": {
 						"value": "[parameters('backendSubnetPrefix')]"
 					}
 				}
 			}
-		}
+		},
 
+		{	// Deploy Backend
+			"name": "deployBackend",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2015-01-01",
+			"dependsOn": [
+				"Microsoft.Resources/deployments/deployNsg",
+				"Microsoft.Resources/deployments/deployVNet"
+			],
+			"properties": {
+				"mode": "Incremental",
+				"templateLink": {
+					"uri": "[variables('deployBackendURL')]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"baseUrl": {
+						"value": "[variables('baseUrl')]"
+					},
+					"storageName": {
+						"value": "[parameters('storageName')]"
+					},
+					"virtualNetworkName": {
+						"value": "[reference('SetupVNET').outputs.vnetName.value]"
+					},
+					"loadBalancerName": {
+						"value": "[parameters('inboundLoadBalancerName')]"
+					},
+					"adminUsername": {
+						"value": "[parameters('username')]"
+					},
+					"backendSubnetName": {
+						"value" : "[parameters('backendSubnetName')]"
+					},
+
+					"adminPassword": {
+						"value": "[parameters('password')]"
+					},
+					"sshKey": {
+						"value": "[parameters('sshPublicKey')]"
+					},
+					"subnetName": {
+						"value": "[parameters('backendSubnetName')]"
+					},
+					"frontendSubnetName": {
+						"value": "[parameters('frontendSubnetName')]"
+					},
+					"vmSize": {
+						"value": "[parameters('backendVmSize')]"
+					},
+				}
+			}
+		}
 	],
 	"outputs": {}
 }
