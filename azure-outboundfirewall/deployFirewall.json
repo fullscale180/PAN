@@ -185,38 +185,6 @@
 			"metadata": {
 				"description": "DNS Name for mgmt interface"
 			}
-		},
-
-		"baseUrl": {
-			"type": "string",
-			"metadata": {
-				"artifactsBaseUrl": "",
-				"description": "URL to acquire other VM-Series for Azure templates"
-			}
-		},
-		"storageAccountNewOrExisting": {
-			"type": "string",
-			"defaultValue": "new",
-			"allowedValues": [
-				"new",
-				"existing"
-			],
-			"metadata": {
-				"Description": "Storage Account is new or existing"
-			}
-		},
-		"storageAccountType": {
-			"type": "string",
-			"allowedValues": [
-				"Standard_LRS",
-				"Standard_GRS",
-				"Premium_LRS",
-				"Standard_RAGRS"
-			],
-			"metadata": {
-				"description": "Type of the storage account created"
-			},
-			"defaultValue": "Standard_LRS"
 		}
 
 	},
@@ -342,9 +310,9 @@
 					}
 				]
 			}
-		},
+		}
 
-	],
+	]
 
 }
 
