@@ -160,7 +160,7 @@
 		"firewallAvSetName": "[concat('firewallAvSet')]",
 		"vnetId": "[resourceId('Microsoft.Network/virtualNetworks/', parameters('virtualNetworkName'))]",
 
-		"mgmtPublicIPDnsName": "panmgmt",
+		"mgmtPublicIPDnsName": "[parameters('mgmtPublicIPDnsName')]",
 
 		"imagePublisher": "paloaltonetworks",
 		"imageOffer": "vmseries1",
