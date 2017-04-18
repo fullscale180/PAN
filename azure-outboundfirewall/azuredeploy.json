@@ -129,19 +129,22 @@
 				"description": "Outbound Load Balancer Name"
 			}
 		},
-
-		"backendVmSize": {
+		"mgmtPublicIPName": {
 			"type": "string",
-			"allowedValues": [
-				"Standard_A1",
-				"Standard_D1",
-				"Standard_D1_v2"
-			],
 			"metadata": {
-				"description": "Azure VM size for backend VMs.  Not all sizes are available in all regions."
+				"description": "Name prefix of public IP resource for Management interface of VM-Series firewall."
 			},
-			"defaultValue": "Standard_D1_v2"
+			"defaultValue": "mgmt-pip"
 		},
+		"mgmtPublicIPDnsName": {
+			"type": "string",
+			"metadata": {
+				"description": "DNS Name prefix of public IP resource for Management interface of VM-Series firewall.  Name must be globally unique."
+			},
+			"defaultValue": "panmgmt"
+		},
+		
+
 		"firewallModel": {
 			"type": "string",
 			"defaultValue": "byol",
@@ -177,19 +180,17 @@
 			},
 			"defaultValue": "Standard_D3"
 		},
-		"mgmtPublicIPName": {
+		"backendVmSize": {
 			"type": "string",
+			"allowedValues": [
+				"Standard_A1",
+				"Standard_D1",
+				"Standard_D1_v2"
+			],
 			"metadata": {
-				"description": "Name prefix of public IP resource for Management interface of VM-Series firewall."
+				"description": "Azure VM size for backend VMs.  Not all sizes are available in all regions."
 			},
-			"defaultValue": "mgmt-pip"
-		},
-		"mgmtPublicIPDnsName": {
-			"type": "string",
-			"metadata": {
-				"description": "DNS Name prefix of public IP resource for Management interface of VM-Series firewall.  Name must be globally unique."
-			},
-			"defaultValue": "panmgmt"
+			"defaultValue": "Standard_D1_v2"
 		},
 		"username": {
 			"type": "string",
