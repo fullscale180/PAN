@@ -22,6 +22,12 @@
 				"description": "Deployment location"
 			}
 		},
+		"baseUrl": {
+			"type": "string",
+			"metadata": {
+				"description": "Deployment location"
+			}
+		},
 		
 		// vm parameters
 		"vmCount": {
@@ -157,8 +163,9 @@
 
 	},
 	"variables": {
-		"firewallAvSetName": "[concat('firewallAvSet')]",
 		"vnetId": "[resourceId('Microsoft.Network/virtualNetworks/', parameters('virtualNetworkName'))]",
+
+		"deployVmURL" : "[concat(variables('baseUrl'),'/deployVm-password-bs-yes.json')]",
 
 		"imagePublisher": "paloaltonetworks",
 		"imageOffer": "vmseries1",
@@ -270,6 +277,75 @@
 					}
 				]
 			}
+		},
+
+		// VMSeries-Firewall-VM
+		{
+			"name": "[concat(parameters('virtualMachineName'), copyindex())]",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2015-01-01",
+			"dependsOn": [
+				"[concat('Microsoft.Compute/availabilitySets/', variables('avSetName'))]",
+				"[concat('Microsoft.Compute/publicIPAddresses/', parameters('mgmtPublicIPName'), copyindex())]",
+				"[concat('Microsoft.Compute/networkInterfaces/', parameters('virtualMachineName'), copyindex(), '-nic0')]",
+				"[concat('Microsoft.Compute/networkInterfaces/', parameters('virtualMachineName'), copyindex(), '-nic1')]",
+				"[concat('Microsoft.Compute/networkInterfaces/', parameters('virtualMachineName'), copyindex(), '-nic2')]"
+			],
+			"copy": {
+				"name": "vmLoop",
+				"count": "[parameters('vmCount')]"
+			},
+			"properties": {
+				"mode": "Incremental",
+				"templateLink": {
+					"uri": "[variables('deployVmURL')]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"location": {
+						"value": "[variables('location')]"
+					},
+					"virtualMachineName": {
+						"value": "[concat(parameters('vmName'), copyindex())]"
+					},
+					"avSetName": {
+						"value": "[parameters('avSetName')]"
+					},
+					"imageSku": {
+						"value": "[parameters('imageSku')]"
+					},
+					"imageOffer": {
+						"value": "[variables('imageOffer')]"
+					},
+					"imagePublisher": {
+						"value": "[variables('imagePublisher')]"
+					},
+					"nicName": {
+						"value": "[concat(variables('virtualMachineName'), copyindex())]"
+					},
+					"vmSize": {
+						"value": "[parameters('vmSize')]"
+					},
+					"adminUsername": {
+						"value": "[parameters('adminUsername')]"
+					},
+					"adminPassword": {
+						"value": "[parameters('adminPassword')]"
+					},
+					"storageName": {
+						"value": "[parameters('storageName')]"
+					},
+					"sshKey": {
+						"value": "[parameters('sshKey')]"
+					},
+					"bootstrapUri": {
+						"value": "[parameters('BootstrapUri')]"
+					},
+					"bootstrapUriSizeGB": {
+						"value": "[parameters('BootstrapUriSizeGB')]"
+					}
+				}
+			}
 		}
 
 
@@ -281,68 +357,3 @@
 
 
 
-		// { // VMSeries-Firewall-VM
-		// 	"name": "[concat('VMSeries-Firewall-VM', copyindex())]",
-		// 	"type": "Microsoft.Resources/deployments",
-		// 	"apiVersion": "2015-01-01",
-		// 	"dependsOn": [
-		// 		"SetupPublicIPsLoop",
-		// 		"NetworkInterfaceLoop",
-		// 		"[concat('Microsoft.Compute/availabilitySets/', variables('inFirewallAvSetName'))]"
-		// 	],
-		// 	"copy": {
-		// 		"name": "VirtualMachineLoop",
-		// 		"count": "[parameters('vmCount')]"
-		// 	},
-		// 	"properties": {
-		// 		"mode": "Incremental",
-		// 		"templateLink": {
-		// 			"uri": "[variables('vmTemplateUrl')]",
-		// 			"contentVersion": "1.0.0.0"
-		// 		},
-		// 		"parameters": {
-		// 			"location": {
-		// 				"value": "[variables('location')]"
-		// 			},
-		// 			"virtualMachineName": {
-		// 				"value": "[concat(parameters('vmName'), copyindex())]"
-		// 			},
-		// 			"inFirewallAvSetName": {
-		// 				"value": "[variables('inFirewallAvSetName')]"
-		// 			},
-		// 			"imageSku": {
-		// 				"value": "[parameters('imageSku')]"
-		// 			},
-		// 			"imageOffer": {
-		// 				"value": "[variables('imageOffer')]"
-		// 			},
-		// 			"imagePublisher": {
-		// 				"value": "[variables('imagePublisher')]"
-		// 			},
-		// 			"nicName": {
-		// 				"value": "[concat(variables('nicName'), copyindex())]"
-		// 			},
-		// 			"vmSize": {
-		// 				"value": "[parameters('vmSize')]"
-		// 			},
-		// 			"adminUsername": {
-		// 				"value": "[parameters('adminUsername')]"
-		// 			},
-		// 			"adminPassword": {
-		// 				"value": "[parameters('adminPassword')]"
-		// 			},
-		// 			"storageName": {
-		// 				"value": "[parameters('storageName')]"
-		// 			},
-		// 			"sshKey": {
-		// 				"value": "[parameters('sshKey')]"
-		// 			},
-		// 			"bootstrapUri": {
-		// 				"value": "[parameters('BootstrapUri')]"
-		// 			},
-		// 			"bootstrapUriSizeGB": {
-		// 				"value": "[parameters('BootstrapUriSizeGB')]"
-		// 			}
-		// 		}
-		// 	}
-		// }

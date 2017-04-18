@@ -413,6 +413,9 @@
 					"contentVersion": "1.0.0.0"
 				},
 				"parameters": {
+					"baseUrl": {
+						"value": "[variables('baseUrl')]"
+					},
 					"location": {
 						"value": "[variables('location')]"
 					},
