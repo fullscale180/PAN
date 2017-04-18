@@ -147,7 +147,7 @@
 							"subnet": {
 								"id": "[concat(variables('vnetId'),'/subnets/',parameters ('backendSubnetName'))]"
 							},
-							"privateIPAllocationMethod": "Dynamic"
+							"privateIPAllocationMethod": "Dynamic" 
 						},
 					}
 				],
