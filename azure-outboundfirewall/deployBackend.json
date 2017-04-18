@@ -115,7 +115,7 @@
 		"frontendSubnetRef": "[concat(variables('vnetId'),'/subnets/',parameters ('frontendSubnetName'))]",
 		"backendSubnetRef": "[concat(variables('vnetId'),'/subnets/',parameters ('backendSubnetName'))]",
 
-		"outboundLBName": "[resourceId('Microsoft.Network/loadBalancers', parameters('loadBalancerName'))]",
+		"outboundLBId": "[resourceId('Microsoft.Network/loadBalancers', parameters('loadBalancerName'))]",
 
 		"numberOfInstances": 2,
 		"networkInterfaceName": "[concat('www-')]",
@@ -207,7 +207,7 @@
 							},
 							"loadBalancerBackendAddressPools": [
 								{
-									"id": "[concat(variables('lbId'), '/backendAddressPools/BackendPool1')]"
+									"id": "[concat(variables('outboundLBId'), '/backendAddressPools/BackendPool1')]"
 								}
 							]
 						}
@@ -216,6 +216,7 @@
 			}
 		},
 	],
+
 	"outputs": {}
 }
 // {	// virtualMachines[]
