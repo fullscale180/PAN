@@ -24,7 +24,7 @@ Get-AzureRmSubscription -SubscriptionName "Visual Studio Enterprise" | Select-Az
 #-----------------------------------------------------
 # Create a new deployment
 #-----------------------------------------------------
-cd 'D:\All Projects\FS180 Clients\PAN\azure-applicationgateway-2way'
+set-location 'D:\All Projects\FS180 Clients\PAN\azure-outboundfirewall'
 
 $deployName = "AzureDeploy"
 $location = "westus2"

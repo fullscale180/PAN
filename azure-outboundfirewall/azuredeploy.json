@@ -161,7 +161,7 @@
 			"metadata": {
 				"description": "Name prefix of VM-Series VM in the Azure portal"
 			},
-			"defaultValue": "VM-Series"
+			"defaultValue": "series-vm"
 		},
 		"firewallVmSize": {
 			"type": "string",
@@ -178,6 +178,13 @@
 				"description": "Azure VM size for VM-Series"
 			},
 			"defaultValue": "Standard_D3_v2"
+		},
+		"backendVmName": {
+			"type": "string",
+			"metadata": {
+				"description": "Name prefix of VM-Series VM in the Azure portal"
+			},
+			"defaultValue": "backend-vm"
 		},
 		"backendVmSize": {
 			"type": "string",
@@ -369,6 +376,7 @@
 					"storageName": {
 						"value": "[parameters('storageName')]"
 					},
+				
 					"virtualNetworkName": {
 						"value": "[parameters('virtualNetworkName')]"
 					},
@@ -381,6 +389,13 @@
 					"backendSubnetName": {
 						"value" : "[parameters('backendSubnetName')]"
 					},
+
+					"virtualMachineName": {
+						"value": "[parameters('backendVmName')]"
+					},
+					"vmSize": {
+						"value": "[parameters('backendVmSize')]"
+					},
 					"adminUsername": {
 						"value": "[parameters('username')]"
 					},
@@ -390,9 +405,6 @@
 					"sshKey": {
 						"value": "[parameters('sshPublicKey')]"
 					},
-					"vmSize": {
-						"value": "[parameters('backendVmSize')]"
-					}
 				}
 			}
 		},
@@ -440,6 +452,12 @@
 						"value" : "[parameters('mgmtPublicIPDnsName')]"
 					},
 
+					"virtualMachineName": {
+						"value": "[parameters('firewallVmName')]"
+					},
+					"vmSize": {
+						"value": "[parameters('firewallVmSize')]"
+					},
 					"adminUsername": {
 						"value": "[parameters('username')]"
 					},
@@ -449,9 +467,6 @@
 					"sshKey": {
 						"value": "[parameters('sshPublicKey')]"
 					},
-					"vmSize": {
-						"value": "[parameters('firewallVmSize')]"
-					}
 				}
 			}
 		}
