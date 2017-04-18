@@ -274,10 +274,15 @@
 					}
 				}
 			}
-		},
+		}
 	],
+
 	"outputs": {}
 }
+
+
+
+
 // {	// virtualMachines/extensions[]
 // 	"name": "[concat(parameters('vmNamePrefix'), substring(uniqueString(resourceGroup().id), 0, 4), '-', copyindex(), '/installcustomscript')]",
 // 	"type": "Microsoft.Compute/virtualMachines/extensions",
