@@ -160,13 +160,13 @@
 					{
 						"properties": {
 							"frontendIPConfiguration": {
-								"id": "[concat(variables(lbId), '/frontendIpConfigurations/LoadBalancerFrontend')]"
+								"id": "[concat(variables('lbId'), '/frontendIpConfigurations/LoadBalancerFrontend')]"
 							},
 							"backendAddressPool": {
-								"id": "[concat(variables(lbId), '/backendAddressPools/BackendPool1')]"
+								"id": "[concat(variables('lbId'), '/backendAddressPools/BackendPool1')]"
 							},
 							"probe": {
-								"id": "[concat(variables(lbId), '/probes/lbprobe')]"
+								"id": "[concat(variables('lbId'), '/probes/lbprobe')]"
 							},
 							"protocol": "Tcp",
 							"frontendPort": 80,
