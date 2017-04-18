@@ -285,10 +285,10 @@
 			"apiVersion": "2015-01-01",
 			"dependsOn": [
 				"[concat('Microsoft.Compute/availabilitySets/', parameters('avSetName'))]",
-				"[concat('Microsoft.Compute/publicIPAddresses/', parameters('mgmtPublicIPName'), copyindex())]",
-				"[concat('Microsoft.Compute/networkInterfaces/', parameters('virtualMachineName'), copyindex(), '-nic0')]",
-				"[concat('Microsoft.Compute/networkInterfaces/', parameters('virtualMachineName'), copyindex(), '-nic1')]",
-				"[concat('Microsoft.Compute/networkInterfaces/', parameters('virtualMachineName'), copyindex(), '-nic2')]"
+				"[concat('Microsoft.Network/publicIPAddresses/', parameters('mgmtPublicIPName'), copyindex())]",
+				"[concat('Microsoft.Network/networkInterfaces/', parameters('virtualMachineName'), copyindex(), '-nic0')]",
+				"[concat('Microsoft.Network/networkInterfaces/', parameters('virtualMachineName'), copyindex(), '-nic1')]",
+				"[concat('Microsoft.Network/networkInterfaces/', parameters('virtualMachineName'), copyindex(), '-nic2')]"
 			],
 			"copy": {
 				"name": "vmLoop",
