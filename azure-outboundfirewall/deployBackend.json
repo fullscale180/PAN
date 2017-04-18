@@ -110,15 +110,14 @@
 		}
 	},
 	"variables": {
-		
 		"vnetId": "[resourceId('Microsoft.Network/virtualNetworks/', parameters('virtualNetworkName'))]",
+		"outboundLBId": "[resourceId('Microsoft.Network/loadBalancers', parameters('loadBalancerName'))]",
 		"frontendSubnetRef": "[concat(variables('vnetId'),'/subnets/',parameters ('frontendSubnetName'))]",
 		"backendSubnetRef": "[concat(variables('vnetId'),'/subnets/',parameters ('backendSubnetName'))]",
 
-		"outboundLBId": "[resourceId('Microsoft.Network/loadBalancers', parameters('loadBalancerName'))]",
-
 		"numberOfInstances": 2,
 		"networkInterfaceName": "[concat('nic-')]",
+		"virtualMachineName": "[concat('vm-')]",
 	},
 	"resources": [
 		{ // availability set
@@ -127,7 +126,6 @@
 			"name": "[parameters('avSetName')]",
 			"location": "[resourceGroup().location]"
 		},
-
 		{ // outbound loadBalancer
 			"apiVersion": "2015-05-01-preview",
 			"type": "Microsoft.Network/loadBalancers",
@@ -215,66 +213,66 @@
 				]
 			}
 		},
-	],
 
+		{ // virtualMachines[]
+			"apiVersion": "2015-06-15",
+			"type": "Microsoft.Compute/virtualMachines",
+			"name": "[concat(parameters('virtualMachineName'), copyindex())]",
+			"copy": {
+				"name": "virtualMachineLoop",
+				"count": "[variables('numberOfInstances')]"
+			},
+			"location": "[resourceGroup().location]",
+			"dependsOn": [
+				"[concat('Microsoft.Network/networkInterfaces/', variables('networkInterfaceName'), copyindex())]",
+				"[concat('Microsoft.Compute/availabilitySets/', variables('avSetName'))]"
+			],
+			"properties": {
+				"availabilitySet": {
+					"id": "[resourceId('Microsoft.Compute/availabilitySets',variables('avSetName'))]"
+				},
+				"hardwareProfile": {
+					"vmSize": "[parameters('vmSize')]"
+				},
+				"osProfile": {
+					"computerName": "[concat(parameters('virtualMachineName'), copyIndex())]",
+					"adminUsername": "[parameters('adminUsername')]",
+					"adminPassword": "[parameters('adminPassword')]"
+				},
+				"storageProfile": {
+					"imageReference": {
+						"publisher": "[parameters('imagePublisher')]",
+						"offer": "[parameters('imageOffer')]",
+						"sku": "[parameters('imageSKU')]",
+						"version": "latest"
+					},
+					"osDisk": {
+						"name": "osdisk",
+						"vhd": {
+							"uri": "[concat('http://',parameters('storageName'),'.blob.core.windows.net/vhds/','osdisk', copyindex(), '.vhd')]"
+						},
+						"caching": "ReadWrite",
+						"createOption": "FromImage"
+					}
+				},
+				"networkProfile": {
+					"networkInterfaces": [
+						{
+							"id": "[resourceId('Microsoft.Network/networkInterfaces',concat(variables('networkInterfaceName'),copyindex()))]"
+						}
+					]
+				},
+				"diagnosticsProfile": {
+					"bootDiagnostics": {
+						"enabled": "true",
+						"storageUri": "[concat('http://',parameters('storageName'),'.blob.core.windows.net')]"
+					}
+				}
+			}
+		},
+	],
 	"outputs": {}
 }
-// {	// virtualMachines[]
-//   "apiVersion": "2015-06-15",
-//   "type": "Microsoft.Compute/virtualMachines",
-//   "name": "[concat(parameters('vmNamePrefix'), substring(uniqueString(resourceGroup().id), 0, 4), '-', copyindex())]",
-//   "copy": {
-//     "name": "virtualMachineLoop",
-//     "count": "[variables('numberOfInstances')]"
-//   },
-//   "location": "[resourceGroup().location]",
-//   "dependsOn": [
-//     "[concat('Microsoft.Network/networkInterfaces/', variables('networkInterfaceName'), copyindex())]",
-//     "[concat('Microsoft.Compute/availabilitySets/', variables('inboundAvSetName'))]"
-//   ],
-//   "properties": {
-//     "availabilitySet": {
-//       "id": "[resourceId('Microsoft.Compute/availabilitySets',variables('inboundAvSetName'))]"
-//     },
-//     "hardwareProfile": {
-//       "vmSize": "[parameters('vmSize')]"
-//     },
-//     "osProfile": {
-//       "computerName": "[concat(parameters('vmNamePrefix'), copyIndex())]",
-//       "adminUsername": "[parameters('adminUsername')]",
-//       "adminPassword": "[parameters('adminPassword')]"
-//     },
-//     "storageProfile": {
-//       "imageReference": {
-//         "publisher": "[parameters('imagePublisher')]",
-//         "offer": "[parameters('imageOffer')]",
-//         "sku": "[parameters('imageSKU')]",
-//         "version": "latest"
-//       },
-//       "osDisk": {
-//         "name": "osdisk",
-//         "vhd": {
-//           "uri": "[concat('http://',parameters('storageName'),'.blob.core.windows.net/vhds/','osdisk', copyindex(), '.vhd')]"
-//         },
-//         "caching": "ReadWrite",
-//         "createOption": "FromImage"
-//       }
-//     },
-//     "networkProfile": {
-//       "networkInterfaces": [
-//         {
-//           "id": "[resourceId('Microsoft.Network/networkInterfaces',concat(variables('networkInterfaceName'),copyindex()))]"
-//         }
-//       ]
-//     },
-//     "diagnosticsProfile": {
-//       "bootDiagnostics": {
-//          "enabled": "true",
-//          "storageUri": "[concat('http://',parameters('storageName'),'.blob.core.windows.net')]"
-//       }
-//     }
-//   }
-// },
 // {	// virtualMachines/extensions[]
 // 	"name": "[concat(parameters('vmNamePrefix'), substring(uniqueString(resourceGroup().id), 0, 4), '-', copyindex(), '/installcustomscript')]",
 // 	"type": "Microsoft.Compute/virtualMachines/extensions",
