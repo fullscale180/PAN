@@ -430,7 +430,7 @@
 						"value" : "[parameters('trustedSubnetName')]"
 					},
 					"mgmtPublicIPDnsName":{
-						"value" : "parameters('mgmtPublicIPDnsName')]"
+						"value" : "[parameters('mgmtPublicIPDnsName')]"
 					},
 
 					"adminUsername": {
