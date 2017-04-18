@@ -149,7 +149,7 @@
 		},
 		"mgmtPublicIPName": {
 			"type": "string",
-			"defaultValue": "mgmtPublicIp-",
+			"defaultValue": "mgmtPip",
 			"metadata": {
 				"description": "Name of public IP resource for mgmt interface"
 			}
@@ -196,7 +196,7 @@
 
 		// Setup Mgmt Network Interface
 		{
-			"name": "[concat(parameters('virtualMachineName'), copyindex(), '-eth0')]",
+			"name": "[concat(parameters('virtualMachineName'), copyindex(), '-nic0')]",
 			"type": "Microsoft.Network/networkInterfaces",
 			"location": "[parameters('location')]",
 			"apiVersion": "2015-06-15",
@@ -214,7 +214,7 @@
 								"id": "[resourceId('Microsoft.Network/publicIPAddresses', parameters('mgmtPublicIPName'))]"
 							},
 							"subnet": {
-								"id": "[concat(variables('vnetId'),'/subnets/', parameters ('mgmtSubnet'))]"
+								"id": "[concat(variables('vnetId'),'/subnets/', parameters ('mgmtSubnetName'))]"
 							}
 						}
 					}
@@ -224,7 +224,7 @@
 
 		// Setup Untrusted Network Interface
 		{
-			"name": "[concat(parameters('virtualMachineName'), copyindex(), '-eth1')]",
+			"name": "[concat(parameters('virtualMachineName'), copyindex(), '-nic1')]",
 			"type": "Microsoft.Network/networkInterfaces",
 			"location": "[parameters('location')]",
 			"apiVersion": "2015-06-15",
@@ -240,7 +240,7 @@
 						"properties": {
 							"privateIPAllocationMethod": "Dynamic",
 							"subnet": {
-								"id": "[concat(variables('vnetId'),'/subnets/', parameters ('untrustedSubnet'))]"
+								"id": "[concat(variables('vnetId'),'/subnets/', parameters ('untrustedSubnetName'))]"
 							}
 						}
 					}
@@ -250,7 +250,7 @@
 
 		// Setup Trusted Network Interface
 		{
-			"name": "[concat(parameters('virtualMachineName'), copyindex(), '-eth2')]",
+			"name": "[concat(parameters('virtualMachineName'), copyindex(), '-nic2')]",
 			"type": "Microsoft.Network/networkInterfaces",
 			"location": "[parameters('location')]",
 			"apiVersion": "2015-06-15",
@@ -266,7 +266,7 @@
 						"properties": {
 							"privateIPAllocationMethod": "Dynamic",
 							"subnet": {
-								"id": "[concat(variables('vnetId'),'/subnets/', parameters ('trustedSubnet'))]"
+								"id": "[concat(variables('vnetId'),'/subnets/', parameters ('trustedSubnetName'))]"
 							}
 						}
 					}

@@ -63,7 +63,7 @@
 		},
 		"virtualMachineName": {
 			"type": "string",
-			"defaultValue": "backend-",
+			"defaultValue": "backend",
 			"metadata": {
 				"description": "This is the prefix name for the virtual machines"
 			}
@@ -276,31 +276,31 @@
 				}
 			}
 		},
-		{ // virtualMachines/extensions[]
-			"name": "[concat(parameters('virtualMachineName'), copyindex(), '/installcustomscript')]",
-			"type": "Microsoft.Compute/virtualMachines/extensions",
-			"copy": {
-				"name": "apacheLoop",
-				"count": "[parameters('vmCount')]"
-			},
-			"location": "[parameters('location')]",
-			"apiVersion": "2015-06-15",
-			"dependsOn": [
-				"virtualMachineLoop"
-			],
-			"tags": {
-				"displayName": "scriptextensiondemo"
-			},
-			"properties": {
-				"publisher": "Microsoft.Azure.Extensions",
-				"type": "CustomScript",
-				"typeHandlerVersion": "2.0",
-				"autoUpgradeMinorVersion": true,
-				"settings": {
-					"commandToExecute": "apt-get -y update && apt-get install -y apache2"
-				}
-			}
-		}
+		// { // virtualMachines/extensions[]
+		// 	"name": "[concat(parameters('virtualMachineName'), copyindex(), '/installcustomscript')]",
+		// 	"type": "Microsoft.Compute/virtualMachines/extensions",
+		// 	"copy": {
+		// 		"name": "apacheLoop",
+		// 		"count": "[parameters('vmCount')]"
+		// 	},
+		// 	"location": "[parameters('location')]",
+		// 	"apiVersion": "2015-06-15",
+		// 	"dependsOn": [
+		// 		"virtualMachineLoop"
+		// 	],
+		// 	"tags": {
+		// 		"displayName": "scriptextensiondemo"
+		// 	},
+		// 	"properties": {
+		// 		"publisher": "Microsoft.Azure.Extensions",
+		// 		"type": "CustomScript",
+		// 		"typeHandlerVersion": "2.0",
+		// 		"autoUpgradeMinorVersion": true,
+		// 		"settings": {
+		// 			"commandToExecute": "apt-get -y update && apt-get install -y apache2"
+		// 		}
+		// 	}
+		// }
 	],
 	
 	"outputs": {}

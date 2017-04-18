@@ -4,7 +4,7 @@
 	"parameters": {
 		"networkSecurityGroupName": {
 			"type": "string",
-			"defaultValue": "nsg-mgmt",
+			"defaultValue": "mgmtNsg",
 			"metadata": {
 				"description": "Network Security Group Name"
 			}
