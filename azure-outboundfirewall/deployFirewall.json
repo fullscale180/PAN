@@ -140,6 +140,13 @@
 		},
 		
 		// public IP parameters
+		"mgmtPublicIPDnsName": {
+			"type": "string",
+			"defaultValue": "panmgmt",
+			"metadata": {
+				"description": "DNS Name for mgmt interface"
+			}
+		},
 		"mgmtPublicIPName": {
 			"type": "string",
 			"defaultValue": "mgmtPublicIp-",
@@ -147,13 +154,6 @@
 				"description": "Name of public IP resource for mgmt interface"
 			}
 		},
-		"mgmtPublicIPDnsName": {
-			"type": "string",
-			"defaultValue": "panmgmt",
-			"metadata": {
-				"description": "DNS Name for mgmt interface"
-			}
-		}
 
 	},
 	"variables": {
