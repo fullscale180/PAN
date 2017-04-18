@@ -149,7 +149,7 @@
 		},
 		"mgmtPublicIPName": {
 			"type": "string",
-			"defaultValue": "mgmtPip",
+			"defaultValue": "mgmt-pip",
 			"metadata": {
 				"description": "Name of public IP resource for mgmt interface"
 			}
