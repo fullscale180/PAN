@@ -110,13 +110,15 @@
 		}
 	},
 	"variables": {
+		
 		"vnetId": "[resourceId('Microsoft.Network/virtualNetworks/', parameters('virtualNetworkName'))]",
 		"frontendSubnetRef": "[concat(variables('vnetId'),'/subnets/',parameters ('frontendSubnetName'))]",
 		"backendSubnetRef": "[concat(variables('vnetId'),'/subnets/',parameters ('backendSubnetName'))]",
-		"lbId": "[resourceId('Microsoft.Network/loadBalancers', parameters('loadBalancerName'))]",
-		"networkInterfaceName": "[concat('www-')]",
 
-		// "numberOfInstances": 2,
+		"outboundLBName": "[resourceId('Microsoft.Network/loadBalancers', parameters('loadBalancerName'))]",
+
+		"numberOfInstances": 2,
+		"networkInterfaceName": "[concat('www-')]",
 	},
 	"resources": [
 		{ // availability set
