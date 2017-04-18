@@ -204,6 +204,9 @@
 			"type": "Microsoft.Network/networkInterfaces",
 			"location": "[parameters('location')]",
 			"apiVersion": "2015-06-15",
+			"dependsOn": [
+				"[concat('Microsoft.Network/publicIPAddresses/', parameters('mgmtPublicIPName'), copyindex())]"
+			],
 			"copy": {
 				"name": "nicLoop",
 				"count": "[parameters('vmCount')]"

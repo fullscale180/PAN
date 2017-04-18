@@ -443,13 +443,13 @@
 						"value": "[parameters('untrustedSubnetName')]"
 					},
 					"trustedSubnetName": {
-						"value" : "[parameters('trustedSubnetName')]"
+						"value": "[parameters('trustedSubnetName')]"
 					},
 					"mgmtPublicIPName": {
 						"value": "[parameters('mgmtPublicIPName')]"
 					},
 					"mgmtPublicIPDnsName":{
-						"value" : "[parameters('mgmtPublicIPDnsName')]"
+						"value": "[parameters('mgmtPublicIPDnsName')]"
 					},
 
 					"virtualMachineName": {

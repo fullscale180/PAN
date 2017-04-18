@@ -9,10 +9,10 @@
       "value": "P@ssword1234"
     },
     "storageName": {
-      "value": "dapan1storage"
+      "value": "dapanstorage"
     },
 	"mgmtPublicIPDnsName" : {
-		"value" : "dapan1mgmt"
+		"value" : "dapanmgmt"
 	}
   }
 }
