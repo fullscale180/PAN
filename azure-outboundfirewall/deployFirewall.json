@@ -164,7 +164,7 @@
 	},
 	"variables": {
 		"vnetId": "[resourceId('Microsoft.Network/virtualNetworks/', parameters('virtualNetworkName'))]",
-		"deployVmURL" : "[concat(parameters('baseUrl'),'/deployVm-password-bs-yes.json')]",
+		"deployVmURL" : "[concat(parameters('baseUrl'),'/deployVm-password-nobs.json')]",
 
 		"imagePublisher": "paloaltonetworks",
 		"imageOffer": "vmseries1",
