@@ -89,11 +89,18 @@
 				"description": "Image SKU"
 			}
 		},
-		"vmNamePrefix": {
+		"virtualMachineName": {
 			"type": "string",
-			"defaultValue": "backendWWW-",
+			"defaultValue": "vm-",
 			"metadata": {
 				"description": "This is the prefix name for the virtual machines"
+			}
+		},
+		"networkInterfaceName": {
+			"type": "string",
+			"defaultValue": "nic-",
+			"metadata": {
+				"description": "This is the prefix name for the network interface"
 			}
 		},
 		"vmSize": {
@@ -116,8 +123,6 @@
 		"backendSubnetRef": "[concat(variables('vnetId'),'/subnets/',parameters ('backendSubnetName'))]",
 
 		"numberOfInstances": 2,
-		"networkInterfaceName": "[concat('nic-')]",
-		"virtualMachineName": "[concat('vm-')]",
 	},
 	"resources": [
 		{ // availability set
@@ -185,7 +190,7 @@
 		{ // network interface[]
 			"apiVersion": "2015-05-01-preview",
 			"type": "Microsoft.Network/networkInterfaces",
-			"name": "[concat(variables('networkInterfaceName'), copyindex())]",
+			"name": "[concat(parameters('networkInterfaceName'), copyindex())]",
 			"location": "[resourceGroup().location]",
 			"copy": {
 				"name": "nicLoop",
@@ -224,7 +229,7 @@
 			},
 			"location": "[resourceGroup().location]",
 			"dependsOn": [
-				"[concat('Microsoft.Network/networkInterfaces/', variables('networkInterfaceName'), copyindex())]",
+				"[concat('Microsoft.Network/networkInterfaces/', parameters('networkInterfaceName'), copyindex())]",
 				"[concat('Microsoft.Compute/availabilitySets/', variables('avSetName'))]"
 			],
 			"properties": {
@@ -258,7 +263,7 @@
 				"networkProfile": {
 					"networkInterfaces": [
 						{
-							"id": "[resourceId('Microsoft.Network/networkInterfaces',concat(variables('networkInterfaceName'),copyindex()))]"
+							"id": "[resourceId('Microsoft.Network/networkInterfaces',concat(parameters('networkInterfaceName'),copyindex()))]"
 						}
 					]
 				},
