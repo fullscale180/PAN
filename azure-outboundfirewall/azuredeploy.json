@@ -189,7 +189,7 @@
 			"metadata": {
 				"description": "DNS Name prefix of public IP resource for Management interface of VM-Series firewall.  Name must be globally unique."
 			},
-			"defaultValue": "dapanmgmt"
+			"defaultValue": "panmgmt"
 		},
 		"username": {
 			"type": "string",
