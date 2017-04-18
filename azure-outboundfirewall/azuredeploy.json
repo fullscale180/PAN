@@ -362,6 +362,9 @@
 					"contentVersion": "1.0.0.0"
 				},
 				"parameters": {
+					"location": {
+						"value": "[variables('location')]"
+					},
 					"storageName": {
 						"value": "[parameters('storageName')]"
 					},

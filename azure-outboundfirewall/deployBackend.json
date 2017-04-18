@@ -15,6 +15,12 @@
 				"description": "Availability Set name"
 			}
 		},
+		"location": {
+			"type": "string",
+			"metadata": {
+				"description": "Deployment location"
+			}
+		},
 
 		// Vnet parameters
 		"virtualNetworkName": {
@@ -55,6 +61,13 @@
 				"description": "The number of backend VM instances"
 			}
 		},
+		"virtualMachineName": {
+			"type": "string",
+			"defaultValue": "backend-",
+			"metadata": {
+				"description": "This is the prefix name for the virtual machines"
+			}
+		},
 		"imagePublisher": {
 			"type": "string",
 			"defaultValue": "Canonical",
@@ -74,13 +87,6 @@
 			"defaultValue": "16.04.0-LTS",
 			"metadata": {
 				"description": "Image SKU"
-			}
-		},
-		"virtualMachineName": {
-			"type": "string",
-			"defaultValue": "vm-",
-			"metadata": {
-				"description": "This is the prefix name for the virtual machines"
 			}
 		},
 		"vmSize": {
@@ -125,13 +131,14 @@
 			"apiVersion": "2015-05-01-preview",
 			"type": "Microsoft.Compute/availabilitySets",
 			"name": "[parameters('avSetName')]",
-			"location": "[resourceGroup().location]"
+			"location": "[parameters('location')]",
+
 		},
 		{ // outbound loadBalancer
 			"apiVersion": "2015-05-01-preview",
 			"type": "Microsoft.Network/loadBalancers",
 			"name": "[parameters('loadBalancerName')]",
-			"location": "[resourceGroup().location]",
+			"location": "[parameters('location')]",
 			"properties": {
 				"frontendIPConfigurations": [
 					{
@@ -186,7 +193,7 @@
 			"apiVersion": "2015-05-01-preview",
 			"type": "Microsoft.Network/networkInterfaces",
 			"name": "[concat(parameters('virtualMachineName'), copyindex(), '-nic')]",
-			"location": "[resourceGroup().location]",
+			"location": "[parameters('location')]",
 			"copy": {
 				"name": "nicLoop",
 				"count": "[parameters('vmCount')]"
@@ -221,7 +228,7 @@
 				"name": "virtualMachineLoop",
 				"count": "[parameters('vmCount')]"
 			},
-			"location": "[resourceGroup().location]",
+			"location": "[parameters('location')]",
 			"dependsOn": [
 				"[concat('Microsoft.Network/networkInterfaces/', parameters('virtualMachineName'), copyindex(), '-nic')]",
 				"[concat('Microsoft.Compute/availabilitySets/', parameters('avSetName'))]"
@@ -276,7 +283,7 @@
 				"name": "apacheLoop",
 				"count": "[parameters('vmCount')]"
 			},
-			"location": "[resourceGroup().location]",
+			"location": "[parameters('location')]",
 			"apiVersion": "2015-06-15",
 			"dependsOn": [
 				"virtualMachineLoop"

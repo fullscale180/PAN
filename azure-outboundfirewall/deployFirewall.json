@@ -36,7 +36,7 @@
 			"metadata": {
 				"description": "Name of VM-Series VM in the Azure portal"
 			},
-			"defaultValue": "VM-Series"
+			"defaultValue": "vmSeries"
 		},
 		"vmSize": {
 			"type": "string",
@@ -119,55 +119,23 @@
 			"metadata": {
 				"description": "Name of the Virtual Network (VNET)"
 			},
-			"defaultValue": "fwVNET"
-		},
-		"virtualNetworkExistingRGName": {
-			"type": "string",
-			"defaultValue": "",
-			"metadata": {
-				"description": "Name of resource group of VNET (new or existing)"
-			}
 		},
 		"mgmtSubnetName": {
 			"type": "string",
-			"defaultValue": "Mgmt",
 			"metadata": {
 				"description": "Subnet for Management"
 			}
 		},
 		"untrustedSubnetName": {
 			"type": "string",
-			"defaultValue": "Untrust",
 			"metadata": {
 				"description": "Subnet for Untrust"
 			}
 		},
 		"trustedSubnetName": {
 			"type": "string",
-			"defaultValue": "Trust",
 			"metadata": {
 				"description": "Subnet for Trust"
-			}
-		},
-		"mgmtSubnetPrefix": {
-			"type": "string",
-			"defaultValue": "192.168.0.0/24",
-			"metadata": {
-				"description": "Mgmt subnet CIDR"
-			}
-		},
-		"untrustedSubnetPrefix": {
-			"type": "string",
-			"defaultValue": "192.168.1.0/24",
-			"metadata": {
-				"description": "Untrust subnet CIDR"
-			}
-		},
-		"trustedSubnetPrefix": {
-			"type": "string",
-			"defaultValue": "192.168.2.0/24",
-			"metadata": {
-				"description": "Trust subnet CIDR"
 			}
 		},
 		
@@ -219,7 +187,7 @@
 			"properties": {
 				"publicIPAllocationMethod": "Dynamic",
 				"dnsSettings": {
-					"domainNameLabel":  "[concat('panmgmt', copyindex())]"
+					"domainNameLabel":  "[concat(parameters('mgmtPublicIPDnsName'), copyindex())]"
 				}
 			}
 		},
@@ -244,7 +212,7 @@
 								"id": "[resourceId('Microsoft.Network/publicIPAddresses', parameters('mgmtPublicIPName'))]"
 							},
 							"subnet": {
-								"id": "[concat(variables('vnetId'),'/subnets/',parameters ('mgmtSubnetRef'))]"
+								"id": "[concat(variables('vnetId'),'/subnets/', parameters ('mgmtSubnet'))]"
 							}
 						}
 					}
@@ -270,7 +238,7 @@
 						"properties": {
 							"privateIPAllocationMethod": "Dynamic",
 							"subnet": {
-								"id": "[concat(variables('vnetId'),'/subnets/',parameters ('untrustedSubnetRef'))]"
+								"id": "[concat(variables('vnetId'),'/subnets/', parameters ('untrustedSubnet'))]"
 							}
 						}
 					}
@@ -296,13 +264,16 @@
 						"properties": {
 							"privateIPAllocationMethod": "Dynamic",
 							"subnet": {
-								"id": "[concat(variables('vnetId'),'/subnets/',parameters ('trustedSubnetRef'))]"
+								"id": "[concat(variables('vnetId'),'/subnets/', parameters ('trustedSubnet'))]"
 							}
 						}
 					}
 				]
 			}
 		}
+
+
+
 
 	]
 
