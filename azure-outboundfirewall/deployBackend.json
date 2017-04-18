@@ -112,7 +112,7 @@
 		}
 	},
 	"variables": {
-		"vnetId": "[resourceId(concat('Microsoft.Network/virtualNetworks/', parameters('virtualNetworkName')))]",
+		"vnetId": "[resourceId('Microsoft.Network/virtualNetworks/', parameters('virtualNetworkName'))]",
 		"frontendSubnetRef": "[concat(variables('vnetId'),'/subnets/',parameters ('frontendSubnetName'))]",
 
 		// "networkInterfaceName": "[concat('web-', substring(uniqueString(resourceGroup().id), 0, 4), '-')]",
