@@ -320,7 +320,7 @@
 						"value": "[variables('imagePublisher')]"
 					},
 					"nicName": {
-						"value": "[concat(variables('virtualMachineName'), copyindex())]"
+						"value": "[concat(parameters('virtualMachineName'), copyindex())]"
 					},
 					"vmSize": {
 						"value": "[parameters('vmSize')]"
