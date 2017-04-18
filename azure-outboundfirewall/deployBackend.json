@@ -2,12 +2,6 @@
 	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
 	"contentVersion": "1.0.0.0",
 	"parameters": {
-		"baseUrl": {
-			"type": "string",
-			"metadata": {
-				"description": "Base URL of templates and scripts"
-			}
-		},
 		"storageName": {
 			"type": "string",
 			"metadata": {
@@ -21,6 +15,7 @@
 				"description": "Availability Set name"
 			}
 		},
+
 		// Vnet parameters
 		"virtualNetworkName": {
 			"type": "string",
@@ -49,6 +44,7 @@
 				"description": "This is the name of the frontend subnet"
 			}
 		},
+
 		// VM parameters
 		"adminUsername": {
 			"type": "string",
@@ -114,23 +110,32 @@
 			"metadata": {
 				"description": "This is the allowed list of VM sizes"
 			}
-		}
+		},
+		"numberOfInstances" : {
+			"type": "int",
+			"maxValue": 5,
+			"minValue": 1,
+			"defaultValue": 2,
+			"metadata": {
+				"description": "The number of backend VM instances"
+			}
+		},
 	},
 	"variables": {
 		"vnetId": "[resourceId('Microsoft.Network/virtualNetworks/', parameters('virtualNetworkName'))]",
 		"outboundLBId": "[resourceId('Microsoft.Network/loadBalancers', parameters('loadBalancerName'))]",
 		"frontendSubnetRef": "[concat(variables('vnetId'),'/subnets/',parameters ('frontendSubnetName'))]",
 		"backendSubnetRef": "[concat(variables('vnetId'),'/subnets/',parameters ('backendSubnetName'))]",
-
-		"numberOfInstances": 2,
 	},
 	"resources": [
+
 		{ // availability set
 			"apiVersion": "2015-05-01-preview",
 			"type": "Microsoft.Compute/availabilitySets",
 			"name": "[parameters('avSetName')]",
 			"location": "[resourceGroup().location]"
 		},
+
 		{ // outbound loadBalancer
 			"apiVersion": "2015-05-01-preview",
 			"type": "Microsoft.Network/loadBalancers",
@@ -194,7 +199,7 @@
 			"location": "[resourceGroup().location]",
 			"copy": {
 				"name": "nicLoop",
-				"count": "[variables('numberOfInstances')]"
+				"count": "[parameters('numberOfInstances')]"
 			},
 			"dependsOn": [
 				"[concat('Microsoft.Network/loadBalancers/', parameters('loadBalancerName'))]"
@@ -225,7 +230,7 @@
 			"name": "[concat(parameters('virtualMachineName'), copyindex())]",
 			"copy": {
 				"name": "virtualMachineLoop",
-				"count": "[variables('numberOfInstances')]"
+				"count": "[parameters('numberOfInstances')]"
 			},
 			"location": "[resourceGroup().location]",
 			"dependsOn": [
