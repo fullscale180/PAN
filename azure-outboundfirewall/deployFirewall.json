@@ -11,7 +11,7 @@
 		},
 		"avSetName": {
 			"type": "string",
-			"defaultValue": "firewallAvSet",
+			"defaultValue": "firewall-avset",
 			"metadata": {
 				"description": "Availability Set name"
 			}

@@ -4,7 +4,7 @@
 	"parameters": {
 		"networkSecurityGroupName": {
 			"type": "string",
-			"defaultValue": "mgmtNsg",
+			"defaultValue": "mgmt-nsg",
 			"metadata": {
 				"description": "Network Security Group Name"
 			}
@@ -124,7 +124,7 @@
 
 		"outboundloadBalancerName": {
 			"type": "string",
-			"defaultValue": "outboundLB",
+			"defaultValue": "outbound-lb",
 			"metadata": {
 				"description": "Outbound Load Balancer Name"
 			}
@@ -182,7 +182,7 @@
 			"metadata": {
 				"description": "Name prefix of public IP resource for Management interface of VM-Series firewall."
 			},
-			"defaultValue": "mgmtIp"
+			"defaultValue": "mgmt-pip"
 		},
 		"mgmtPublicIPDnsName": {
 			"type": "string",
@@ -428,6 +428,9 @@
 					},
 					"trustedSubnetName": {
 						"value" : "[parameters('trustedSubnetName')]"
+					},
+					"mgmtPublicIPName": {
+						"value": "[parameters('mgmtPublicIPName')]"
 					},
 					"mgmtPublicIPDnsName":{
 						"value" : "[parameters('mgmtPublicIPDnsName')]"

@@ -10,7 +10,7 @@
 		},
 		"avSetName": {
 			"type": "string",
-			"defaultValue": "backendAvSet",
+			"defaultValue": "backend-avset",
 			"metadata": {
 				"description": "Availability Set name"
 			}
@@ -63,7 +63,7 @@
 		},
 		"virtualMachineName": {
 			"type": "string",
-			"defaultValue": "backend",
+			"defaultValue": "backendVm",
 			"metadata": {
 				"description": "This is the prefix name for the virtual machines"
 			}
@@ -192,7 +192,7 @@
 		{ // network interface[]
 			"apiVersion": "2015-05-01-preview",
 			"type": "Microsoft.Network/networkInterfaces",
-			"name": "[concat(parameters('virtualMachineName'), copyindex(), '-nic')]",
+			"name": "[concat(parameters('virtualMachineName'), copyindex(), '-nic0')]",
 			"location": "[parameters('location')]",
 			"copy": {
 				"name": "nicLoop",
