@@ -305,7 +305,7 @@
 						"value": "[parameters('location')]"
 					},
 					"virtualMachineName": {
-						"value": "[concat(parameters('vmName'), copyindex())]"
+						"value": "[concat(parameters('virtualMachineName'), copyindex())]"
 					},
 					"avSetName": {
 						"value": "[parameters('avSetName')]"
