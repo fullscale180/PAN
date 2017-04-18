@@ -32,7 +32,7 @@ $location = "westus2"
 #-----------------------------------------------------
 # Create a new resource group
 #-----------------------------------------------------
-$rgName = "PAN1" 
+$rgName = "PAN2" 
 $rg = New-AzureRMResourceGroup -name $rgName -location $location
 
 #-----------------------------------------------------

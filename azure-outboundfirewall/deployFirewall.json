@@ -72,6 +72,17 @@
 			},
 			"defaultValue": "byol"
 		},
+		"bootstrap": {
+			"type": "string",
+			"defaultValue" : "no",
+			"allowedValues": [
+				"yes",
+				"no"
+			],
+			"metadata": {
+				"description": "Bootstrap disk yes or no"
+			}
+		},
 		"bootstrapUri": {
 			"type": "string",
 			"defaultValue": "",
@@ -159,17 +170,18 @@
 			"metadata": {
 				"description": "Name of public IP resource for mgmt interface"
 			}
-		},
-
+		}
 	},
+
 	"variables": {
 		"vnetId": "[resourceId('Microsoft.Network/virtualNetworks/', parameters('virtualNetworkName'))]",
-		"deployVmURL" : "[concat(parameters('baseUrl'),'/deployVm-password-nobs.json')]",
+		"deployVmURL" : "[concat(parameters('baseUrl'),'/deployVm-', parameters('authenticationType'), '-bs-', parameters('bootstrap'),'.json')]",
 
 		"imagePublisher": "paloaltonetworks",
 		"imageOffer": "vmseries1",
 		"version": "latest"
 	},
+
 	"resources": [
 
 		// availabilitySets
@@ -350,11 +362,7 @@
 			}
 		}
 
-
-
-
 	]
-
 }
 
 
