@@ -352,6 +352,7 @@
 			"type": "Microsoft.Resources/deployments",
 			"apiVersion": "2015-01-01",
 			"dependsOn": [
+				"Microsoft.Resources/deployments/deployStorage",
 				"Microsoft.Resources/deployments/deployNsg",
 				"Microsoft.Resources/deployments/deployVNet"
 			],
