@@ -122,6 +122,14 @@
 			}
 		},
 
+		"outboundloadBalancerName": {
+			"type": "string",
+			"defaultValue": "outboundLB",
+			"metadata": {
+				"description": "Outbound Load Balancer Name"
+			}
+		},
+
 		"backendVmSize": {
 			"type": "string",
 			"allowedValues": [
@@ -362,29 +370,26 @@
 						"value": "[parameters('storageName')]"
 					},
 					"virtualNetworkName": {
-						"value": "[parameters('virtualNetworkName').outputs.vnetName.value]"
+						"value": "[parameters('virtualNetworkName')]"
 					},
 					"loadBalancerName": {
-						"value": "[parameters('inboundLoadBalancerName')]"
+						"value": "[parameters('outboundLoadBalancerName')]"
 					},
-					"adminUsername": {
-						"value": "[parameters('username')]"
+					"frontendSubnetName": {
+						"value": "[parameters('frontendSubnetName')]"
 					},
 					"backendSubnetName": {
 						"value" : "[parameters('backendSubnetName')]"
 					},
 
+					"adminUsername": {
+						"value": "[parameters('username')]"
+					},
 					"adminPassword": {
 						"value": "[parameters('password')]"
 					},
 					"sshKey": {
 						"value": "[parameters('sshPublicKey')]"
-					},
-					"subnetName": {
-						"value": "[parameters('backendSubnetName')]"
-					},
-					"frontendSubnetName": {
-						"value": "[parameters('frontendSubnetName')]"
 					},
 					"vmSize": {
 						"value": "[parameters('backendVmSize')]"

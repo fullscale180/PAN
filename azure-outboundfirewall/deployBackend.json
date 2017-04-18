@@ -112,10 +112,10 @@
 		}
 	},
 	"variables": {
+		"vnetRef": "[reference(concat('Microsoft.Network/virtualNetworks/', parameters('virtualNetworkName')))]",
+		"frontendSubnetRef": "[concat(variables('vnetRef'),'/subnets/',parameters ('frontendSubnetName'))]",
+
 		// "networkInterfaceName": "[concat('web-', substring(uniqueString(resourceGroup().id), 0, 4), '-')]",
-		// "vnetID": "[resourceId(parameters('virtualNetworkExistingRGName'),concat('Microsoft.Network','/','virtualNetworks'),parameters('virtualNetworkName'))]",
-		// "subnetRef": "[concat(variables('vnetID'),'/subnets/',parameters ('subnetName'))]",
-		// "frontendSubnetRef": "[concat(variables('vnetID'),'/subnets/',parameters ('frontendSubnetName'))]",
 		// "numberOfInstances": 2,
 		// "inboundLbID": "[resourceId('Microsoft.Network/loadBalancers',parameters('inboundLbName'))]",
 	},
@@ -183,7 +183,7 @@
 		}
 	],
 	"outputs": {
-				
+
 	}
 }
 // {	// network interface[]
