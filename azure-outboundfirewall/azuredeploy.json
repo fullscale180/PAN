@@ -414,9 +414,9 @@
 					"virtualNetworkName": {
 						"value": "[parameters('virtualNetworkName')]"
 					},
-					"loadBalancerName": {
-						"value": "[parameters('outboundLoadBalancerName')]"
-					},
+					// "loadBalancerName": {
+					// 	"value": "[parameters('outboundLoadBalancerName')]"
+					// },
 					"untrustSubnetName": {
 						"value": "[parameters('untrustedSubnetName')]"
 					},
