@@ -3,7 +3,7 @@
 	"contentVersion": "1.0.0.0",
 	"parameters": {
 
-		"storageAccountName": {
+		"storageName": {
 			"type": "string",
 			"metadata": {
 				"description": "Name prefix of the new storage account created to store the VM's disks"
@@ -135,14 +135,14 @@
 				"description": "Subnet for Management"
 			}
 		},
-		"untrustSubnetName": {
+		"untrustedSubnetName": {
 			"type": "string",
 			"defaultValue": "Untrust",
 			"metadata": {
 				"description": "Subnet for Untrust"
 			}
 		},
-		"trustSubnetName": {
+		"trustedSubnetName": {
 			"type": "string",
 			"defaultValue": "Trust",
 			"metadata": {
@@ -156,14 +156,14 @@
 				"description": "Mgmt subnet CIDR"
 			}
 		},
-		"untrustSubnetPrefix": {
+		"untrustedSubnetPrefix": {
 			"type": "string",
 			"defaultValue": "192.168.1.0/24",
 			"metadata": {
 				"description": "Untrust subnet CIDR"
 			}
 		},
-		"trustSubnetPrefix": {
+		"trustedSubnetPrefix": {
 			"type": "string",
 			"defaultValue": "192.168.2.0/24",
 			"metadata": {
@@ -317,7 +317,7 @@
 						"properties": {
 							"privateIPAllocationMethod": "Dynamic",
 							"subnet": {
-								"id": "[concat(variables('vnetId'),'/subnets/',parameters ('untrustSubnetRef'))]"
+								"id": "[concat(variables('vnetId'),'/subnets/',parameters ('untrustedSubnetRef'))]"
 							}
 						}
 					}
@@ -343,7 +343,7 @@
 						"properties": {
 							"privateIPAllocationMethod": "Dynamic",
 							"subnet": {
-								"id": "[concat(variables('vnetId'),'/subnets/',parameters ('trustSubnetRef'))]"
+								"id": "[concat(variables('vnetId'),'/subnets/',parameters ('trustedSubnetRef'))]"
 							}
 						}
 					}
@@ -407,8 +407,8 @@
 		// 			"adminPassword": {
 		// 				"value": "[parameters('adminPassword')]"
 		// 			},
-		// 			"storageAccountName": {
-		// 				"value": "[parameters('storageAccountName')]"
+		// 			"storageName": {
+		// 				"value": "[parameters('storageName')]"
 		// 			},
 		// 			"sshKey": {
 		// 				"value": "[parameters('sshKey')]"
