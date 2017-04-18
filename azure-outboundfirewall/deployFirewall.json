@@ -302,7 +302,7 @@
 				},
 				"parameters": {
 					"location": {
-						"value": "[variables('location')]"
+						"value": "[parameters('location')]"
 					},
 					"virtualMachineName": {
 						"value": "[concat(parameters('vmName'), copyindex())]"
