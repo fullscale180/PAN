@@ -230,11 +230,11 @@
 			"location": "[resourceGroup().location]",
 			"dependsOn": [
 				"[concat('Microsoft.Network/networkInterfaces/', parameters('networkInterfaceName'), copyindex())]",
-				"[concat('Microsoft.Compute/availabilitySets/', variables('avSetName'))]"
+				"[concat('Microsoft.Compute/availabilitySets/', parameters('avSetName'))]"
 			],
 			"properties": {
 				"availabilitySet": {
-					"id": "[resourceId('Microsoft.Compute/availabilitySets',variables('avSetName'))]"
+					"id": "[resourceId('Microsoft.Compute/availabilitySets',parameters('avSetName'))]"
 				},
 				"hardwareProfile": {
 					"vmSize": "[parameters('vmSize')]"
