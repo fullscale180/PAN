@@ -112,8 +112,8 @@
 		}
 	},
 	"variables": {
-		"vnetRef": "[reference(concat('Microsoft.Network/virtualNetworks/', parameters('virtualNetworkName')))]",
-		"frontendSubnetRef": "[concat(variables('vnetRef'),'/subnets/',parameters ('frontendSubnetName'))]",
+		"vnetId": "[resourceId(concat('Microsoft.Network/virtualNetworks/', parameters('virtualNetworkName')))]",
+		"frontendSubnetRef": "[concat(variables('vnetId'),'/subnets/',parameters ('frontendSubnetName'))]",
 
 		// "networkInterfaceName": "[concat('web-', substring(uniqueString(resourceGroup().id), 0, 4), '-')]",
 		// "numberOfInstances": 2,
