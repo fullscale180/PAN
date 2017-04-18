@@ -160,6 +160,8 @@
 		"firewallAvSetName": "[concat('firewallAvSet')]",
 		"vnetId": "[resourceId('Microsoft.Network/virtualNetworks/', parameters('virtualNetworkName'))]",
 
+		"mgmtPublicIPDnsName": "panmgmt",
+
 		"imagePublisher": "paloaltonetworks",
 		"imageOffer": "vmseries1",
 		"version": "latest"
@@ -187,7 +189,7 @@
 			"properties": {
 				"publicIPAllocationMethod": "Dynamic",
 				"dnsSettings": {
-					"domainNameLabel":  "[concat(parameters('mgmtPublicIPDnsName'), copyindex())]"
+					"domainNameLabel":  "[concat(variables('mgmtPublicIPDnsName'), copyindex())]"
 				}
 			}
 		},
