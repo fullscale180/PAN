@@ -17,7 +17,6 @@
 			"defaultValue": "0.0.0.0/0"
 		},
 
-
 		"storageName": {
 			"type": "string",
 			"metadata": {
@@ -96,7 +95,7 @@
 		},
 		"frontendSubnetName": {
 			"type": "string",
-			"defaultValue": "Gateway",
+			"defaultValue": "Frontend",
 			"metadata": {
 				"description": "Subnet for App Gateway"
 			}
@@ -289,7 +288,7 @@
 			"type": "Microsoft.Resources/deployments",
 			"apiVersion": "2015-01-01",
 			"dependsOn": [
-				"Microsoft.Resources/deployments/SetupNsg"
+				"Microsoft.Resources/deployments/deployNsg"
 			],
 			"properties": {
 				"mode": "Incremental",
@@ -363,7 +362,7 @@
 						"value": "[parameters('storageName')]"
 					},
 					"virtualNetworkName": {
-						"value": "[reference('SetupVNET').outputs.vnetName.value]"
+						"value": "[parameters('virtualNetworkName').outputs.vnetName.value]"
 					},
 					"loadBalancerName": {
 						"value": "[parameters('inboundLoadBalancerName')]"
