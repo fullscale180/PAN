@@ -118,7 +118,7 @@
 		"outboundLBId": "[resourceId('Microsoft.Network/loadBalancers', parameters('loadBalancerName'))]",
 
 		"numberOfInstances": 2,
-		"networkInterfaceName": "[concat('www-')]",
+		"networkInterfaceName": "[concat('nic-')]",
 	},
 	"resources": [
 		{ // availability set
