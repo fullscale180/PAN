@@ -253,10 +253,10 @@
 					"location": {
 						"value": "[variables('location')]"
 					},
-					"storageAccountType": {
+					"storageType": {
 						"value": "[parameters('storageType')]"
 					},
-					"storageAccountName": {
+					"storageName": {
 						"value": "[variables('storageName')]"
 					}
 				}

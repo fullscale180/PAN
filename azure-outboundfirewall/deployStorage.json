@@ -5,13 +5,13 @@
     "location": {
       "type": "string"
     },
-    "storageAccountName": {
+    "storageName": {
       "type": "string",
       "metadata": {
         "Description": "The name of the new storage account created to store the VMs disks"
       }
     },
-    "storageAccountType": {
+    "storageType": {
       "type": "string",
       "allowedValues": [
         "Standard_LRS",
@@ -25,7 +25,7 @@
     },
   },
   "variables": {
-    "stname": "[parameters('storageAccountName')]"
+    "stname": "[parameters('storageName')]"
   },
   "resources": [
     {
@@ -34,7 +34,7 @@
 	"apiVersion": "2015-06-15",
 	"location": "[parameters('location')]",
 	"properties": {
-		"accountType": "[parameters('storageAccountType')]"
+		"accountType": "[parameters('storageType')]"
 	}
      }
   ],
