@@ -194,9 +194,7 @@
 
 		"imagePublisher": "paloaltonetworks",
 		"imageOffer": "vmseries1",
-		"version": "latest",
-
-		// "vmTemplateUrl": "[concat(parameters('baseUrl'), '/virtual-machine-', parameters('authenticationType'),'-bs-', parameters('Bootstrap'), '.json')]",
+		"version": "latest"
 	},
 	"resources": [
 
