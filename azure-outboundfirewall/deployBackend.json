@@ -21,7 +21,6 @@
 				"description": "Availability Set name"
 			}
 		},
-
 		// Vnet parameters
 		"virtualNetworkName": {
 			"type": "string",
@@ -50,7 +49,6 @@
 				"description": "This is the name of the frontend subnet"
 			}
 		},
-
 		// VM parameters
 		"adminUsername": {
 			"type": "string",
@@ -114,10 +112,11 @@
 	"variables": {
 		"vnetId": "[resourceId('Microsoft.Network/virtualNetworks/', parameters('virtualNetworkName'))]",
 		"frontendSubnetRef": "[concat(variables('vnetId'),'/subnets/',parameters ('frontendSubnetName'))]",
+		"backendSubnetRef": "[concat(variables('vnetId'),'/subnets/',parameters ('backendSubnetName'))]",
+		"lbId": "[resourceId('Microsoft.Network/loadBalancers', parameters('loadBalancerName'))]",
+		"networkInterfaceName": "[concat('www-')]",
 
-		// "networkInterfaceName": "[concat('web-', substring(uniqueString(resourceGroup().id), 0, 4), '-')]",
 		// "numberOfInstances": 2,
-		// "inboundLbID": "[resourceId('Microsoft.Network/loadBalancers',parameters('inboundLbName'))]",
 	},
 	"resources": [
 		{ // availability set
@@ -126,6 +125,7 @@
 			"name": "[parameters('avSetName')]",
 			"location": "[resourceGroup().location]"
 		},
+
 		{ // outbound loadBalancer
 			"apiVersion": "2015-05-01-preview",
 			"type": "Microsoft.Network/loadBalancers",
@@ -134,13 +134,13 @@
 			"properties": {
 				"frontendIPConfigurations": [
 					{
+						"name": "LoadBalancerFrontend",
 						"properties": {
 							"subnet": {
-								"id": "[variables('frontendSubnetRef')]"
+								"id": "[variables('backendSubnetRef')]"
 							},
 							"privateIPAllocationMethod": "Dynamic"
 						},
-						"name": "LoadBalancerFrontend"
 					}
 				],
 				"backendAddressPools": [
@@ -180,43 +180,42 @@
 					}
 				]
 			}
-		}
-	],
-	"outputs": {
+		},
 
-	}
+		{ // network interface[]
+			"apiVersion": "2015-05-01-preview",
+			"type": "Microsoft.Network/networkInterfaces",
+			"name": "[concat(variables('networkInterfaceName'), copyindex())]",
+			"location": "[resourceGroup().location]",
+			"copy": {
+				"name": "nicLoop",
+				"count": "[variables('numberOfInstances')]"
+			},
+			"dependsOn": [
+				"[concat('Microsoft.Network/loadBalancers/', parameters('loadBalancerName'))]"
+			],
+			"properties": {
+				"ipConfigurations": [
+					{
+						"name": "ipconfig1",
+						"properties": {
+							"privateIPAllocationMethod": "Dynamic",
+							"subnet": {
+								"id": "[variables('backendSubnetRef')]"
+							},
+							"loadBalancerBackendAddressPools": [
+								{
+									"id": "[concat(variables('lbId'), '/backendAddressPools/BackendPool1')]"
+								}
+							]
+						}
+					}
+				]
+			}
+		},
+	],
+	"outputs": {}
 }
-// {	// network interface[]
-//   "apiVersion": "2015-05-01-preview",
-//   "type": "Microsoft.Network/networkInterfaces",
-//   "name": "[concat(variables('networkInterfaceName'), copyindex())]",
-//   "location": "[resourceGroup().location]",
-//   "copy": {
-//     "name": "nicLoop",
-//     "count": "[variables('numberOfInstances')]"
-//   },
-//   "dependsOn": [
-//     "[concat('Microsoft.Network/loadBalancers/', parameters('inboundLbName'))]"
-//   ],
-//   "properties": {
-//     "ipConfigurations": [
-//       {
-//         "name": "ipconfig1",
-//         "properties": {
-//           "privateIPAllocationMethod": "Dynamic",
-//           "subnet": {
-//             "id": "[variables('subnetRef')]"
-//           },
-//           "loadBalancerBackendAddressPools": [
-//             {
-//               "id": "[concat(variables('inboundLbID'), '/backendAddressPools/BackendPool1')]"
-//             }
-//           ]
-//         }
-//       }
-//     ]
-//   }
-// },
 // {	// virtualMachines[]
 //   "apiVersion": "2015-06-15",
 //   "type": "Microsoft.Compute/virtualMachines",
