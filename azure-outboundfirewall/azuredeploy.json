@@ -380,9 +380,6 @@
 					"virtualNetworkName": {
 						"value": "[parameters('virtualNetworkName')]"
 					},
-					"loadBalancerName": {
-						"value": "[parameters('outboundLoadBalancerName')]"
-					},
 					"frontendSubnetName": {
 						"value": "[parameters('frontendSubnetName')]"
 					},
@@ -452,6 +449,9 @@
 						"value": "[parameters('mgmtPublicIPDnsName')]"
 					},
 
+					"loadBalancerName": {
+						"value": "[parameters('outboundLoadBalancerName')]"
+					},
 					"virtualMachineName": {
 						"value": "[parameters('firewallVmName')]"
 					},

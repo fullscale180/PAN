@@ -156,6 +156,15 @@
 			}
 		},
 		
+		// load balancer parameters
+		"loadBalancerName": {
+			"type": "string",
+			"defaultValue": "outboundLB",
+			"metadata": {
+				"description": "This is the name of the inbound load balancer"
+			}
+		},
+
 		// public IP parameters
 		"mgmtPublicIPDnsName": {
 			"type": "string",
@@ -241,7 +250,7 @@
 			}
 		},
 
-		// Setup Untrusted Network Interface
+		// Setup Untrusted (external) Network Interface
 		{
 			"name": "[concat(parameters('virtualMachineName'), copyindex(), '-nic1')]",
 			"type": "Microsoft.Network/networkInterfaces",
@@ -267,7 +276,7 @@
 			}
 		},
 
-		// Setup Trusted Network Interface
+		// Setup Trusted (internal) Network Interface
 		{
 			"name": "[concat(parameters('virtualMachineName'), copyindex(), '-nic2')]",
 			"type": "Microsoft.Network/networkInterfaces",
@@ -286,12 +295,75 @@
 							"privateIPAllocationMethod": "Dynamic",
 							"subnet": {
 								"id": "[concat(variables('vnetId'),'/subnets/', parameters ('trustedSubnetName'))]"
-							}
+							},
+							"loadBalancerBackendAddressPools": [
+								{
+									"id": "[concat(variables('lbId'), '/backendAddressPools/FirewallPool')]"
+								}
+							]
 						}
 					}
 				]
 			}
 		},
+
+		// Setup firewall load balancer
+		{ 
+			"apiVersion": "2015-05-01-preview",
+			"type": "Microsoft.Network/loadBalancers",
+			"name": "[parameters('loadBalancerName')]",
+			"location": "[parameters('location')]",
+			"properties": {
+				"frontendIPConfigurations": [
+					{
+						"name": "LoadBalancerFrontend",
+						"properties": {
+							"subnet": {
+								"id": "[concat(variables('vnetId'),'/subnets/',parameters ('trustedSubnetName'))]"
+							},
+							"privateIPAllocationMethod": "Dynamic" 
+						},
+					}
+				],
+				"backendAddressPools": [
+					{
+						"name": "FirewallPool"
+					}
+				],
+				"loadBalancingRules": [
+					{
+						"properties": {
+							"frontendIPConfiguration": {
+								"id": "[concat(variables('lbId'), '/frontendIpConfigurations/LoadBalancerFrontend')]"
+							},
+							"backendAddressPool": {
+								"id": "[concat(variables('lbId'), '/backendAddressPools/FirewallPool')]"
+							},
+							"probe": {
+								"id": "[concat(variables('lbId'), '/probes/lbprobe')]"
+							},
+							"protocol": "Tcp",
+							"frontendPort": 80,
+							"backendPort": 80,
+							"idleTimeoutInMinutes": 15
+						},
+						"Name": "lbrule"
+					}
+				],
+				"probes": [
+					{
+						"properties": {
+							"protocol": "Tcp",
+							"port": 80,
+							"intervalInSeconds": 15,
+							"numberOfProbes": 2
+						},
+						"name": "lbprobe"
+					}
+				]
+			}
+		},
+
 
 		// VMSeries-Firewall-VM
 		{

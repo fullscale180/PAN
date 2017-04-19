@@ -29,13 +29,6 @@
 				"description": "This is the name of the Virtual Network"
 			}
 		},
-		"loadBalancerName": {
-			"type": "string",
-			"defaultValue": "outboundLB",
-			"metadata": {
-				"description": "This is the name of the inbound load balancer"
-			}
-		},
 		"backendSubnetName": {
 			"type": "string",
 			"defaultValue": "backend",
@@ -127,69 +120,17 @@
 	},
 
 	"resources": [
-		{ // availability set
+		// availability set
+		{ 
 			"apiVersion": "2015-05-01-preview",
 			"type": "Microsoft.Compute/availabilitySets",
 			"name": "[parameters('avSetName')]",
 			"location": "[parameters('location')]",
 
 		},
-		{ // outbound loadBalancer
-			"apiVersion": "2015-05-01-preview",
-			"type": "Microsoft.Network/loadBalancers",
-			"name": "[parameters('loadBalancerName')]",
-			"location": "[parameters('location')]",
-			"properties": {
-				"frontendIPConfigurations": [
-					{
-						"name": "LoadBalancerFrontend",
-						"properties": {
-							"subnet": {
-								"id": "[concat(variables('vnetId'),'/subnets/',parameters ('backendSubnetName'))]"
-							},
-							"privateIPAllocationMethod": "Dynamic" 
-						},
-					}
-				],
-				"backendAddressPools": [
-					{
-						"name": "BackendPool1"
-					}
-				],
-				"loadBalancingRules": [
-					{
-						"properties": {
-							"frontendIPConfiguration": {
-								"id": "[concat(variables('lbId'), '/frontendIpConfigurations/LoadBalancerFrontend')]"
-							},
-							"backendAddressPool": {
-								"id": "[concat(variables('lbId'), '/backendAddressPools/BackendPool1')]"
-							},
-							"probe": {
-								"id": "[concat(variables('lbId'), '/probes/lbprobe')]"
-							},
-							"protocol": "Tcp",
-							"frontendPort": 80,
-							"backendPort": 80,
-							"idleTimeoutInMinutes": 15
-						},
-						"Name": "lbrule"
-					}
-				],
-				"probes": [
-					{
-						"properties": {
-							"protocol": "Tcp",
-							"port": 80,
-							"intervalInSeconds": 15,
-							"numberOfProbes": 2
-						},
-						"name": "lbprobe"
-					}
-				]
-			}
-		},
-		{ // network interface[]
+		
+		// network interface[]
+		{
 			"apiVersion": "2015-05-01-preview",
 			"type": "Microsoft.Network/networkInterfaces",
 			"name": "[concat(parameters('virtualMachineName'), copyindex(), '-nic')]",
@@ -209,18 +150,15 @@
 							"privateIPAllocationMethod": "Dynamic",
 							"subnet": {
 								"id": "[concat(variables('vnetId'),'/subnets/',parameters ('backendSubnetName'))]"
-							},
-							"loadBalancerBackendAddressPools": [
-								{
-									"id": "[concat(variables('lbId'), '/backendAddressPools/BackendPool1')]"
-								}
-							]
+							}
 						}
 					}
 				]
 			}
 		},
-		{ // virtualMachines[]
+		
+		// virtualMachines[]
+		{ 
 			"apiVersion": "2015-06-15",
 			"type": "Microsoft.Compute/virtualMachines",
 			"name": "[concat(parameters('virtualMachineName'), copyindex())]",
@@ -276,31 +214,33 @@
 				}
 			}
 		},
-		// { // virtualMachines/extensions[]
-		// 	"name": "[concat(parameters('virtualMachineName'), copyindex(), '/installcustomscript')]",
-		// 	"type": "Microsoft.Compute/virtualMachines/extensions",
-		// 	"copy": {
-		// 		"name": "apacheLoop",
-		// 		"count": "[parameters('vmCount')]"
-		// 	},
-		// 	"location": "[parameters('location')]",
-		// 	"apiVersion": "2015-06-15",
-		// 	"dependsOn": [
-		// 		"virtualMachineLoop"
-		// 	],
-		// 	"tags": {
-		// 		"displayName": "scriptextensiondemo"
-		// 	},
-		// 	"properties": {
-		// 		"publisher": "Microsoft.Azure.Extensions",
-		// 		"type": "CustomScript",
-		// 		"typeHandlerVersion": "2.0",
-		// 		"autoUpgradeMinorVersion": true,
-		// 		"settings": {
-		// 			"commandToExecute": "apt-get -y update && apt-get install -y apache2"
-		// 		}
-		// 	}
-		// }
+		
+		// virtualMachines/extensions[]
+		{ 
+			"name": "[concat(parameters('virtualMachineName'), copyindex(), '/installcustomscript')]",
+			"type": "Microsoft.Compute/virtualMachines/extensions",
+			"copy": {
+				"name": "apacheLoop",
+				"count": "[parameters('vmCount')]"
+			},
+			"location": "[parameters('location')]",
+			"apiVersion": "2015-06-15",
+			"dependsOn": [
+				"virtualMachineLoop"
+			],
+			"tags": {
+				"displayName": "scriptextensiondemo"
+			},
+			"properties": {
+				"publisher": "Microsoft.Azure.Extensions",
+				"type": "CustomScript",
+				"typeHandlerVersion": "2.0",
+				"autoUpgradeMinorVersion": true,
+				"settings": {
+					"commandToExecute": "apt-get -y update && apt-get install -y apache2"
+				}
+			}
+		}
 	],
 	
 	"outputs": {}
