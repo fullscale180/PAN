@@ -138,9 +138,6 @@
 				"name": "nicLoop",
 				"count": "[parameters('vmCount')]"
 			},
-			"dependsOn": [
-				"[concat('Microsoft.Network/loadBalancers/', parameters('loadBalancerName'))]"
-			],
 			"properties": {
 				"ipConfigurations": [
 					{

@@ -284,6 +284,9 @@
 			"type": "Microsoft.Network/networkInterfaces",
 			"location": "[parameters('location')]",
 			"apiVersion": "2015-06-15",
+			"dependsOn": [
+				"[concat('Microsoft.Network/loadBalancers/', parameters('loadBalancerName'))]"
+			],
 			"copy": {
 				"name": "nicLoop",
 				"count": "[parameters('vmCount')]"
