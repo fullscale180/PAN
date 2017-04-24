@@ -357,6 +357,7 @@
 							"protocol": "Tcp",
 							"frontendPort": 80,
 							"backendPort": 80,
+							"enableFloatingIP": true,
 							"idleTimeoutInMinutes": 15
 						},
 						"Name": "lbrule"
@@ -385,7 +386,7 @@
 			"properties": {
 				"routes": [
 					{
-						"name": "DensDefault",
+						"name": "Default",
 						"properties": {
 							"addressPrefix": "0.0.0.0/0",
 							"nextHopType": "VirtualAppliance", 
