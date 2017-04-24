@@ -389,7 +389,7 @@
 						"properties": {
 							"addressPrefix": "0.0.0.0/0",
 							"nextHopType": "VirtualAppliance", 
-							"nextHopIpAddress": "[reference(resourceId('Microsoft.Network/loadBalancers/', parameters('loadBalancerName/frontendIPConfigurations/LoadBalancerFrontend/'))).privateIPAddress]"
+							"nextHopIpAddress": "[reference(resourceId('Microsoft.Network/loadBalancers/', parameters('loadBalancerName'))).frontendIPConfigurations.LoadBalancerFrontend.privateIPAddress]"
 						}
 					}
 				]
