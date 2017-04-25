@@ -406,7 +406,7 @@
 
 		// Deploy outbound load balancer
 		{	
-			"name": "deployLoadBalancer",
+			"name": "deployOutboundLoadBalancer",
 			"type": "Microsoft.Resources/deployments",
 			"apiVersion": "2015-01-01",
 			"dependsOn": [
@@ -444,7 +444,7 @@
 			"dependsOn": [
 				"Microsoft.Resources/deployments/deployVNet",
 				"Microsoft.Resources/deployments/deployBackend",
-				"Microsoft.Resources/deployments/deployLoadBalancer"
+				"Microsoft.Resources/deployments/deployOutboundLoadBalancer"
 			],
 			"properties": {
 				"mode": "Incremental",
@@ -504,7 +504,7 @@
 
 		// Deploy inbound load balancer
 		{	
-			"name": "deployLoadBalancer",
+			"name": "deployInboundLoadBalancer",
 			"type": "Microsoft.Resources/deployments",
 			"apiVersion": "2015-01-01",
 			"dependsOn": [
@@ -534,7 +534,6 @@
 			}
 		},
 
-
 		// Deploy inbound Firewall
 		{	
 			"name": "deployInboundFirewall",
@@ -543,7 +542,7 @@
 			"dependsOn": [
 				"Microsoft.Resources/deployments/deployVNet",
 				"Microsoft.Resources/deployments/deployBackend",
-				"Microsoft.Resources/deployments/deployLoadBalancer"
+				"Microsoft.Resources/deployments/deployInboundLoadBalancer"
 			],
 			"properties": {
 				"mode": "Incremental",
