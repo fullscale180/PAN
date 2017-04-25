@@ -2,6 +2,7 @@
 	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
 	"contentVersion": "1.0.0.0",
 	"parameters": {
+		// NSG Settings
 		"networkSecurityGroupName": {
 			"type": "string",
 			"defaultValue": "mgmt-nsg",
@@ -17,6 +18,7 @@
 			"defaultValue": "0.0.0.0/0"
 		},
 
+		// Storage Settings
 		"storageName": {
 			"type": "string",
 			"metadata": {
@@ -37,6 +39,7 @@
 			"defaultValue": "Standard_LRS"
 		},
 
+		// VNet settings
 		"virtualNetworkName": {
 			"type": "string",
 			"defaultValue": "vnet",
@@ -93,13 +96,13 @@
 				"description": "CIDR for Trusted Network"
 			}
 		},
-		"frontendSubnetName": {
-			"type": "string",
-			"defaultValue": "Frontend",
-			"metadata": {
-				"description": "Subnet for App Gateway"
-			}
-		},
+		// "frontendSubnetName": {
+		// 	"type": "string",
+		// 	"defaultValue": "Frontend",
+		// 	"metadata": {
+		// 		"description": "Subnet for App Gateway"
+		// 	}
+		// },
 		"frontendSubnetPrefix": {
 			"type": "string",
 			"defaultValue": "192.168.3.0/24",
@@ -121,6 +124,22 @@
 				"description": "CIDR for Backend WWW Network"
 			}
 		},
+
+		// Public Ip Settings
+		"gatewayPublicIPName": {
+			"type": "string",
+			"metadata": {
+				"description": "Name public IP resource for the application gateway."
+			},
+			"defaultValue": "gateway-pip"
+		},
+		"gatewayPublicIPDnsName" : {
+			"type": "string",
+			"metadata": {
+				"description": "DNS Name of public IP resource for the application gateway.  Name must be globally unique."
+			},
+			"defaultValue": "pangateway"
+		},
 		"mgmtPublicIPName": {
 			"type": "string",
 			"metadata": {
@@ -136,6 +155,7 @@
 			"defaultValue": "panmgmt"
 		},
 		
+		// VM settings
 		"firewallModel": {
 			"type": "string",
 			"defaultValue": "byol",
@@ -325,9 +345,9 @@
 					"trustSubnetName": {
 						"value": "[parameters('trustedSubnetName')]"
 					},
-					"frontendSubnetName": {
-						"value": "[parameters('frontendSubnetName')]"
-					},
+					// "frontendSubnetName": {
+					// 	"value": "[parameters('frontendSubnetName')]"
+					// },
 					"backendSubnetName": {
 						"value": "[parameters('backendSubnetName')]"
 					},
@@ -346,6 +366,21 @@
 					"backendSubnetPrefix": {
 						"value": "[parameters('backendSubnetPrefix')]"
 					}
+				}
+			}
+		},
+
+		
+		// Setup App gateway PublicIPs[x]
+		{ 
+			"apiVersion": "2015-06-15",
+			"type": "Microsoft.Network/publicIPAddresses",
+			"name": "[parameters('gatewayPublicIPName')]",
+			"location": "[parameters('location')]",
+			"properties": {
+				"publicIPAllocationMethod": "Dynamic",
+				"dnsSettings": {
+					"domainNameLabel":  "[parameters('gatewayPublicIPDnsName')]"
 				}
 			}
 		},
@@ -471,9 +506,9 @@
 					"virtualNetworkName": {
 						"value": "[parameters('virtualNetworkName')]"
 					},
-					"frontendSubnetName": {
-						"value": "[parameters('frontendSubnetName')]"
-					},
+					// "frontendSubnetName": {
+					// 	"value": "[parameters('frontendSubnetName')]"
+					// },
 					"backendSubnetName": {
 						"value" : "[parameters('backendSubnetName')]"
 					},

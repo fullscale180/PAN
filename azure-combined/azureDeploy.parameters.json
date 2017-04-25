@@ -11,6 +11,9 @@
     "storageName": {
       "value": "dapan2storage"
     },
+	"gatewayPublicIPDnsName" : {
+		"value" : "dapanapp"
+	},
 	"mgmtPublicIPDnsName" : {
 		"value" : "dapan2mgmt"
 	}
