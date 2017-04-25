@@ -208,7 +208,7 @@
 			"defaultValue": "password"
 		},
 		"password": {
-			"type": "string",
+			"type": "securestring",
 			"defaultValue": "",
 			"metadata": {
 				"description": "Password for the administrator account of all VM instances. Must be specified if Authentication Type is 'password'."
@@ -346,59 +346,6 @@
 					"backendSubnetPrefix": {
 						"value": "[parameters('backendSubnetPrefix')]"
 					}
-				}
-			}
-		},
-
-		// Deploy Backend
-		{	
-			"name": "deployBackend",
-			"type": "Microsoft.Resources/deployments",
-			"apiVersion": "2015-01-01",
-			"dependsOn": [
-				"Microsoft.Resources/deployments/deployStorage",
-				"Microsoft.Resources/deployments/deployNsg",
-				"Microsoft.Resources/deployments/deployVNet"
-			],
-			"properties": {
-				"mode": "Incremental",
-				"templateLink": {
-					"uri": "[variables('deployBackendURL')]",
-					"contentVersion": "1.0.0.0"
-				},
-				"parameters": {
-					"location": {
-						"value": "[variables('location')]"
-					},
-					"storageName": {
-						"value": "[parameters('storageName')]"
-					},
-				
-					"virtualNetworkName": {
-						"value": "[parameters('virtualNetworkName')]"
-					},
-					"frontendSubnetName": {
-						"value": "[parameters('frontendSubnetName')]"
-					},
-					"backendSubnetName": {
-						"value" : "[parameters('backendSubnetName')]"
-					},
-
-					"virtualMachineName": {
-						"value": "[parameters('backendVmName')]"
-					},
-					"vmSize": {
-						"value": "[parameters('backendVmSize')]"
-					},
-					"adminUsername": {
-						"value": "[parameters('username')]"
-					},
-					"adminPassword": {
-						"value": "[parameters('password')]"
-					},
-					"sshKey": {
-						"value": "[parameters('sshPublicKey')]"
-					},
 				}
 			}
 		},
