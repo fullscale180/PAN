@@ -67,17 +67,17 @@
 				],
 				"backendAddressPools": [
 					{
-						"name": "FirewallPool"
+						"name": "BackendPool"
 					}
 				],
 				"loadBalancingRules": [
 					{
 						"properties": {
 							"frontendIPConfiguration": {
-								"id": "[concat(variables('lbId'), '/frontendIpConfigurations/LoadBalancerFrontend')]"
+								"id": "[concat(variables('lbId'), '/frontendIpConfigurations/Frontend')]"
 							},
 							"backendAddressPool": {
-								"id": "[concat(variables('lbId'), '/backendAddressPools/FirewallPool')]"
+								"id": "[concat(variables('lbId'), '/backendAddressPools/BackendPool')]"
 							},
 							"probe": {
 								"id": "[concat(variables('lbId'), '/probes/lbprobe')]"
