@@ -496,10 +496,10 @@
 					},
 					"loadBalancerName": {
 						"value": "outbound-lb"
-					},
+					}
 				}
 			}
-		}
+		},
 
 		// Deploy outbound Firewall
 		{	
