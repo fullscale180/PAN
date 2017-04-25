@@ -404,6 +404,101 @@
 		},
 
 
+		// Deploy load balancer
+		{	
+			"name": "deployLoadBalancer",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2015-01-01",
+			"dependsOn": [
+				"Microsoft.Resources/deployments/deployVNet",
+				"Microsoft.Resources/deployments/deployBackend"
+			],
+			"properties": {
+				"mode": "Incremental",
+				"templateLink": {
+					"uri": "[variables('deployLoadBalancerURL')]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"location": {
+						"value": "[variables('location')]"
+					},
+					"virtualNetworkName": {
+						"value": "[parameters('virtualNetworkName')]"
+					},
+					"trustedSubnetName": {
+						"value": "[parameters('trustedSubnetName')]"
+					},
+					"loadBalancerName": {
+						"value": "outbound-lb"
+					}
+				}
+			}
+		},
+
+		// Deploy outbound Firewall
+		{	
+			"name": "deployOutboundFirewall",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2015-01-01",
+			"dependsOn": [
+				"Microsoft.Resources/deployments/deployVNet",
+				"Microsoft.Resources/deployments/deployBackend"
+			],
+			"properties": {
+				"mode": "Incremental",
+				"templateLink": {
+					"uri": "[variables('deployFirewallURL')]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"baseUrl": {
+						"value": "[variables('baseUrl')]"
+					},
+					"location": {
+						"value": "[variables('location')]"
+					},
+					"storageName": {
+						"value": "[parameters('storageName')]"
+					},
+					"virtualNetworkName": {
+						"value": "[parameters('virtualNetworkName')]"
+					},
+					"mgmtSubnetName": {
+						"value": "[parameters('mgmtSubnetName')]"
+					},
+					"untrustedSubnetName": {
+						"value": "[parameters('untrustedSubnetName')]"
+					},
+					"trustedSubnetName": {
+						"value": "[parameters('trustedSubnetName')]"
+					},
+					"mgmtPublicIPName": {
+						"value": "[concat('out', parameters('mgmtPublicIPName'))]"
+					},
+					"mgmtPublicIPDnsName":{
+						"value": "[concat('out', parameters('mgmtPublicIPDnsName'))]"
+					},
+					"virtualMachineName": {
+						"value": "[concat('out', parameters('firewallVmName'))]"
+					},
+					"vmSize": {
+						"value": "[parameters('firewallVmSize')]"
+					},
+					"adminUsername": {
+						"value": "[parameters('username')]"
+					},
+					"adminPassword": {
+						"value": "[parameters('password')]"
+					},
+					"sshKey": {
+						"value": "[parameters('sshPublicKey')]"
+					},
+				}
+			}
+		}
+
+
 	],
 	"outputs": {}
 }
