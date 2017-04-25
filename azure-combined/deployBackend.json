@@ -1,0 +1,243 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"storageName": {
+			"type": "string",
+			"metadata": {
+				"description": "Storage account name"
+			}
+		},
+		"avSetName": {
+			"type": "string",
+			"defaultValue": "backend-avset",
+			"metadata": {
+				"description": "Availability Set name"
+			}
+		},
+		"location": {
+			"type": "string",
+			"metadata": {
+				"description": "Deployment location"
+			}
+		},
+
+		// Vnet parameters
+		"virtualNetworkName": {
+			"type": "string",
+			"metadata": {
+				"description": "This is the name of the Virtual Network"
+			}
+		},
+		"backendSubnetName": {
+			"type": "string",
+			"defaultValue": "backend",
+			"metadata": {
+				"description": "This is the name of the backend subnet"
+			}
+		},
+		"frontendSubnetName": {
+			"type": "string",
+			"defaultValue": "frontend",
+			"metadata": {
+				"description": "This is the name of the frontend subnet"
+			}
+		},
+
+		// VM parameters
+		"vmCount": {
+			"type": "int",
+			"maxValue": 5,
+			"minValue": 1,
+			"defaultValue": 2,
+			"metadata": {
+				"description": "The number of backend VM instances"
+			}
+		},
+		"virtualMachineName": {
+			"type": "string",
+			"defaultValue": "backendVm",
+			"metadata": {
+				"description": "This is the prefix name for the virtual machines"
+			}
+		},
+		"imagePublisher": {
+			"type": "string",
+			"defaultValue": "Canonical",
+			"metadata": {
+				"description": "Image Publisher"
+			}
+		},
+		"imageOffer": {
+			"type": "string",
+			"defaultValue": "UbuntuServer",
+			"metadata": {
+				"description": "Image Offer"
+			}
+		},
+		"imageSKU": {
+			"type": "string",
+			"defaultValue": "16.04.0-LTS",
+			"metadata": {
+				"description": "Image SKU"
+			}
+		},
+		"vmSize": {
+			"type": "string",
+			"allowedValues": [
+				"Standard_A1",
+				"Standard_D1",
+				"Standard_D1_v2"
+			],
+			"defaultValue": "Standard_D1",
+			"metadata": {
+				"description": "This is the allowed list of VM sizes"
+			}
+		},
+		"adminUsername": {
+			"type": "string",
+			"metadata": {
+				"description": "Admin username"
+			}
+		},
+		"adminPassword": {
+			"type": "securestring",
+			"metadata": {
+				"description": "Admin password"
+			}
+		},
+		"sshKey": {
+			"type": "string",
+			"metadata": {
+				"description": "ssh public key for admin user authentication"
+			}
+		},
+	},
+
+	"variables": {
+		"vnetId": "[resourceId('Microsoft.Network/virtualNetworks/', parameters('virtualNetworkName'))]",
+	},
+
+	"resources": [
+		// availability set
+		{ 
+			"apiVersion": "2015-05-01-preview",
+			"type": "Microsoft.Compute/availabilitySets",
+			"name": "[parameters('avSetName')]",
+			"location": "[parameters('location')]",
+
+		},
+		
+		// network interface[]
+		{
+			"apiVersion": "2015-05-01-preview",
+			"type": "Microsoft.Network/networkInterfaces",
+			"name": "[concat(parameters('virtualMachineName'), copyindex(), '-nic')]",
+			"location": "[parameters('location')]",
+			"copy": {
+				"name": "nicLoop",
+				"count": "[parameters('vmCount')]"
+			},
+			"properties": {
+				"ipConfigurations": [
+					{
+						"name": "ipconfig1",
+						"properties": {
+							"privateIPAllocationMethod": "Dynamic",
+							"subnet": {
+								"id": "[concat(variables('vnetId'),'/subnets/',parameters ('backendSubnetName'))]"
+							}
+						}
+					}
+				]
+			}
+		},
+		
+		// // virtualMachines[]
+		{ 
+			// 	"apiVersion": "2015-06-15",
+			// 	"type": "Microsoft.Compute/virtualMachines",
+			// 	"name": "[concat(parameters('virtualMachineName'), copyindex())]",
+			// 	"copy": {
+			// 		"name": "virtualMachineLoop",
+			// 		"count": "[parameters('vmCount')]"
+			// 	},
+			// 	"location": "[parameters('location')]",
+			// 	"dependsOn": [
+			// 		"[concat('Microsoft.Network/networkInterfaces/', parameters('virtualMachineName'), copyindex(), '-nic')]",
+			// 		"[concat('Microsoft.Compute/availabilitySets/', parameters('avSetName'))]"
+			// 	],
+			// 	"properties": {
+			// 		"availabilitySet": {
+			// 			"id": "[resourceId('Microsoft.Compute/availabilitySets',parameters('avSetName'))]"
+			// 		},
+			// 		"hardwareProfile": {
+			// 			"vmSize": "[parameters('vmSize')]"
+			// 		},
+			// 		"osProfile": {
+			// 			"computerName": "[concat(parameters('virtualMachineName'), copyIndex())]",
+			// 			"adminUsername": "[parameters('adminUsername')]",
+			// 			"adminPassword": "[parameters('adminPassword')]"
+			// 		},
+			// 		"storageProfile": {
+			// 			"imageReference": {
+			// 				"publisher": "[parameters('imagePublisher')]",
+			// 				"offer": "[parameters('imageOffer')]",
+			// 				"sku": "[parameters('imageSKU')]",
+			// 				"version": "latest"
+			// 			},
+			// 			"osDisk": {
+			// 				"name": "osdisk",
+			// 				"vhd": {
+			// 					"uri": "[concat('http://',parameters('storageName'),'.blob.core.windows.net/vhds/','osdisk', copyindex(), '.vhd')]"
+			// 				},
+			// 				"caching": "ReadWrite",
+			// 				"createOption": "FromImage"
+			// 			}
+			// 		},
+			// 		"networkProfile": {
+			// 			"networkInterfaces": [
+			// 				{
+			// 					"id": "[resourceId('Microsoft.Network/networkInterfaces',concat(parameters('virtualMachineName'), copyindex(),'-nic'))]"
+			// 				}
+			// 			]
+			// 		},
+			// 		"diagnosticsProfile": {
+			// 			"bootDiagnostics": {
+			// 				"enabled": "true",
+			// 				"storageUri": "[concat('http://',parameters('storageName'),'.blob.core.windows.net')]"
+			// 			}
+			// 		}
+			// 	}
+		},
+		
+		// // virtualMachines/extensions[]
+		{ 
+			// 	"name": "[concat(parameters('virtualMachineName'), copyindex(), '/installcustomscript')]",
+			// 	"type": "Microsoft.Compute/virtualMachines/extensions",
+			// 	"copy": {
+			// 		"name": "apacheLoop",
+			// 		"count": "[parameters('vmCount')]"
+			// 	},
+			// 	"location": "[parameters('location')]",
+			// 	"apiVersion": "2015-06-15",
+			// 	"dependsOn": [
+			// 		"virtualMachineLoop"
+			// 	],
+			// 	"tags": {
+			// 		"displayName": "scriptextensiondemo"
+			// 	},
+			// 	"properties": {
+			// 		"publisher": "Microsoft.Azure.Extensions",
+			// 		"type": "CustomScript",
+			// 		"typeHandlerVersion": "2.0",
+			// 		"autoUpgradeMinorVersion": true,
+			// 		"settings": {
+			// 			"commandToExecute": "apt-get -y update && apt-get install -y apache2"
+			// 		}
+			// 	}
+		}
+	],
+	
+	"outputs": {}
+}
