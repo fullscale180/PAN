@@ -110,6 +110,9 @@
 			"apiVersion": "2015-06-15",
 			"type": "Microsoft.Network/routeTables",
 			"name": "[parameters('routeTableName')]",
+			"dependsOn": [
+				"[concat('Microsoft.Network/loadBalancers',parameters('loadBalancerName'))",
+			],
 			"location": "[parameters('location')]",
 			"properties": {
 				"routes": [
