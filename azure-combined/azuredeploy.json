@@ -350,6 +350,99 @@
 			}
 		},
 
+		// Deploy inbound load balancer
+		{	
+			"name": "deployInboundLoadBalancer",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2015-01-01",
+			"dependsOn": [
+				"Microsoft.Resources/deployments/deployVNet"
+			],
+			"properties": {
+				"mode": "Incremental",
+				"templateLink": {
+					"uri": "[variables('deployLoadBalancerURL')]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"location": {
+						"value": "[variables('location')]"
+					},
+					"virtualNetworkName": {
+						"value": "[parameters('virtualNetworkName')]"
+					},
+					"subnetName": {
+						"value": "[parameters('trustedSubnetName')]"
+					},
+					"loadBalancerName": {
+						"value": "inbound-lb"
+					}
+				}
+			}
+		},
+
+		// Deploy backend load balancer
+		{	
+			"name": "deployBackendLoadBalancer",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2015-01-01",
+			"dependsOn": [
+				"Microsoft.Resources/deployments/deployVNet"
+			],
+			"properties": {
+				"mode": "Incremental",
+				"templateLink": {
+					"uri": "[variables('deployLoadBalancerURL')]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"location": {
+						"value": "[variables('location')]"
+					},
+					"virtualNetworkName": {
+						"value": "[parameters('virtualNetworkName')]"
+					},
+					"subnetName": {
+						"value": "[parameters('untrustedSubnetName')]"
+					},
+					"loadBalancerName": {
+						"value": "backend-lb"
+					}
+				}
+			}
+		},
+
+		// Deploy outbound load balancer
+		{	
+			"name": "deployOutboundLoadBalancer",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2015-01-01",
+			"dependsOn": [
+				"Microsoft.Resources/deployments/deployVNet"
+			],
+			"properties": {
+				"mode": "Incremental",
+				"templateLink": {
+					"uri": "[variables('deployLoadBalancerURL')]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"location": {
+						"value": "[variables('location')]"
+					},
+					"virtualNetworkName": {
+						"value": "[parameters('virtualNetworkName')]"
+					},
+					"subnetName": {
+						"value": "[parameters('trustedSubnetName')]"
+					},
+					"loadBalancerName": {
+						"value": "outbound-lb"
+					}
+				}
+			}
+		},
+
 		// Deploy Backend
 		{	
 			"name": "deployBackend",
@@ -358,7 +451,8 @@
 			"dependsOn": [
 				"Microsoft.Resources/deployments/deployStorage",
 				"Microsoft.Resources/deployments/deployNsg",
-				"Microsoft.Resources/deployments/deployVNet"
+				"Microsoft.Resources/deployments/deployVNet",
+				"Microsoft.Resources/deployments/deployBackendLoadBalancer"
 			],
 			"properties": {
 				"mode": "Incremental",
@@ -406,99 +500,68 @@
 			}
 		},
 
-
-		// Deploy outbound load balancer
+		// Deploy inbound Firewall
 		{	
-			"name": "deployOutboundLoadBalancer",
+			"name": "deployInboundFirewall",
 			"type": "Microsoft.Resources/deployments",
 			"apiVersion": "2015-01-01",
 			"dependsOn": [
 				"Microsoft.Resources/deployments/deployVNet",
-				"Microsoft.Resources/deployments/deployBackend"
+				"Microsoft.Resources/deployments/deployBackend",
+				"Microsoft.Resources/deployments/deployInboundLoadBalancer"
 			],
 			"properties": {
 				"mode": "Incremental",
 				"templateLink": {
-					"uri": "[variables('deployLoadBalancerURL')]",
+					"uri": "[variables('deployFirewallURL')]",
 					"contentVersion": "1.0.0.0"
 				},
 				"parameters": {
+					"baseUrl": {
+						"value": "[variables('baseUrl')]"
+					},
 					"location": {
 						"value": "[variables('location')]"
+					},
+					"storageName": {
+						"value": "[parameters('storageName')]"
 					},
 					"virtualNetworkName": {
 						"value": "[parameters('virtualNetworkName')]"
 					},
-					"subnetName": {
-						"value": "[parameters('trustedSubnetName')]"
+					"mgmtSubnetName": {
+						"value": "[parameters('mgmtSubnetName')]"
 					},
-					"loadBalancerName": {
-						"value": "outbound-lb"
-					}
-				}
-			}
-		},
-
-		// Deploy inbound load balancer
-		{	
-			"name": "deployInboundLoadBalancer",
-			"type": "Microsoft.Resources/deployments",
-			"apiVersion": "2015-01-01",
-			"dependsOn": [
-				"Microsoft.Resources/deployments/deployVNet",
-				"Microsoft.Resources/deployments/deployBackend"
-			],
-			"properties": {
-				"mode": "Incremental",
-				"templateLink": {
-					"uri": "[variables('deployLoadBalancerURL')]",
-					"contentVersion": "1.0.0.0"
-				},
-				"parameters": {
-					"location": {
-						"value": "[variables('location')]"
+					"inboundSubnetName": {
+						"value": "[parameters('untrustedSubnetName')]"
 					},
-					"virtualNetworkName": {
-						"value": "[parameters('virtualNetworkName')]"
-					},
-					"subnetName": {
+					"outboundSubnetName": {
 						"value": "[parameters('trustedSubnetName')]"
 					},
 					"loadBalancerName": {
 						"value": "inbound-lb"
-					}
-				}
-			}
-		},
-
-		// Deploy backend load balancer
-		{	
-			"name": "deployBackendLoadBalancer",
-			"type": "Microsoft.Resources/deployments",
-			"apiVersion": "2015-01-01",
-			"dependsOn": [
-				"Microsoft.Resources/deployments/deployVNet",
-				"Microsoft.Resources/deployments/deployBackend"
-			],
-			"properties": {
-				"mode": "Incremental",
-				"templateLink": {
-					"uri": "[variables('deployLoadBalancerURL')]",
-					"contentVersion": "1.0.0.0"
-				},
-				"parameters": {
-					"location": {
-						"value": "[variables('location')]"
 					},
-					"virtualNetworkName": {
-						"value": "[parameters('virtualNetworkName')]"
+					"mgmtPublicIPName": {
+						"value": "[concat('in', parameters('mgmtPublicIPName'))]"
 					},
-					"subnetName": {
-						"value": "[parameters('untrustedSubnetName')]"
+					"mgmtPublicIPDnsName":{
+						"value": "[concat('in', parameters('mgmtPublicIPDnsName'))]"
 					},
-					"loadBalancerName": {
-						"value": "backend-lb"
-					}
+					"virtualMachineName": {
+						"value": "[concat('in', parameters('firewallVmName'))]"
+					},
+					"vmSize": {
+						"value": "[parameters('firewallVmSize')]"
+					},
+					"adminUsername": {
+						"value": "[parameters('username')]"
+					},
+					"adminPassword": {
+						"value": "[parameters('password')]"
+					},
+					"sshKey": {
+						"value": "[parameters('sshPublicKey')]"
+					},
 				}
 			}
 		},
@@ -535,10 +598,10 @@
 					"mgmtSubnetName": {
 						"value": "[parameters('mgmtSubnetName')]"
 					},
-					"untrustedSubnetName": {
+					"inboundSubnetName": {
 						"value": "[parameters('untrustedSubnetName')]"
 					},
-					"trustedSubnetName": {
+					"outboundSubnetName": {
 						"value": "[parameters('trustedSubnetName')]"
 					},
 					"loadBalancerName": {
@@ -568,72 +631,6 @@
 				}
 			}
 		},
-
-		// Deploy inbound Firewall
-		{	
-			"name": "deployInboundFirewall",
-			"type": "Microsoft.Resources/deployments",
-			"apiVersion": "2015-01-01",
-			"dependsOn": [
-				"Microsoft.Resources/deployments/deployVNet",
-				"Microsoft.Resources/deployments/deployBackend",
-				"Microsoft.Resources/deployments/deployInboundLoadBalancer"
-			],
-			"properties": {
-				"mode": "Incremental",
-				"templateLink": {
-					"uri": "[variables('deployFirewallURL')]",
-					"contentVersion": "1.0.0.0"
-				},
-				"parameters": {
-					"baseUrl": {
-						"value": "[variables('baseUrl')]"
-					},
-					"location": {
-						"value": "[variables('location')]"
-					},
-					"storageName": {
-						"value": "[parameters('storageName')]"
-					},
-					"virtualNetworkName": {
-						"value": "[parameters('virtualNetworkName')]"
-					},
-					"mgmtSubnetName": {
-						"value": "[parameters('mgmtSubnetName')]"
-					},
-					"untrustedSubnetName": {
-						"value": "[parameters('untrustedSubnetName')]"
-					},
-					"trustedSubnetName": {
-						"value": "[parameters('trustedSubnetName')]"
-					},
-					"loadBalancerName": {
-						"value": "inbound-lb"
-					},
-					"mgmtPublicIPName": {
-						"value": "[concat('in', parameters('mgmtPublicIPName'))]"
-					},
-					"mgmtPublicIPDnsName":{
-						"value": "[concat('in', parameters('mgmtPublicIPDnsName'))]"
-					},
-					"virtualMachineName": {
-						"value": "[concat('in', parameters('firewallVmName'))]"
-					},
-					"vmSize": {
-						"value": "[parameters('firewallVmSize')]"
-					},
-					"adminUsername": {
-						"value": "[parameters('username')]"
-					},
-					"adminPassword": {
-						"value": "[parameters('password')]"
-					},
-					"sshKey": {
-						"value": "[parameters('sshPublicKey')]"
-					},
-				}
-			}
-		}
 
 
 	],
