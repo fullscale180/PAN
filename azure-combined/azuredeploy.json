@@ -444,7 +444,7 @@
 						"value": "[parameters('untrustedSubnetName')]"
 					},
 					"loadBalancerName": {
-						"value": "parameters('backendLoadBalancerName')"
+						"value": "[parameters('backendLoadBalancerName')]"
 					}
 				}
 			}
@@ -475,7 +475,7 @@
 						"value": "[parameters('trustedSubnetName')]"
 					},
 					"loadBalancerName": {
-						"value": "parameters('outboundLoadBalancerName')"
+						"value": "[parameters('outboundLoadBalancerName')]"
 					}
 				}
 			}
@@ -514,7 +514,7 @@
 					},
 
 					"loadBalancerName": {
-						"value": "parameters('backendLoadBalancerName')"
+						"value": "[parameters('backendLoadBalancerName')]"
 					},
 					"virtualMachineName": {
 						"value": "[parameters('backendVmName')]"
@@ -640,7 +640,7 @@
 						"value": "[parameters('trustedSubnetName')]"
 					},
 					"loadBalancerName": {
-						"value": "parameters('outboundLoadBalancerName')"
+						"value": "[parameters('outboundLoadBalancerName')]"
 					},
 					"mgmtPublicIPName": {
 						"value": "[concat('out', parameters('mgmtPublicIPName'))]"
@@ -667,16 +667,15 @@
 			}
 		},
 
-		// Connect inbound load balancer to gateway Public IP
+		// Connect gateway Public IP to inbound load balancer
 		{ 
 			"apiVersion": "2015-05-01-preview",
 			"type": "Microsoft.Network/loadBalancers",
 			"name": "[parameters('inboundLoadBalancerName')]",
 			"dependsOn": [
-				"[concat('Microsoft.Network/publicIPAddresses/', parameters('gatewayPublicIPName')]",
-				"[concat('Microsoft.Network/loadBalancers/', parameters('inboundLoadBalancerName')]"
+				"[concat('Microsoft.Network/publicIPAddresses/', parameters('gatewayPublicIPName'))]"
 			],
-			"location": "[parameters('location')]",
+			"location": "[variables('location')]",
 			"properties": {
 				"frontendIPConfigurations": [
 					{
