@@ -103,13 +103,13 @@
 		// 		"description": "Subnet for App Gateway"
 		// 	}
 		// },
-		"frontendSubnetPrefix": {
-			"type": "string",
-			"defaultValue": "192.168.3.0/24",
-			"metadata": {
-				"description": "CIDR for App Gateway"
-			}
-		},
+		// "frontendSubnetPrefix": {
+		// 	"type": "string",
+		// 	"defaultValue": "192.168.3.0/24",
+		// 	"metadata": {
+		// 		"description": "CIDR for App Gateway"
+		// 	}
+		// },
 		"backendSubnetName": {
 			"type": "string",
 			"defaultValue": "Backend",
@@ -360,9 +360,9 @@
 					"trustSubnetPrefix": {
 						"value": "[parameters('trustedSubnetPrefix')]"
 					},
-					"frontendSubnetPrefix": {
-						"value": "[parameters('frontendSubnetPrefix')]"
-					},
+					// "frontendSubnetPrefix": {
+					// 	"value": "[parameters('frontendSubnetPrefix')]"
+					// },
 					"backendSubnetPrefix": {
 						"value": "[parameters('backendSubnetPrefix')]"
 					}
