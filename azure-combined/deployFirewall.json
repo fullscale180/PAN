@@ -295,9 +295,10 @@
 							"subnet": {
 								"id": "[concat(variables('vnetId'),'/subnets/', parameters ('trustedSubnetName'))]"
 							},
+							// DO NOT add to backendpool for inbound
 							"loadBalancerBackendAddressPools": [
 								{
-									"id": "[concat(variables('lbId'), '/backendAddressPools/FirewallPool')]"
+									"id": "[concat(variables('lbId'), '/backendAddressPools/BackendPool')]"
 								}
 							]
 						}

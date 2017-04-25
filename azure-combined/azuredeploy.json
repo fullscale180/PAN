@@ -384,6 +384,9 @@
 						"value" : "[parameters('backendSubnetName')]"
 					},
 
+					"loadBalancerName": {
+						"value": "inbound-lb"
+					},
 					"virtualMachineName": {
 						"value": "[parameters('backendVmName')]"
 					},

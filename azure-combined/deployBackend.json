@@ -116,6 +116,7 @@
 
 	"variables": {
 		"vnetId": "[resourceId('Microsoft.Network/virtualNetworks/', parameters('virtualNetworkName'))]",
+		"lbId": "[resourceId('Microsoft.Network/loadBalancers/', parameters('loadBalancerName'))]",
 	},
 
 	"resources": [
@@ -146,8 +147,12 @@
 							"privateIPAllocationMethod": "Dynamic",
 							"subnet": {
 								"id": "[concat(variables('vnetId'),'/subnets/',parameters ('backendSubnetName'))]"
-							}
-						}
+							},
+							"loadBalancerBackendAddressPools": [
+								{
+									"id": "[concat(variables('lbId'), '/backendAddressPools/BackendPool')]"
+								}
+							]						}
 					}
 				]
 			}
