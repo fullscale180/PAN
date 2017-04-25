@@ -473,6 +473,9 @@
 					"trustedSubnetName": {
 						"value": "[parameters('trustedSubnetName')]"
 					},
+					"loadBalancerName": {
+						"value": "outbound-lb"
+					},
 					"mgmtPublicIPName": {
 						"value": "[concat('out', parameters('mgmtPublicIPName'))]"
 					},
