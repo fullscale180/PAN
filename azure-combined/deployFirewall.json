@@ -155,6 +155,7 @@
 				"description": "Subnet for Trust"
 			}
 		},
+
 		// load balancer parameters
 		"loadBalancerName": {
 			"type": "string",
@@ -162,7 +163,8 @@
 			"metadata": {
 				"description": "This is the name of the inbound load balancer"
 			}
-		},		
+		},	
+			
 		// public IP parameters
 		"mgmtPublicIPDnsName": {
 			"type": "string",
