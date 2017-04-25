@@ -385,7 +385,7 @@
 					},
 
 					"loadBalancerName": {
-						"value": "inbound-lb"
+						"value": "backend-lb"
 					},
 					"virtualMachineName": {
 						"value": "[parameters('backendVmName')]"
@@ -429,11 +429,75 @@
 					"virtualNetworkName": {
 						"value": "[parameters('virtualNetworkName')]"
 					},
-					"trustedSubnetName": {
+					"subnetName": {
 						"value": "[parameters('trustedSubnetName')]"
 					},
 					"loadBalancerName": {
 						"value": "outbound-lb"
+					}
+				}
+			}
+		},
+
+		// Deploy inbound load balancer
+		{	
+			"name": "deployInboundLoadBalancer",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2015-01-01",
+			"dependsOn": [
+				"Microsoft.Resources/deployments/deployVNet",
+				"Microsoft.Resources/deployments/deployBackend"
+			],
+			"properties": {
+				"mode": "Incremental",
+				"templateLink": {
+					"uri": "[variables('deployLoadBalancerURL')]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"location": {
+						"value": "[variables('location')]"
+					},
+					"virtualNetworkName": {
+						"value": "[parameters('virtualNetworkName')]"
+					},
+					"subnetName": {
+						"value": "[parameters('trustedSubnetName')]"
+					},
+					"loadBalancerName": {
+						"value": "inbound-lb"
+					}
+				}
+			}
+		},
+
+		// Deploy backend load balancer
+		{	
+			"name": "deployBackendLoadBalancer",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2015-01-01",
+			"dependsOn": [
+				"Microsoft.Resources/deployments/deployVNet",
+				"Microsoft.Resources/deployments/deployBackend"
+			],
+			"properties": {
+				"mode": "Incremental",
+				"templateLink": {
+					"uri": "[variables('deployLoadBalancerURL')]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"location": {
+						"value": "[variables('location')]"
+					},
+					"virtualNetworkName": {
+						"value": "[parameters('virtualNetworkName')]"
+					},
+					"subnetName": {
+						"value": "[parameters('untrustedSubnetName')]"
+					},
+					"loadBalancerName": {
+						"value": "backend-lb"
 					}
 				}
 			}
@@ -501,38 +565,6 @@
 					"sshKey": {
 						"value": "[parameters('sshPublicKey')]"
 					},
-				}
-			}
-		},
-
-		// Deploy inbound load balancer
-		{	
-			"name": "deployInboundLoadBalancer",
-			"type": "Microsoft.Resources/deployments",
-			"apiVersion": "2015-01-01",
-			"dependsOn": [
-				"Microsoft.Resources/deployments/deployVNet",
-				"Microsoft.Resources/deployments/deployBackend"
-			],
-			"properties": {
-				"mode": "Incremental",
-				"templateLink": {
-					"uri": "[variables('deployLoadBalancerURL')]",
-					"contentVersion": "1.0.0.0"
-				},
-				"parameters": {
-					"location": {
-						"value": "[variables('location')]"
-					},
-					"virtualNetworkName": {
-						"value": "[parameters('virtualNetworkName')]"
-					},
-					"trustedSubnetName": {
-						"value": "[parameters('trustedSubnetName')]"
-					},
-					"loadBalancerName": {
-						"value": "inbound-lb"
-					}
 				}
 			}
 		},

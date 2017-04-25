@@ -17,7 +17,7 @@
 				"description": "Name of the Virtual Network (VNET)"
 			}
 		},
-		"trustedSubnetName": {
+		"subnetName": {
 			"type": "string",
 			"metadata": {
 				"description": "Subnet for Trust"
@@ -59,7 +59,7 @@
 						"name": "Frontend",
 						"properties": {
 							"subnet": {
-								"id": "[concat(variables('vnetId'),'/subnets/',parameters ('trustedSubnetName'))]"
+								"id": "[concat(variables('vnetId'),'/subnets/',parameters ('subnetName'))]"
 							},
 							"privateIPAllocationMethod": "Dynamic" 
 						}

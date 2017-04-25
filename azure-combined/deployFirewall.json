@@ -163,7 +163,6 @@
 				"description": "This is the name of the inbound load balancer"
 			}
 		},	
-
 		// public IP parameters
 		"mgmtPublicIPDnsName": {
 			"type": "string",
@@ -295,7 +294,6 @@
 							"subnet": {
 								"id": "[concat(variables('vnetId'),'/subnets/', parameters ('trustedSubnetName'))]"
 							},
-							// DO NOT add to backendpool for inbound
 							"loadBalancerBackendAddressPools": [
 								{
 									"id": "[concat(variables('lbId'), '/backendAddressPools/BackendPool')]"
