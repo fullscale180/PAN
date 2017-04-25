@@ -56,7 +56,7 @@
 			"properties": {
 				"frontendIPConfigurations": [
 					{
-						"name": "LoadBalancerFrontend",
+						"name": "Frontend",
 						"properties": {
 							"subnet": {
 								"id": "[concat(variables('vnetId'),'/subnets/',parameters ('trustedSubnetName'))]"
