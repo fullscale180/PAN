@@ -43,7 +43,7 @@
 
 	"variables": {
 		"vnetId": "[resourceId('Microsoft.Network/virtualNetworks/', parameters('virtualNetworkName'))]",
-		"lbId": "[resourceId('Microsoft.Network/loadBalancers/', parameters('loadBalancerName'))]"
+		// "lbId": "[resourceId('Microsoft.Network/loadBalancers/', parameters('loadBalancerName'))]"
 	},
 
 	"resources": [
