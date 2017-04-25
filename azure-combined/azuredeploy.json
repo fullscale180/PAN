@@ -208,7 +208,7 @@
 			"defaultValue": "password"
 		},
 		"password": {
-			"type": "securestring",
+			"type": "string",
 			"defaultValue": "",
 			"metadata": {
 				"description": "Password for the administrator account of all VM instances. Must be specified if Authentication Type is 'password'."
