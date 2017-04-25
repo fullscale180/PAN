@@ -24,7 +24,7 @@ Get-AzureRmSubscription -SubscriptionName "Visual Studio Enterprise" | Select-Az
 #-----------------------------------------------------
 # Create a new deployment
 #-----------------------------------------------------
-cd 'D:\All Projects\FS180 Clients\PAN\azure-outboundfirewall'
+cd 'D:\All Projects\FS180 Clients\PAN\azure-combined'
 
 $deployName = "AzureDeploy"
 $location = "westus2"
@@ -32,7 +32,7 @@ $location = "westus2"
 #-----------------------------------------------------
 # Create a new resource group
 #-----------------------------------------------------
-$rgName = "PAN1" 
+$rgName = "PAN3" 
 $rg = New-AzureRMResourceGroup -name $rgName -location $location
 
 #-----------------------------------------------------

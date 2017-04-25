@@ -558,6 +558,9 @@
 					"location": {
 						"value": "[variables('location')]"
 					},
+					"avsetName": {
+						"value": "[parameters('inbound-avset')]"
+					},
 					"storageName": {
 						"value": "[parameters('storageName')]"
 					},
@@ -623,6 +626,9 @@
 					},
 					"location": {
 						"value": "[variables('location')]"
+					},
+					"avsetName": {
+						"value": "[parameters('outbound-avset')]"
 					},
 					"storageName": {
 						"value": "[parameters('storageName')]"
