@@ -305,74 +305,74 @@
 			}
 		},
 
-		// // VMSeries-Firewall-VM
-		// {
-			// 	"name": "[concat(parameters('virtualMachineName'), copyindex())]",
-			// 	"type": "Microsoft.Resources/deployments",
-			// 	"apiVersion": "2015-01-01",
-			// 	"dependsOn": [
-			// 		"[concat('Microsoft.Compute/availabilitySets/', parameters('avSetName'))]",
-			// 		"[concat('Microsoft.Network/publicIPAddresses/', parameters('mgmtPublicIPName'), copyindex())]",
-			// 		"[concat('Microsoft.Network/networkInterfaces/', parameters('virtualMachineName'), copyindex(), '-nic0')]",
-			// 		"[concat('Microsoft.Network/networkInterfaces/', parameters('virtualMachineName'), copyindex(), '-nic1')]",
-			// 		"[concat('Microsoft.Network/networkInterfaces/', parameters('virtualMachineName'), copyindex(), '-nic2')]"
-			// 	],
-			// 	"copy": {
-			// 		"name": "vmLoop",
-			// 		"count": "[parameters('vmCount')]"
-			// 	},
-			// 	"properties": {
-			// 		"mode": "Incremental",
-			// 		"templateLink": {
-			// 			"uri": "[variables('deployVmURL')]",
-			// 			"contentVersion": "1.0.0.0"
-			// 		},
-			// 		"parameters": {
-			// 			"location": {
-			// 				"value": "[parameters('location')]"
-			// 			},
-			// 			"virtualMachineName": {
-			// 				"value": "[concat(parameters('virtualMachineName'), copyindex())]"
-			// 			},
-			// 			"avSetName": {
-			// 				"value": "[parameters('avSetName')]"
-			// 			},
-			// 			"imageSku": {
-			// 				"value": "[parameters('imageSku')]"
-			// 			},
-			// 			"imageOffer": {
-			// 				"value": "[variables('imageOffer')]"
-			// 			},
-			// 			"imagePublisher": {
-			// 				"value": "[variables('imagePublisher')]"
-			// 			},
-			// 			"nicName": {
-			// 				"value": "[concat(parameters('virtualMachineName'), copyindex())]"
-			// 			},
-			// 			"vmSize": {
-			// 				"value": "[parameters('vmSize')]"
-			// 			},
-			// 			"adminUsername": {
-			// 				"value": "[parameters('adminUsername')]"
-			// 			},
-			// 			"adminPassword": {
-			// 				"value": "[parameters('adminPassword')]"
-			// 			},
-			// 			"storageName": {
-			// 				"value": "[parameters('storageName')]"
-			// 			},
-			// 			"sshKey": {
-			// 				"value": "[parameters('sshKey')]"
-			// 			},
-			// 			"bootstrapUri": {
-			// 				"value": "[parameters('BootstrapUri')]"
-			// 			},
-			// 			"bootstrapUriSizeGB": {
-			// 				"value": "[parameters('BootstrapUriSizeGB')]"
-			// 			}
-			// 		}
-			// 	}
-		// }
+		// VMSeries-Firewall-VM
+		{
+				"name": "[concat(parameters('virtualMachineName'), copyindex())]",
+				"type": "Microsoft.Resources/deployments",
+				"apiVersion": "2015-01-01",
+				"dependsOn": [
+					"[concat('Microsoft.Compute/availabilitySets/', parameters('avSetName'))]",
+					"[concat('Microsoft.Network/publicIPAddresses/', parameters('mgmtPublicIPName'), copyindex())]",
+					"[concat('Microsoft.Network/networkInterfaces/', parameters('virtualMachineName'), copyindex(), '-nic0')]",
+					"[concat('Microsoft.Network/networkInterfaces/', parameters('virtualMachineName'), copyindex(), '-nic1')]",
+					"[concat('Microsoft.Network/networkInterfaces/', parameters('virtualMachineName'), copyindex(), '-nic2')]"
+				],
+				"copy": {
+					"name": "vmLoop",
+					"count": "[parameters('vmCount')]"
+				},
+				"properties": {
+					"mode": "Incremental",
+					"templateLink": {
+						"uri": "[variables('deployVmURL')]",
+						"contentVersion": "1.0.0.0"
+					},
+					"parameters": {
+						"location": {
+							"value": "[parameters('location')]"
+						},
+						"virtualMachineName": {
+							"value": "[concat(parameters('virtualMachineName'), copyindex())]"
+						},
+						"avSetName": {
+							"value": "[parameters('avSetName')]"
+						},
+						"imageSku": {
+							"value": "[parameters('imageSku')]"
+						},
+						"imageOffer": {
+							"value": "[variables('imageOffer')]"
+						},
+						"imagePublisher": {
+							"value": "[variables('imagePublisher')]"
+						},
+						"nicName": {
+							"value": "[concat(parameters('virtualMachineName'), copyindex())]"
+						},
+						"vmSize": {
+							"value": "[parameters('vmSize')]"
+						},
+						"adminUsername": {
+							"value": "[parameters('adminUsername')]"
+						},
+						"adminPassword": {
+							"value": "[parameters('adminPassword')]"
+						},
+						"storageName": {
+							"value": "[parameters('storageName')]"
+						},
+						"sshKey": {
+							"value": "[parameters('sshKey')]"
+						},
+						"bootstrapUri": {
+							"value": "[parameters('BootstrapUri')]"
+						},
+						"bootstrapUriSizeGB": {
+							"value": "[parameters('BootstrapUriSizeGB')]"
+						}
+					}
+				}
+		}
 
 	]
 }
