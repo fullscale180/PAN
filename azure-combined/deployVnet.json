@@ -41,13 +41,6 @@
 				"description": "Subnet for Trust"
 			}
 		},
-		// "frontendSubnetName": {
-		// 	"type": "string",
-		// 	"defaultValue": "UntrustLB",
-		// 	"metadata": {
-		// 		"description": "Subnet for App Gateway"
-		// 	}
-		// },
 		"backendSubnetName": {
 			"type": "string",
 			"defaultValue": "backendSubnet",
@@ -76,13 +69,6 @@
 				"description": "Trust subnet CIDR"
 			}
 		},
-		// "frontendSubnetPrefix": {
-		// 	"type": "string",
-		// 	"defaultValue": "192.168.3.0/24",
-		// 	"metadata": {
-		// 		"description": "App Gateway CIDR"
-		// 	}
-		// },
 		"backendSubnetPrefix": {
 			"type": "string",
 			"defaultValue": "192.168.4.0/24",
@@ -99,7 +85,6 @@
 		"mgmtSubnetRef"    : "[concat(variables('vnetID'),'/subnets/',parameters('mgmtSubnetName'))]",
 		"untrustSubnetRef" : "[concat(variables('vnetID'),'/subnets/',parameters('untrustSubnetName'))]",
 		"trustSubnetRef"   : "[concat(variables('vnetID'),'/subnets/',parameters('trustSubnetName'))]",
-		// "frontendSubnetRef": "[concat(variables('vnetID'),'/subnets/',parameters('frontendSubnetName'))]",
 		"backendSubnetRef" : "[concat(variables('vnetID'),'/subnets/',parameters('backendSubnetName'))]",
 		"subnets": [
 			{
@@ -123,12 +108,6 @@
 					"addressPrefix": "[parameters('trustSubnetPrefix')]"
 				}
 			},
-			// {
-			// 	"name": "[parameters('frontendSubnetName')]",
-			// 	"properties": {
-			// 		"addressPrefix": "[parameters('frontendSubnetPrefix')]"
-			// 	}
-			// },
 			{
 				"name": "[parameters('backendSubnetName')]",
 				"properties": {
