@@ -154,7 +154,7 @@
 		},
 		
 		// // virtualMachines[]
-		{ 
+		// { 
 			// 	"apiVersion": "2015-06-15",
 			// 	"type": "Microsoft.Compute/virtualMachines",
 			// 	"name": "[concat(parameters('virtualMachineName'), copyindex())]",
@@ -209,10 +209,10 @@
 			// 			}
 			// 		}
 			// 	}
-		},
+		// },
 		
 		// // virtualMachines/extensions[]
-		{ 
+		// { 
 			// 	"name": "[concat(parameters('virtualMachineName'), copyindex(), '/installcustomscript')]",
 			// 	"type": "Microsoft.Compute/virtualMachines/extensions",
 			// 	"copy": {
@@ -236,7 +236,7 @@
 			// 			"commandToExecute": "apt-get -y update && apt-get install -y apache2"
 			// 		}
 			// 	}
-		}
+		// }
 	],
 	
 	"outputs": {}
