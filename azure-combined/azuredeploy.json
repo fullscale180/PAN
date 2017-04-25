@@ -404,7 +404,7 @@
 		},
 
 
-		// Deploy load balancer
+		// Deploy outbound load balancer
 		{	
 			"name": "deployLoadBalancer",
 			"type": "Microsoft.Resources/deployments",
@@ -501,6 +501,39 @@
 				}
 			}
 		},
+
+		// Deploy inbound load balancer
+		{	
+			"name": "deployLoadBalancer",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2015-01-01",
+			"dependsOn": [
+				"Microsoft.Resources/deployments/deployVNet",
+				"Microsoft.Resources/deployments/deployBackend"
+			],
+			"properties": {
+				"mode": "Incremental",
+				"templateLink": {
+					"uri": "[variables('deployLoadBalancerURL')]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"location": {
+						"value": "[variables('location')]"
+					},
+					"virtualNetworkName": {
+						"value": "[parameters('virtualNetworkName')]"
+					},
+					"trustedSubnetName": {
+						"value": "[parameters('trustedSubnetName')]"
+					},
+					"loadBalancerName": {
+						"value": "inbound-lb"
+					}
+				}
+			}
+		},
+
 
 		// Deploy inbound Firewall
 		{	
