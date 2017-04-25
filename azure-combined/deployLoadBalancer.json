@@ -27,7 +27,6 @@
 		// load balancer parameters
 		"loadBalancerName": {
 			"type": "string",
-			"defaultValue": "outboundLB",
 			"metadata": {
 				"description": "This is the name of the inbound load balancer"
 			}
