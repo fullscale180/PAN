@@ -42,91 +42,91 @@
 
 	"variables": {
 		"vnetId": "[resourceId('Microsoft.Network/virtualNetworks/', parameters('virtualNetworkName'))]",
-		// "lbId": "[resourceId('Microsoft.Network/loadBalancers/', parameters('loadBalancerName'))]"
+		"lbId": "[resourceId('Microsoft.Network/loadBalancers/', parameters('loadBalancerName'))]"
 	},
 
 	"resources": [
 
 		// Setup load balancer
-		{ 
-			"apiVersion": "2015-05-01-preview",
-			"type": "Microsoft.Network/loadBalancers",
-			"name": "[parameters('loadBalancerName')]",
-			"location": "[parameters('location')]",
-			"properties": {
-				"frontendIPConfigurations": [
-					{
-						"name": "LoadBalancerFrontend",
-						"properties": {
-							"subnet": {
-								"id": "[concat(variables('vnetId'),'/subnets/',parameters ('trustedSubnetName'))]"
-							},
-							"privateIPAllocationMethod": "Dynamic" 
-						}
-					}
-				],
-				"backendAddressPools": [
-					{
-						"name": "FirewallPool"
-					}
-				],
-				"loadBalancingRules": [
-					{
-						"properties": {
-							"frontendIPConfiguration": {
-								"id": "[concat(variables('lbId'), '/frontendIpConfigurations/LoadBalancerFrontend')]"
-							},
-							"backendAddressPool": {
-								"id": "[concat(variables('lbId'), '/backendAddressPools/FirewallPool')]"
-							},
-							"probe": {
-								"id": "[concat(variables('lbId'), '/probes/lbprobe')]"
-							},
-							"protocol": "Tcp",
-							"frontendPort": 80,
-							"backendPort": 80,
-							"enableFloatingIP": true,
-							"idleTimeoutInMinutes": 15
-						},
-						"Name": "lbrule"
-					}
-				],
-				"probes": [
-					{
-						"properties": {
-							"protocol": "Tcp",
-							"port": 80,
-							"intervalInSeconds": 15,
-							"numberOfProbes": 2
-						},
-						"name": "lbprobe"
-					}
-				]
-			}
-		},
+		// { 
+		// 	"apiVersion": "2015-05-01-preview",
+		// 	"type": "Microsoft.Network/loadBalancers",
+		// 	"name": "[parameters('loadBalancerName')]",
+		// 	"location": "[parameters('location')]",
+		// 	"properties": {
+		// 		"frontendIPConfigurations": [
+		// 			{
+		// 				"name": "LoadBalancerFrontend",
+		// 				"properties": {
+		// 					"subnet": {
+		// 						"id": "[concat(variables('vnetId'),'/subnets/',parameters ('trustedSubnetName'))]"
+		// 					},
+		// 					"privateIPAllocationMethod": "Dynamic" 
+		// 				}
+		// 			}
+		// 		],
+		// 		"backendAddressPools": [
+		// 			{
+		// 				"name": "FirewallPool"
+		// 			}
+		// 		],
+		// 		"loadBalancingRules": [
+		// 			{
+		// 				"properties": {
+		// 					"frontendIPConfiguration": {
+		// 						"id": "[concat(variables('lbId'), '/frontendIpConfigurations/LoadBalancerFrontend')]"
+		// 					},
+		// 					"backendAddressPool": {
+		// 						"id": "[concat(variables('lbId'), '/backendAddressPools/FirewallPool')]"
+		// 					},
+		// 					"probe": {
+		// 						"id": "[concat(variables('lbId'), '/probes/lbprobe')]"
+		// 					},
+		// 					"protocol": "Tcp",
+		// 					"frontendPort": 80,
+		// 					"backendPort": 80,
+		// 					"enableFloatingIP": true,
+		// 					"idleTimeoutInMinutes": 15
+		// 				},
+		// 				"Name": "lbrule"
+		// 			}
+		// 		],
+		// 		"probes": [
+		// 			{
+		// 				"properties": {
+		// 					"protocol": "Tcp",
+		// 					"port": 80,
+		// 					"intervalInSeconds": 15,
+		// 					"numberOfProbes": 2
+		// 				},
+		// 				"name": "lbprobe"
+		// 			}
+		// 		]
+		// 	}
+		// },
 
-		// Setup RouteTable
-		{
-			"apiVersion": "2015-06-15",
-			"type": "Microsoft.Network/routeTables",
-			"name": "[parameters('routeTableName')]",
-			"dependsOn": [
-				"[concat('Microsoft.Network/loadBalancers',parameters('loadBalancerName'))",
-			],
-			"location": "[parameters('location')]",
-			"properties": {
-				"routes": [
-					{
-						"name": "Default",
-						"properties": {
-							"addressPrefix": "0.0.0.0/0",
-							"nextHopType": "VirtualAppliance", 
-							"nextHopIpAddress": "[reference(resourceId('Microsoft.Network/loadBalancers/', parameters('loadBalancerName'))).frontendIPConfigurations[0].properties.privateIPAddress]"
-						}
-					}
-				]
-			}
-		}
+		// // Setup RouteTable
+		// {
+		// 	"apiVersion": "2015-06-15",
+		// 	"type": "Microsoft.Network/routeTables",
+		// 	"name": "[parameters('routeTableName')]",
+		// 	"dependsOn": [
+		// 		"[concat('Microsoft.Network/loadBalancers',parameters('loadBalancerName'))",
+		// 	],
+		// 	"location": "[parameters('location')]",
+		// 	"properties": {
+		// 		"routes": [
+		// 			{
+		// 				"name": "Default",
+		// 				"properties": {
+		// 					"addressPrefix": "0.0.0.0/0",
+		// 					"nextHopType": "VirtualAppliance", 
+		// 					"nextHopIpAddress": "[reference(resourceId('Microsoft.Network/loadBalancers/', parameters('loadBalancerName'))).frontendIPConfigurations[0].properties.privateIPAddress]"
+		// 				}
+		// 			}
+		// 		]
+		// 	}
+		// }
 
 	]
 }
