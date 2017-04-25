@@ -44,6 +44,14 @@
 			}
 		},
 
+		// load balancer parameters
+		"loadBalancerName": {
+			"type": "string",
+			"metadata": {
+				"description": "This is the name of the inbound load balancer"
+			}
+		},
+		
 		// VM parameters
 		"vmCount": {
 			"type": "int",
