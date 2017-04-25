@@ -443,7 +443,8 @@
 			"apiVersion": "2015-01-01",
 			"dependsOn": [
 				"Microsoft.Resources/deployments/deployVNet",
-				"Microsoft.Resources/deployments/deployBackend"
+				"Microsoft.Resources/deployments/deployBackend",
+				"Microsoft.Resources/deployments/deployLoadBalancer"
 			],
 			"properties": {
 				"mode": "Incremental",
