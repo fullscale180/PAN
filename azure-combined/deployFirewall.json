@@ -301,7 +301,7 @@
 		},
 
 		// // VMSeries-Firewall-VM
-		{
+		// {
 			// 	"name": "[concat(parameters('virtualMachineName'), copyindex())]",
 			// 	"type": "Microsoft.Resources/deployments",
 			// 	"apiVersion": "2015-01-01",
@@ -367,7 +367,7 @@
 			// 			}
 			// 		}
 			// 	}
-		}
+		// }
 
 	]
 }
