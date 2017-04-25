@@ -18,6 +18,21 @@
 			"defaultValue": "0.0.0.0/0"
 		},
 
+		// Availability Set Settings
+		"inboundAvsetName": {
+			"type": "string",
+			"metadata": {
+				"description": "Name of the availability set for inbound firewall"
+			}
+		},
+
+		"outboundAvsetName": {
+			"type": "string",
+			"metadata": {
+				"description": "Name of the availability set for outbound firewall"
+			}
+		},
+
 		// Storage Settings
 		"storageName": {
 			"type": "string",
@@ -558,8 +573,8 @@
 					"location": {
 						"value": "[variables('location')]"
 					},
-					"avsetName": {
-						"value": "[parameters('inbound-avset')]"
+					"avSetName": {
+						"value": "[parameters('inboundAvsetName')]"
 					},
 					"storageName": {
 						"value": "[parameters('storageName')]"
@@ -627,8 +642,8 @@
 					"location": {
 						"value": "[variables('location')]"
 					},
-					"avsetName": {
-						"value": "[parameters('outbound-avset')]"
+					"avSetName": {
+						"value": "[parameters('outboundAvsetName')]"
 					},
 					"storageName": {
 						"value": "[parameters('storageName')]"
