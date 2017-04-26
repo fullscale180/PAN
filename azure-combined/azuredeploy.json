@@ -23,14 +23,15 @@
 			"type": "string",
 			"metadata": {
 				"description": "Name of the availability set for inbound firewall"
-			}
+			},
+			"defaultValue": "inbound-avset"
 		},
-
 		"outboundAvsetName": {
 			"type": "string",
 			"metadata": {
 				"description": "Name of the availability set for outbound firewall"
-			}
+			},
+			"defaultValue": "outbound-avset"
 		},
 
 		// Storage Settings
@@ -388,7 +389,6 @@
 			}
 		},
 
-		
 		// Setup gateway PublicIP
 		{ 
 			"apiVersion": "2015-06-15",
@@ -606,6 +606,9 @@
 					"vmSize": {
 						"value": "[parameters('firewallVmSize')]"
 					},
+					"imageSku" : {
+						"value": "[parameters('firewallModel')]"
+					},
 					"adminUsername": {
 						"value": "[parameters('username')]"
 					},
@@ -674,6 +677,9 @@
 					},
 					"vmSize": {
 						"value": "[parameters('firewallVmSize')]"
+					},
+					"imageSku" : {
+						"value": "[parameters('firewallModel')]"
 					},
 					"adminUsername": {
 						"value": "[parameters('username')]"
