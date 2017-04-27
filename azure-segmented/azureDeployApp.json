@@ -2,13 +2,21 @@
 	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
 	"contentVersion": "1.0.0.0",
 	"parameters": {
+		// App Settings
+		"appPrefix": {
+			"type": "string",
+			"metadata": {
+				"description": "Prefixed used in naming application specific resources"
+			}
+		},
+
 		// Availability Set Settings
 		"avsetName": {
 			"type": "string",
 			"metadata": {
 				"description": "Name of the availability set for inbound firewall"
 			},
-			"defaultValue": "inbound-avset"
+			"defaultValue": "firewall-avset"
 		},
 
 		// Storage Settings
@@ -16,7 +24,8 @@
 			"type": "string",
 			"metadata": {
 				"description": "Name of the storage account created to store the VM's disks.  Storage account name must be globally unique."
-			}
+			},
+			"defaultValue": "storage"
 		},
 		"storageType": {
 			"type": "string",
@@ -40,12 +49,12 @@
 			},
 			"defaultValue": "gateway-pip"
 		},
-		"gatewayPublicIPDnsName" : {
+		"gatewayPublicIPDns" : {
 			"type": "string",
 			"metadata": {
 				"description": "DNS Name of public IP resource for the application gateway.  Name must be globally unique."
 			},
-			"defaultValue": "pangateway"
+			"defaultValue": "gateway"
 		},
 		"mgmtPublicIPName": {
 			"type": "string",
@@ -54,14 +63,43 @@
 			},
 			"defaultValue": "mgmt-pip"
 		},
-		"mgmtPublicIPDnsName": {
+		"mgmtPublicIPDns": {
 			"type": "string",
 			"metadata": {
 				"description": "DNS Name prefix of public IP resource for Management interface of VM-Series firewall.  Name must be globally unique."
 			},
-			"defaultValue": "panmgmt"
+			"defaultValue": "mgmt"
 		},
-		
+
+		// VNet settings
+		"virtualNetworkName": {
+			"type": "string",
+			"defaultValue": "vnet",
+			"metadata": {
+				"description": "Virtual Network Name"
+			}
+		},
+		"untrustedSubnetName": {
+			"type": "string",
+			"defaultValue": "Untrust",
+			"metadata": {
+				"description": "Subnet for Untrusted Network"
+			}
+		},
+		"trustedSubnetName": {
+			"type": "string",
+			"defaultValue": "Trust",
+			"metadata": {
+				"description": "Subnet for Trusted Network"
+			}
+		},
+		"backendSubnetName": {
+			"type": "string",
+			"defaultValue": "Backend",
+			"metadata": {
+				"description": "Subnet for Backend WWW Network"
+			}
+		},
 		// Load Balancer Settings
 		"inboundLoadBalancerName": {
 			"type": "string",
@@ -167,15 +205,26 @@
 	},
 	
 	"variables": {
-		"baseUrl"              : "http://raw.githubusercontent.com/fullscale180/PAN/master/azure-segmented",
-		"deployStorageURL"     : "[concat(variables('baseUrl'),'/deployStorage.json')]",
-		"deployBackendURL"     : "[concat(variables('baseUrl'),'/deployBackend.json')]",
-		"deployFirewallURL"    : "[concat(variables('baseUrl'),'/deployFirewall.json')]",
-		"deployLoadBalancerURL": "[concat(variables('baseUrl'),'/deployLoadBalancer.json')]",
+		"baseUrl"                  : "http://raw.githubusercontent.com/fullscale180/PAN/master/azure-segmented",
+		"deployStorageURL"         : "[concat(variables('baseUrl'),'/deployStorage.json')]",
+		"deployBackendURL"         : "[concat(variables('baseUrl'),'/deployBackend.json')]",
+		"deployFirewallURL"        : "[concat(variables('baseUrl'),'/deployFirewall.json')]",
+		"deployLoadBalancerURL"    : "[concat(variables('baseUrl'),'/deployLoadBalancer.json')]",
 
-		"location"   : "[resourceGroup().location]",
-		"rgname"     : "[resourceGroup().name]",
-		"storageName": "[toLower(concat(parameters('storageName')))]"
+		"apStorageName"            : "[toLower(concat(parameters('appPrefix'), parameters('storageName')))]",
+		"apGatewayPublicIpDns"     : "[toLower(concat(parameters('appPrefix'), '-', parameters('gatewayPublicIPDns')))]",
+		"apMgmtPublicIpDns"        : "[toLower(concat(parameters('appPrefix'), '-', parameters('mgmtPublicIPDns')))]",
+
+		"apAvsetName"              : "[concat(parameters('appPrefix'), '-', parameters('avsetName'))]",
+		"apBackendVmName"          : "[concat(parameters('appPrefix'), '-', parameters('backendVmName'))]",
+		"apFirewallVmName"         : "[concat(parameters('appPrefix'), '-', parameters('firewallVmName'))]",
+		"apInboundLoadBalancerName": "[concat(parameters('appPrefix'), '-', parameters('inboundLoadBalancerName'))]",
+		"apBackendLoadBalancerName": "[concat(parameters('appPrefix'), '-', parameters('backendLoadBalancerName'))]",
+		"apGatewayPublicIpName"    : "[concat(parameters('appPrefix'), '-', parameters('gatewayPublicIPName'))]",
+		"apMgmtPublicIpName"       : "[concat(parameters('appPrefix'), '-', parameters('mgmtPublicIPName'))]",
+		"location"                 : "[resourceGroup().location]",
+
+		"rgname"       : "[resourceGroup().name]",
 	},
 
 	"resources": [
@@ -199,7 +248,7 @@
 						"value": "[parameters('storageType')]"
 					},
 					"storageName": {
-						"value": "[variables('storageName')]"
+						"value": "[variables('apStorageName')]"
 					}
 				}
 			}
@@ -209,12 +258,12 @@
 		{ 
 			"apiVersion": "2015-06-15",
 			"type": "Microsoft.Network/publicIPAddresses",
-			"name": "[parameters('gatewayPublicIPName')]",
+			"name": "[variables('apGatewayPublicIPName')]",
 			"location": "[variables('location')]",
 			"properties": {
 				"publicIPAllocationMethod": "Dynamic",
 				"dnsSettings": {
-					"domainNameLabel":  "[parameters('gatewayPublicIPDnsName')]"
+					"domainNameLabel":  "[parameters('gatewayPublicIPDns')]"
 				}
 			}
 		},
@@ -225,7 +274,7 @@
 			"type": "Microsoft.Resources/deployments",
 			"apiVersion": "2015-01-01",
 			"dependsOn": [
-				"Microsoft.Resources/deployments/deployVNet"
+				// "Microsoft.Resources/deployments/deployVNet"
 			],
 			"properties": {
 				"mode": "Incremental",
@@ -244,7 +293,7 @@
 						"value": "[parameters('trustedSubnetName')]"
 					},
 					"loadBalancerName": {
-						"value": "[parameters('inboundLoadBalancerName')]"
+						"value": "[variables('apInboundLoadBalancerName')]"
 					}
 				}
 			}
@@ -256,7 +305,7 @@
 			"type": "Microsoft.Resources/deployments",
 			"apiVersion": "2015-01-01",
 			"dependsOn": [
-				"Microsoft.Resources/deployments/deployVNet"
+				// "Microsoft.Resources/deployments/deployVNet"
 			],
 			"properties": {
 				"mode": "Incremental",
@@ -275,7 +324,7 @@
 						"value": "[parameters('untrustedSubnetName')]"
 					},
 					"loadBalancerName": {
-						"value": "[parameters('backendLoadBalancerName')]"
+						"value": "[variables('apBackendLoadBalancerName')]"
 					}
 				}
 			}
@@ -288,8 +337,8 @@
 			"apiVersion": "2015-01-01",
 			"dependsOn": [
 				"Microsoft.Resources/deployments/deployStorage",
-				"Microsoft.Resources/deployments/deployNsg",
-				"Microsoft.Resources/deployments/deployVNet",
+				// "Microsoft.Resources/deployments/deployNsg",
+				// "Microsoft.Resources/deployments/deployVNet",
 				"Microsoft.Resources/deployments/deployBackendLoadBalancer"
 			],
 			"properties": {
@@ -303,7 +352,7 @@
 						"value": "[variables('location')]"
 					},
 					"storageName": {
-						"value": "[parameters('storageName')]"
+						"value": "[variables('apStorageName')]"
 					},
 				
 					"virtualNetworkName": {
@@ -314,10 +363,10 @@
 					},
 
 					"loadBalancerName": {
-						"value": "[parameters('backendLoadBalancerName')]"
+						"value": "[variables('apBackendLoadBalancerName')]"
 					},
 					"virtualMachineName": {
-						"value": "[parameters('backendVmName')]"
+						"value": "[variables('apBackendVmName')]"
 					},
 					"vmSize": {
 						"value": "[parameters('backendVmSize')]"
@@ -341,7 +390,7 @@
 			"type": "Microsoft.Resources/deployments",
 			"apiVersion": "2015-01-01",
 			"dependsOn": [
-				"Microsoft.Resources/deployments/deployVNet",
+				// "Microsoft.Resources/deployments/deployVNet",
 				"Microsoft.Resources/deployments/deployBackend",
 				"Microsoft.Resources/deployments/deployInboundLoadBalancer"
 			],
@@ -359,7 +408,7 @@
 						"value": "[variables('location')]"
 					},
 					"avSetName": {
-						"value": "[parameters('inboundAvsetName')]"
+						"value": "[variables('apAvsetName')]"
 					},
 					"storageName": {
 						"value": "[parameters('storageName')]"
@@ -377,16 +426,16 @@
 						"value": "[parameters('trustedSubnetName')]"
 					},
 					"loadBalancerName": {
-						"value": "[parameters('inboundLoadBalancerName')]"
+						"value": "[variables('apInboundLoadBalancerName')]"
 					},
 					"mgmtPublicIPName": {
-						"value": "[concat('in', parameters('mgmtPublicIPName'))]"
+						"value": "[variables('apMgmtPublicIPName')]"
 					},
 					"mgmtPublicIPDnsName":{
-						"value": "[concat('in', parameters('mgmtPublicIPDnsName'))]"
+						"value": "[variables('apMgmtPublicIPDnsName')]"
 					},
 					"virtualMachineName": {
-						"value": "[concat('in', parameters('firewallVmName'))]"
+						"value": "[variables('apFirewallVmName')]"
 					},
 					"vmSize": {
 						"value": "[parameters('firewallVmSize')]"
@@ -413,7 +462,7 @@
 			"type": "Microsoft.Network/loadBalancers",
 			"name": "[parameters('inboundLoadBalancerName')]",
 			"dependsOn": [
-				"[concat('Microsoft.Network/publicIPAddresses/', parameters('gatewayPublicIPName'))]"
+				"[concat('Microsoft.Network/publicIPAddresses/', variables('apGatewayPublicIPName'))]"
 			],
 			"location": "[variables('location')]",
 			"properties": {
@@ -422,7 +471,7 @@
 						"name": "Frontend",
 						"properties": {
 							"publicIPAddress": {
-								"id": "[resourceId('Microsoft.Network/publicIPAddresses',parameters('gatewayPublicIPName'))]"
+								"id": "[resourceId('Microsoft.Network/publicIPAddresses', variables('apGatewayPublicIPName'))]"
 							}
 						}
 					}
