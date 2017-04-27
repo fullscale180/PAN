@@ -1,0 +1,435 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		// Availability Set Settings
+		"avsetName": {
+			"type": "string",
+			"metadata": {
+				"description": "Name of the availability set for inbound firewall"
+			},
+			"defaultValue": "inbound-avset"
+		},
+
+		// Storage Settings
+		"storageName": {
+			"type": "string",
+			"metadata": {
+				"description": "Name of the storage account created to store the VM's disks.  Storage account name must be globally unique."
+			}
+		},
+		"storageType": {
+			"type": "string",
+			"allowedValues": [
+				"Standard_LRS",
+				"Standard_GRS",
+				"Premium_LRS",
+				"Standard_RAGRS"
+			],
+			"metadata": {
+				"description": "Type of the storage account created"
+			},
+			"defaultValue": "Standard_LRS"
+		},
+
+		// Public Ip Settings
+		"gatewayPublicIPName": {
+			"type": "string",
+			"metadata": {
+				"description": "Name public IP resource for the application gateway."
+			},
+			"defaultValue": "gateway-pip"
+		},
+		"gatewayPublicIPDnsName" : {
+			"type": "string",
+			"metadata": {
+				"description": "DNS Name of public IP resource for the application gateway.  Name must be globally unique."
+			},
+			"defaultValue": "pangateway"
+		},
+		"mgmtPublicIPName": {
+			"type": "string",
+			"metadata": {
+				"description": "Name prefix of public IP resource for Management interface of VM-Series firewall."
+			},
+			"defaultValue": "mgmt-pip"
+		},
+		"mgmtPublicIPDnsName": {
+			"type": "string",
+			"metadata": {
+				"description": "DNS Name prefix of public IP resource for Management interface of VM-Series firewall.  Name must be globally unique."
+			},
+			"defaultValue": "panmgmt"
+		},
+		
+		// Load Balancer Settings
+		"inboundLoadBalancerName": {
+			"type": "string",
+			"metadata": {
+				"description": "Name for the inbound load balancer resource."
+			},
+			"defaultValue": "inbound-lb"
+		},
+		"backendLoadBalancerName": {
+			"type": "string",
+			"metadata": {
+				"description": "Name for the backend load balancer resource."
+			},
+			"defaultValue": "backend-lb"
+		},
+
+		// VM settings
+		"firewallModel": {
+			"type": "string",
+			"defaultValue": "byol",
+			"allowedValues": [
+				"byol",
+				"bundle1",
+				"bundle2"
+			],
+			"metadata": {
+				"description": "byol = Bring Your Own License; bundle1 = Bundle 1 PAYG (Hourly); bundle2 = Bundle 2 PAYG (Hourly)"
+			}
+		},
+		"firewallVmName": {
+			"type": "string",
+			"metadata": {
+				"description": "Name prefix of VM-Series VM in the Azure portal"
+			},
+			"defaultValue": "series-vm"
+		},
+		"firewallVmSize": {
+			"type": "string",
+			"allowedValues": [
+				"Standard_D3",
+				"Standard_D4",
+				"Standard_D3_v2",
+				"Standard_D4_v2",
+				"Standard_D5_v2",
+				"Standard_D14_v2",
+				"Standard_A4"
+			],
+			"metadata": {
+				"description": "Azure VM size for VM-Series"
+			},
+			"defaultValue": "Standard_D3_v2"
+		},
+		"backendVmName": {
+			"type": "string",
+			"metadata": {
+				"description": "Name prefix of VM-Series VM in the Azure portal"
+			},
+			"defaultValue": "backend-vm"
+		},
+		"backendVmSize": {
+			"type": "string",
+			"allowedValues": [
+				"Standard_A1",
+				"Standard_D1",
+				"Standard_D1_v2"
+			],
+			"metadata": {
+				"description": "Azure VM size for backend VMs.  Not all sizes are available in all regions."
+			},
+			"defaultValue": "Standard_D1_v2"
+		},
+		"username": {
+			"type": "string",
+			"metadata": {
+				"description": "Username of the administrator account of VM instances"
+			}
+		},
+		"authenticationType": {
+			"type": "string",
+			"metadata": {
+				"description": "Type of administrator user authentication "
+			},
+			"allowedValues": [
+				"sshPublicKey",
+				"password"
+			],
+			"defaultValue": "password"
+		},
+		"password": {
+			"type": "securestring",
+			"defaultValue": "",
+			"metadata": {
+				"description": "Password for the administrator account of all VM instances. Must be specified if Authentication Type is 'password'."
+			}
+		},
+		"sshPublicKey": {
+			"type": "string",
+			"defaultValue": "",
+			"metadata": {
+				"description": "SSH RSA public key file as a string. Must be specified if Authentication Type is 'sshPublicKey'."
+			}
+		}
+	},
+	
+	"variables": {
+		"baseUrl"              : "http://raw.githubusercontent.com/fullscale180/PAN/master/azure-segmented",
+		"deployStorageURL"     : "[concat(variables('baseUrl'),'/deployStorage.json')]",
+		"deployBackendURL"     : "[concat(variables('baseUrl'),'/deployBackend.json')]",
+		"deployFirewallURL"    : "[concat(variables('baseUrl'),'/deployFirewall.json')]",
+		"deployLoadBalancerURL": "[concat(variables('baseUrl'),'/deployLoadBalancer.json')]",
+
+		"location"   : "[resourceGroup().location]",
+		"rgname"     : "[resourceGroup().name]",
+		"storageName": "[toLower(concat(parameters('storageName')))]"
+	},
+
+	"resources": [
+
+		// Deploy Storage
+		{	
+			"name": "deployStorage",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2015-01-01",
+			"properties": {
+				"mode": "Incremental",
+				"templateLink": {
+					"uri": "[variables('deployStorageURL')]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"location": {
+						"value": "[variables('location')]"
+					},
+					"storageType": {
+						"value": "[parameters('storageType')]"
+					},
+					"storageName": {
+						"value": "[variables('storageName')]"
+					}
+				}
+			}
+		},
+
+		// Setup gateway PublicIP
+		{ 
+			"apiVersion": "2015-06-15",
+			"type": "Microsoft.Network/publicIPAddresses",
+			"name": "[parameters('gatewayPublicIPName')]",
+			"location": "[variables('location')]",
+			"properties": {
+				"publicIPAllocationMethod": "Dynamic",
+				"dnsSettings": {
+					"domainNameLabel":  "[parameters('gatewayPublicIPDnsName')]"
+				}
+			}
+		},
+
+		// Deploy inbound load balancer
+		{	
+			"name": "deployInboundLoadBalancer",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2015-01-01",
+			"dependsOn": [
+				"Microsoft.Resources/deployments/deployVNet"
+			],
+			"properties": {
+				"mode": "Incremental",
+				"templateLink": {
+					"uri": "[variables('deployLoadBalancerURL')]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"location": {
+						"value": "[variables('location')]"
+					},
+					"virtualNetworkName": {
+						"value": "[parameters('virtualNetworkName')]"
+					},
+					"subnetName": {
+						"value": "[parameters('trustedSubnetName')]"
+					},
+					"loadBalancerName": {
+						"value": "[parameters('inboundLoadBalancerName')]"
+					}
+				}
+			}
+		},
+
+		// Deploy backend load balancer
+		{	
+			"name": "deployBackendLoadBalancer",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2015-01-01",
+			"dependsOn": [
+				"Microsoft.Resources/deployments/deployVNet"
+			],
+			"properties": {
+				"mode": "Incremental",
+				"templateLink": {
+					"uri": "[variables('deployLoadBalancerURL')]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"location": {
+						"value": "[variables('location')]"
+					},
+					"virtualNetworkName": {
+						"value": "[parameters('virtualNetworkName')]"
+					},
+					"subnetName": {
+						"value": "[parameters('untrustedSubnetName')]"
+					},
+					"loadBalancerName": {
+						"value": "[parameters('backendLoadBalancerName')]"
+					}
+				}
+			}
+		},
+
+		// Deploy Backend
+		{	
+			"name": "deployBackend",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2015-01-01",
+			"dependsOn": [
+				"Microsoft.Resources/deployments/deployStorage",
+				"Microsoft.Resources/deployments/deployNsg",
+				"Microsoft.Resources/deployments/deployVNet",
+				"Microsoft.Resources/deployments/deployBackendLoadBalancer"
+			],
+			"properties": {
+				"mode": "Incremental",
+				"templateLink": {
+					"uri": "[variables('deployBackendURL')]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"location": {
+						"value": "[variables('location')]"
+					},
+					"storageName": {
+						"value": "[parameters('storageName')]"
+					},
+				
+					"virtualNetworkName": {
+						"value": "[parameters('virtualNetworkName')]"
+					},
+					"backendSubnetName": {
+						"value" : "[parameters('backendSubnetName')]"
+					},
+
+					"loadBalancerName": {
+						"value": "[parameters('backendLoadBalancerName')]"
+					},
+					"virtualMachineName": {
+						"value": "[parameters('backendVmName')]"
+					},
+					"vmSize": {
+						"value": "[parameters('backendVmSize')]"
+					},
+					"adminUsername": {
+						"value": "[parameters('username')]"
+					},
+					"adminPassword": {
+						"value": "[parameters('password')]"
+					},
+					"sshKey": {
+						"value": "[parameters('sshPublicKey')]"
+					},
+				}
+			}
+		},
+
+		// Deploy inbound Firewall
+		{	
+			"name": "deployInboundFirewall",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2015-01-01",
+			"dependsOn": [
+				"Microsoft.Resources/deployments/deployVNet",
+				"Microsoft.Resources/deployments/deployBackend",
+				"Microsoft.Resources/deployments/deployInboundLoadBalancer"
+			],
+			"properties": {
+				"mode": "Incremental",
+				"templateLink": {
+					"uri": "[variables('deployFirewallURL')]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"baseUrl": {
+						"value": "[variables('baseUrl')]"
+					},
+					"location": {
+						"value": "[variables('location')]"
+					},
+					"avSetName": {
+						"value": "[parameters('inboundAvsetName')]"
+					},
+					"storageName": {
+						"value": "[parameters('storageName')]"
+					},
+					"virtualNetworkName": {
+						"value": "[parameters('virtualNetworkName')]"
+					},
+					"mgmtSubnetName": {
+						"value": "[parameters('mgmtSubnetName')]"
+					},
+					"inboundSubnetName": {
+						"value": "[parameters('untrustedSubnetName')]"
+					},
+					"outboundSubnetName": {
+						"value": "[parameters('trustedSubnetName')]"
+					},
+					"loadBalancerName": {
+						"value": "[parameters('inboundLoadBalancerName')]"
+					},
+					"mgmtPublicIPName": {
+						"value": "[concat('in', parameters('mgmtPublicIPName'))]"
+					},
+					"mgmtPublicIPDnsName":{
+						"value": "[concat('in', parameters('mgmtPublicIPDnsName'))]"
+					},
+					"virtualMachineName": {
+						"value": "[concat('in', parameters('firewallVmName'))]"
+					},
+					"vmSize": {
+						"value": "[parameters('firewallVmSize')]"
+					},
+					"imageSku" : {
+						"value": "[parameters('firewallModel')]"
+					},
+					"adminUsername": {
+						"value": "[parameters('username')]"
+					},
+					"adminPassword": {
+						"value": "[parameters('password')]"
+					},
+					"sshKey": {
+						"value": "[parameters('sshPublicKey')]"
+					},
+				}
+			}
+		},
+
+		// Connect gateway Public IP to inbound load balancer
+		{ 
+			"apiVersion": "2015-05-01-preview",
+			"type": "Microsoft.Network/loadBalancers",
+			"name": "[parameters('inboundLoadBalancerName')]",
+			"dependsOn": [
+				"[concat('Microsoft.Network/publicIPAddresses/', parameters('gatewayPublicIPName'))]"
+			],
+			"location": "[variables('location')]",
+			"properties": {
+				"frontendIPConfigurations": [
+					{
+						"name": "Frontend",
+						"properties": {
+							"publicIPAddress": {
+								"id": "[resourceId('Microsoft.Network/publicIPAddresses',parameters('gatewayPublicIPName'))]"
+							}
+						}
+					}
+				]
+			}
+		}
+
+	],
+	"outputs": {}
+}
