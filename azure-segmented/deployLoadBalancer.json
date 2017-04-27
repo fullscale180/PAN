@@ -42,9 +42,9 @@
 
 	"variables": {
 		// HACK rgname
-		"vnetId": "[resourceId('PAN', Microsoft.Network/virtualNetworks/', parameters('virtualNetworkName'))]",
+		"vnetId": "[resourceId('PAN', 'Microsoft.Network/virtualNetworks/', parameters('virtualNetworkName'))]",
 		// HACK rgname
-		"lbId": "[resourceId('PAN', Microsoft.Network/loadBalancers/', parameters('loadBalancerName'))]"
+		"lbId": "[resourceId('PAN', 'Microsoft.Network/loadBalancers/', parameters('loadBalancerName'))]"
 	},
 
 	"resources": [
