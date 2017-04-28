@@ -1,3 +1,3 @@
 # Obsolete
 
-Use /azure-outboundfirewall
+Use /azure-outboundfirewall instead
