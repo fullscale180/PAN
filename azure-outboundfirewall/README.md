@@ -1,3 +1,3 @@
 # Obsolete
 
-Use /azure-segmented
+Use /azure-segmented instead
