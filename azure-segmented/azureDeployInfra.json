@@ -460,7 +460,7 @@
 						"properties": {
 							"addressPrefix": "0.0.0.0/0",
 							"nextHopType": "VirtualAppliance", 
-							"nextHopIpAddress": "[reference(concat('Microsoft.Network/loadBalancers/', parameters('loadBalancerName'))).frontendIPConfigurations[0].properties.privateIPAddress]"
+							"nextHopIpAddress": "LoadBalancer.frontendIPConfigurations[0].properties.privateIPAddress"
 						}
 					}
 				]
