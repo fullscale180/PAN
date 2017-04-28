@@ -100,7 +100,13 @@
 		}
 
 
-	]
+	],
+	"outputs" : {
+		"LoadBalancer": {
+			"value": "[reference(concat('Microsoft.Network/loadBalancers/', parameters('loadBalancerName'))]",
+			"type" : "object"
+		},
+	}
 }
 
 
