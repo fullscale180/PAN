@@ -120,6 +120,7 @@
 			}
 		},
 
+		// Pip setttings
 		"mgmtPublicIPName": {
 			"type": "string",
 			"metadata": {
@@ -135,6 +136,7 @@
 			"defaultValue": "panmgmt"
 		},
 		
+		// Load Balancers setttings
 		"loadBalancerName": {
 			"type": "string",
 			"metadata": {
@@ -142,6 +144,14 @@
 			},
 			"defaultValue": "outbound-lb"
 		},
+		"routeTableName": {
+			"type": "string",
+			"defaultValue": "routes-rt",
+			"metadata": {
+				"description": "This is the name of the route table"
+			}
+		},
+
 
 		// VM settings
 		"firewallModel": {

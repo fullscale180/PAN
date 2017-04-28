@@ -30,13 +30,6 @@
 			"metadata": {
 				"description": "This is the name of the inbound load balancer"
 			}
-		},
-		"routeTableName": {
-			"type": "string",
-			"defaultValue": "routes-rt",
-			"metadata": {
-				"description": "This is the name of the route table"
-			}
 		}
 	},
 
