@@ -1,5 +1,8 @@
 # Using VM-Series Firewalls and the Azure Application Gateway to Secure Internet-Facing Web Workloads
 
+![VM Series Firewall](https://raw.githubusercontent.com/fullscale180/PAN/master/azure-segmented/azure-segmented.png "VM Series Firewall")
+
+
 Use this ARM template to deploy: 
 
 * An outbound VM-Series firewall which includes two VM-Series firewalls behind an internal load balancer to handle outbound internet traffic. 
