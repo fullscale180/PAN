@@ -1,0 +1,3 @@
+# Obsolete
+
+Use /azure-segmented
