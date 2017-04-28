@@ -452,7 +452,7 @@
 			"dependsOn": [
 				"Microsoft.Resources/deployments/deployOutboundLoadBalancer"
 			],
-			"location": "[parameters('location')]",
+			"location": "[variables('location')]",
 			"properties": {
 				"routes": [
 					{
