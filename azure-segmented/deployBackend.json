@@ -123,7 +123,8 @@
 	},
 
 	"variables": {
-		"vnetId": "[resourceId('Microsoft.Network/virtualNetworks/', parameters('virtualNetworkName'))]",
+		// HACK rg name
+		"vnetId": "[resourceId('PAN', 'Microsoft.Network/virtualNetworks/', parameters('virtualNetworkName'))]",
 		"lbId": "[resourceId('Microsoft.Network/loadBalancers/', parameters('loadBalancerName'))]",
 	},
 
