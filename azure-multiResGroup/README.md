@@ -1,6 +1,6 @@
 # Using VM-Series Firewalls and the Azure Application Gateway to Secure Internet-Facing Web Workloads
 
-![VM Series Firewall](https://raw.githubusercontent.com/fullscale180/PAN/master/azure-segmented/azure-segmented.png "VM Series Firewall")
+![VM Series Firewall](https://raw.githubusercontent.com/fullscale180/PAN/master/azure-segmented/azure-multiResGroup.png "VM Series Firewall")
 
 
 Use this ARM template to deploy: 

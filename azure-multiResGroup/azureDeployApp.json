@@ -7,7 +7,8 @@
 			"type": "string",
 			"metadata": {
 				"description": "Prefixed used in naming application specific resources"
-			}
+			},
+			"defaultValue": "a1"
 		},
 
 		// Availability Set Settings
