@@ -32,15 +32,21 @@ $location = "westus2"
 #-----------------------------------------------------
 # Deploy outbound firewall
 #-----------------------------------------------------
-$rgName = "PAN1" 
+$rgName = "PAN" 
 $rg = New-AzureRMResourceGroup -name $rgName -location $location
 New-AzureRMResourceGroupDeployment -ResourceGroupName $rgName -Name $deployName -TemplateFile .\azureDeployInfra.json -TemplateParameterFile .\azureDeployInfra.parameters.json 
 
 #-----------------------------------------------------
-# Deploy application firewall and backend
+# Deploy inbound firewall and backend from app1
 #-----------------------------------------------------
-$rgName = "PAN1" 
+$rgName = "APP1" 
 $rg = New-AzureRMResourceGroup -name $rgName -location $location
-New-AzureRMResourceGroupDeployment -ResourceGroupName $rgName -Name $deployName -TemplateFile .\azureDeployApp.json -TemplateParameterFile .\azureDeployApp.parameters.json 
+New-AzureRMResourceGroupDeployment -ResourceGroupName $rgName -Name $deployName -TemplateFile .\azureDeployApp.json -TemplateParameterFile .\azureDeployApp1.parameters.json 
 
+#-----------------------------------------------------
+# Deploy inbound firewall and backend from app2
+#-----------------------------------------------------
+$rgName = "APP2" 
+$rg = New-AzureRMResourceGroup -name $rgName -location $location
+New-AzureRMResourceGroupDeployment -ResourceGroupName $rgName -Name $deployName -TemplateFile .\azureDeployApp.json -TemplateParameterFile .\azureDeployApp2.parameters.json 
 

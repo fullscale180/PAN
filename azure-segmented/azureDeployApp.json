@@ -11,12 +11,19 @@
 		},
 
 		// Availability Set Settings
-		"avsetName": {
+		"firewallAvsetName": {
 			"type": "string",
 			"metadata": {
 				"description": "Name of the availability set for inbound firewall"
 			},
 			"defaultValue": "firewall-avset"
+		},
+		"backendAvsetName": {
+			"type": "string",
+			"metadata": {
+				"description": "Name of the availability set for backend"
+			},
+			"defaultValue": "backend-avset"
 		},
 
 		// Storage Settings
@@ -77,6 +84,13 @@
 			"defaultValue": "vnet",
 			"metadata": {
 				"description": "Virtual Network Name"
+			}
+		},
+		"mgmtSubnetName": {
+			"type": "string",
+			"defaultValue": "Mgmt",
+			"metadata": {
+				"description": "Subnet for Management Network"
 			}
 		},
 		"untrustedSubnetName": {
@@ -215,7 +229,8 @@
 		"apGatewayPublicIpDns"     : "[toLower(concat(parameters('appPrefix'), '-', parameters('gatewayPublicIPDns')))]",
 		"apMgmtPublicIpDns"        : "[toLower(concat(parameters('appPrefix'), '-', parameters('mgmtPublicIPDns')))]",
 
-		"apAvsetName"              : "[concat(parameters('appPrefix'), '-', parameters('avsetName'))]",
+		"apFirewallAvsetName"      : "[concat(parameters('appPrefix'), '-', parameters('firewallAvsetName'))]",
+		"apBackendAvsetName"       : "[concat(parameters('appPrefix'), '-', parameters('backendAvsetName'))]",
 		"apBackendVmName"          : "[concat(parameters('appPrefix'), '-', parameters('backendVmName'))]",
 		"apFirewallVmName"         : "[concat(parameters('appPrefix'), '-', parameters('firewallVmName'))]",
 		"apInboundLoadBalancerName": "[concat(parameters('appPrefix'), '-', parameters('inboundLoadBalancerName'))]",
@@ -263,7 +278,7 @@
 			"properties": {
 				"publicIPAllocationMethod": "Dynamic",
 				"dnsSettings": {
-					"domainNameLabel":  "[parameters('gatewayPublicIPDns')]"
+					"domainNameLabel":  "[variables('apGatewayPublicIPDns')]"
 				}
 			}
 		},
@@ -274,7 +289,6 @@
 			"type": "Microsoft.Resources/deployments",
 			"apiVersion": "2015-01-01",
 			"dependsOn": [
-				// "Microsoft.Resources/deployments/deployVNet"
 			],
 			"properties": {
 				"mode": "Incremental",
@@ -305,7 +319,6 @@
 			"type": "Microsoft.Resources/deployments",
 			"apiVersion": "2015-01-01",
 			"dependsOn": [
-				// "Microsoft.Resources/deployments/deployVNet"
 			],
 			"properties": {
 				"mode": "Incremental",
@@ -337,8 +350,6 @@
 			"apiVersion": "2015-01-01",
 			"dependsOn": [
 				"Microsoft.Resources/deployments/deployStorage",
-				// "Microsoft.Resources/deployments/deployNsg",
-				// "Microsoft.Resources/deployments/deployVNet",
 				"Microsoft.Resources/deployments/deployBackendLoadBalancer"
 			],
 			"properties": {
@@ -353,6 +364,9 @@
 					},
 					"storageName": {
 						"value": "[variables('apStorageName')]"
+					},
+					"avSetName": {
+						"value": "[variables('apBackendAvsetName')]"
 					},
 				
 					"virtualNetworkName": {
@@ -408,7 +422,7 @@
 						"value": "[variables('location')]"
 					},
 					"avSetName": {
-						"value": "[variables('apAvsetName')]"
+						"value": "[variables('apFirewallAvsetName')]"
 					},
 					"storageName": {
 						"value": "[parameters('storageName')]"
@@ -432,7 +446,7 @@
 						"value": "[variables('apMgmtPublicIPName')]"
 					},
 					"mgmtPublicIPDnsName":{
-						"value": "[variables('apMgmtPublicIPDnsName')]"
+						"value": "[variables('apMgmtPublicIPDns')]"
 					},
 					"virtualMachineName": {
 						"value": "[variables('apFirewallVmName')]"
@@ -456,28 +470,28 @@
 			}
 		},
 
-		// // Connect gateway Public IP to inbound load balancer
-		// { 
-		// 	"apiVersion": "2015-05-01-preview",
-		// 	"type": "Microsoft.Network/loadBalancers",
-		// 	"name": "[parameters('inboundLoadBalancerName')]",
-		// 	"dependsOn": [
-		// 		"[concat('Microsoft.Network/publicIPAddresses/', variables('apGatewayPublicIPName'))]"
-		// 	],
-		// 	"location": "[variables('location')]",
-		// 	"properties": {
-		// 		"frontendIPConfigurations": [
-		// 			{
-		// 				"name": "Frontend",
-		// 				"properties": {
-		// 					"publicIPAddress": {
-		// 						"id": "[resourceId('Microsoft.Network/publicIPAddresses', variables('apGatewayPublicIPName'))]"
-		// 					}
-		// 				}
-		// 			}
-		// 		]
-		// 	}
-		// }
+		// Connect gateway Public IP to inbound load balancer
+		{ 
+			"apiVersion": "2015-05-01-preview",
+			"type": "Microsoft.Network/loadBalancers",
+			"name": "[parameters('inboundLoadBalancerName')]",
+			"dependsOn": [
+				"[concat('Microsoft.Network/publicIPAddresses/', variables('apGatewayPublicIPName'))]"
+			],
+			"location": "[variables('location')]",
+			"properties": {
+				"frontendIPConfigurations": [
+					{
+						"name": "Frontend",
+						"properties": {
+							"publicIPAddress": {
+								"id": "[resourceId('Microsoft.Network/publicIPAddresses', variables('apGatewayPublicIPName'))]"
+							}
+						}
+					}
+				]
+			}
+		}
 
 	],
 	"outputs": {}
