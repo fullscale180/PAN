@@ -168,89 +168,89 @@
 		},
 		
 		// virtualMachines[]
-		// { 
-		// 		"apiVersion": "2015-06-15",
-		// 		"type": "Microsoft.Compute/virtualMachines",
-		// 		"name": "[concat(parameters('virtualMachineName'), copyindex())]",
-		// 		"copy": {
-		// 			"name": "virtualMachineLoop",
-		// 			"count": "[parameters('vmCount')]"
-		// 		},
-		// 		"location": "[parameters('location')]",
-		// 		"dependsOn": [
-		// 			"[concat('Microsoft.Network/networkInterfaces/', parameters('virtualMachineName'), copyindex(), '-nic')]",
-		// 			"[concat('Microsoft.Compute/availabilitySets/', parameters('avSetName'))]"
-		// 		],
-		// 		"properties": {
-		// 			"availabilitySet": {
-		// 				"id": "[resourceId('Microsoft.Compute/availabilitySets',parameters('avSetName'))]"
-		// 			},
-		// 			"hardwareProfile": {
-		// 				"vmSize": "[parameters('vmSize')]"
-		// 			},
-		// 			"osProfile": {
-		// 				"computerName": "[concat(parameters('virtualMachineName'), copyIndex())]",
-		// 				"adminUsername": "[parameters('adminUsername')]",
-		// 				"adminPassword": "[parameters('adminPassword')]"
-		// 			},
-		// 			"storageProfile": {
-		// 				"imageReference": {
-		// 					"publisher": "[parameters('imagePublisher')]",
-		// 					"offer": "[parameters('imageOffer')]",
-		// 					"sku": "[parameters('imageSKU')]",
-		// 					"version": "latest"
-		// 				},
-		// 				"osDisk": {
-		// 					"name": "osdisk",
-		// 					"vhd": {
-		// 						"uri": "[concat('http://',parameters('storageName'),'.blob.core.windows.net/vhds/','osdisk', copyindex(), '.vhd')]"
-		// 					},
-		// 					"caching": "ReadWrite",
-		// 					"createOption": "FromImage"
-		// 				}
-		// 			},
-		// 			"networkProfile": {
-		// 				"networkInterfaces": [
-		// 					{
-		// 						"id": "[resourceId('Microsoft.Network/networkInterfaces',concat(parameters('virtualMachineName'), copyindex(),'-nic'))]"
-		// 					}
-		// 				]
-		// 			},
-		// 			"diagnosticsProfile": {
-		// 				"bootDiagnostics": {
-		// 					"enabled": "true",
-		// 					"storageUri": "[concat('http://',parameters('storageName'),'.blob.core.windows.net')]"
-		// 				}
-		// 			}
-		// 		}
-		// },
+		{ 
+				"apiVersion": "2015-06-15",
+				"type": "Microsoft.Compute/virtualMachines",
+				"name": "[concat(parameters('virtualMachineName'), copyindex())]",
+				"copy": {
+					"name": "virtualMachineLoop",
+					"count": "[parameters('vmCount')]"
+				},
+				"location": "[parameters('location')]",
+				"dependsOn": [
+					"[concat('Microsoft.Network/networkInterfaces/', parameters('virtualMachineName'), copyindex(), '-nic')]",
+					"[concat('Microsoft.Compute/availabilitySets/', parameters('avSetName'))]"
+				],
+				"properties": {
+					"availabilitySet": {
+						"id": "[resourceId('Microsoft.Compute/availabilitySets',parameters('avSetName'))]"
+					},
+					"hardwareProfile": {
+						"vmSize": "[parameters('vmSize')]"
+					},
+					"osProfile": {
+						"computerName": "[concat(parameters('virtualMachineName'), copyIndex())]",
+						"adminUsername": "[parameters('adminUsername')]",
+						"adminPassword": "[parameters('adminPassword')]"
+					},
+					"storageProfile": {
+						"imageReference": {
+							"publisher": "[parameters('imagePublisher')]",
+							"offer": "[parameters('imageOffer')]",
+							"sku": "[parameters('imageSKU')]",
+							"version": "latest"
+						},
+						"osDisk": {
+							"name": "osdisk",
+							"vhd": {
+								"uri": "[concat('http://',parameters('storageName'),'.blob.core.windows.net/vhds/','osdisk', copyindex(), '.vhd')]"
+							},
+							"caching": "ReadWrite",
+							"createOption": "FromImage"
+						}
+					},
+					"networkProfile": {
+						"networkInterfaces": [
+							{
+								"id": "[resourceId('Microsoft.Network/networkInterfaces',concat(parameters('virtualMachineName'), copyindex(),'-nic'))]"
+							}
+						]
+					},
+					"diagnosticsProfile": {
+						"bootDiagnostics": {
+							"enabled": "true",
+							"storageUri": "[concat('http://',parameters('storageName'),'.blob.core.windows.net')]"
+						}
+					}
+				}
+		},
 		
 		// virtualMachines/extensions[]
-		// { 
-		// 		"name": "[concat(parameters('virtualMachineName'), copyindex(), '/installcustomscript')]",
-		// 		"type": "Microsoft.Compute/virtualMachines/extensions",
-		// 		"copy": {
-		// 			"name": "apacheLoop",
-		// 			"count": "[parameters('vmCount')]"
-		// 		},
-		// 		"location": "[parameters('location')]",
-		// 		"apiVersion": "2015-06-15",
-		// 		"dependsOn": [
-		// 			"virtualMachineLoop"
-		// 		],
-		// 		"tags": {
-		// 			"displayName": "scriptextensiondemo"
-		// 		},
-		// 		"properties": {
-		// 			"publisher": "Microsoft.Azure.Extensions",
-		// 			"type": "CustomScript",
-		// 			"typeHandlerVersion": "2.0",
-		// 			"autoUpgradeMinorVersion": true,
-		// 			"settings": {
-		// 				"commandToExecute": "apt-get -y update && apt-get install -y apache2"
-		// 			}
-		// 		}
-		// }
+		{ 
+				"name": "[concat(parameters('virtualMachineName'), copyindex(), '/installcustomscript')]",
+				"type": "Microsoft.Compute/virtualMachines/extensions",
+				"copy": {
+					"name": "apacheLoop",
+					"count": "[parameters('vmCount')]"
+				},
+				"location": "[parameters('location')]",
+				"apiVersion": "2015-06-15",
+				"dependsOn": [
+					"virtualMachineLoop"
+				],
+				"tags": {
+					"displayName": "scriptextensiondemo"
+				},
+				"properties": {
+					"publisher": "Microsoft.Azure.Extensions",
+					"type": "CustomScript",
+					"typeHandlerVersion": "2.0",
+					"autoUpgradeMinorVersion": true,
+					"settings": {
+						"commandToExecute": "apt-get -y update && apt-get install -y apache2"
+					}
+				}
+		}
 	],
 	
 	"outputs": {}

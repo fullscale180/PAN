@@ -50,3 +50,9 @@ $rgName = "APP2"
 $rg = New-AzureRMResourceGroup -name $rgName -location $location
 New-AzureRMResourceGroupDeployment -ResourceGroupName $rgName -Name $deployName -TemplateFile .\azureDeployApp.json -TemplateParameterFile .\azureDeployApp2.parameters.json 
 
+#-----------------------------------------------------
+# Deploy inbound firewall and backend from app3
+#-----------------------------------------------------
+$rgName = "APP3" 
+$rg = New-AzureRMResourceGroup -name $rgName -location $location
+New-AzureRMResourceGroupDeployment -ResourceGroupName $rgName -Name $deployName -TemplateFile .\azureDeployApp.json -TemplateParameterFile .\azureDeployApp3.parameters.json 
