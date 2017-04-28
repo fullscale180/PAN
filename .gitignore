@@ -17,3 +17,6 @@ $RECYCLE.BIN/
 
 ## Visio temp files
 *.~*
+
+## obsolete Folder
+/azure-combined
