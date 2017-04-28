@@ -30,12 +30,9 @@ Only projects explicitly tagged with "Supported" information are officially supp
 
 ***Deploy outbound VM-Series Firewall***
 
-[<img src="http://azuredeploy.net/deploybutton.png"/>](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Ffullscale180%2FPAN%2Fmaster%2Fazure-segmented%2FazureDeployInfra.json)
+[<img src="http://azuredeploy.net/deploybutton.png"/>](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Ffullscale180%2FPAN%2Fmaster%2Fazure-multiResGroup%2FazureDeployInfra.json)
 
-***Deploy sample Application 1 with separate load balancer inbound firewall and backend***
+***Deploy a sample Application with separate load balancer inbound firewall and backend***
 
-[<img src="http://azuredeploy.net/deploybutton.png"/>](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Ffullscale180%2FPAN%2Fmaster%2Fazure-segmented%2FazureDeployApp1.json)
+[<img src="http://azuredeploy.net/deploybutton.png"/>](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Ffullscale180%2FPAN%2Fmaster%2Fazure-multiResGroup%2FazureDeployApp1.json)
 
-***Deploy sample Application 2 with separate load balancer inbound firewall and backend***
-
-[<img src="http://azuredeploy.net/deploybutton.png"/>](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Ffullscale180%2FPAN%2Fmaster%2Fazure-segmented%2FazureDeployApp1.json)
