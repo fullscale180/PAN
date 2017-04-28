@@ -384,100 +384,100 @@
 			}
 		},
 
-		// Deploy inbound Firewall
-		{	
-			"name": "deployInboundFirewall",
-			"type": "Microsoft.Resources/deployments",
-			"apiVersion": "2015-01-01",
-			"dependsOn": [
-				// "Microsoft.Resources/deployments/deployVNet",
-				"Microsoft.Resources/deployments/deployBackend",
-				"Microsoft.Resources/deployments/deployInboundLoadBalancer"
-			],
-			"properties": {
-				"mode": "Incremental",
-				"templateLink": {
-					"uri": "[variables('deployFirewallURL')]",
-					"contentVersion": "1.0.0.0"
-				},
-				"parameters": {
-					"baseUrl": {
-						"value": "[variables('baseUrl')]"
-					},
-					"location": {
-						"value": "[variables('location')]"
-					},
-					"avSetName": {
-						"value": "[variables('apAvsetName')]"
-					},
-					"storageName": {
-						"value": "[parameters('storageName')]"
-					},
-					"virtualNetworkName": {
-						"value": "[parameters('virtualNetworkName')]"
-					},
-					"mgmtSubnetName": {
-						"value": "[parameters('mgmtSubnetName')]"
-					},
-					"inboundSubnetName": {
-						"value": "[parameters('untrustedSubnetName')]"
-					},
-					"outboundSubnetName": {
-						"value": "[parameters('trustedSubnetName')]"
-					},
-					"loadBalancerName": {
-						"value": "[variables('apInboundLoadBalancerName')]"
-					},
-					"mgmtPublicIPName": {
-						"value": "[variables('apMgmtPublicIPName')]"
-					},
-					"mgmtPublicIPDnsName":{
-						"value": "[variables('apMgmtPublicIPDnsName')]"
-					},
-					"virtualMachineName": {
-						"value": "[variables('apFirewallVmName')]"
-					},
-					"vmSize": {
-						"value": "[parameters('firewallVmSize')]"
-					},
-					"imageSku" : {
-						"value": "[parameters('firewallModel')]"
-					},
-					"adminUsername": {
-						"value": "[parameters('username')]"
-					},
-					"adminPassword": {
-						"value": "[parameters('password')]"
-					},
-					"sshKey": {
-						"value": "[parameters('sshPublicKey')]"
-					},
-				}
-			}
-		},
+		// // Deploy inbound Firewall
+		// {	
+		// 	"name": "deployInboundFirewall",
+		// 	"type": "Microsoft.Resources/deployments",
+		// 	"apiVersion": "2015-01-01",
+		// 	"dependsOn": [
+		// 		// "Microsoft.Resources/deployments/deployVNet",
+		// 		"Microsoft.Resources/deployments/deployBackend",
+		// 		"Microsoft.Resources/deployments/deployInboundLoadBalancer"
+		// 	],
+		// 	"properties": {
+		// 		"mode": "Incremental",
+		// 		"templateLink": {
+		// 			"uri": "[variables('deployFirewallURL')]",
+		// 			"contentVersion": "1.0.0.0"
+		// 		},
+		// 		"parameters": {
+		// 			"baseUrl": {
+		// 				"value": "[variables('baseUrl')]"
+		// 			},
+		// 			"location": {
+		// 				"value": "[variables('location')]"
+		// 			},
+		// 			"avSetName": {
+		// 				"value": "[variables('apAvsetName')]"
+		// 			},
+		// 			"storageName": {
+		// 				"value": "[parameters('storageName')]"
+		// 			},
+		// 			"virtualNetworkName": {
+		// 				"value": "[parameters('virtualNetworkName')]"
+		// 			},
+		// 			"mgmtSubnetName": {
+		// 				"value": "[parameters('mgmtSubnetName')]"
+		// 			},
+		// 			"inboundSubnetName": {
+		// 				"value": "[parameters('untrustedSubnetName')]"
+		// 			},
+		// 			"outboundSubnetName": {
+		// 				"value": "[parameters('trustedSubnetName')]"
+		// 			},
+		// 			"loadBalancerName": {
+		// 				"value": "[variables('apInboundLoadBalancerName')]"
+		// 			},
+		// 			"mgmtPublicIPName": {
+		// 				"value": "[variables('apMgmtPublicIPName')]"
+		// 			},
+		// 			"mgmtPublicIPDnsName":{
+		// 				"value": "[variables('apMgmtPublicIPDnsName')]"
+		// 			},
+		// 			"virtualMachineName": {
+		// 				"value": "[variables('apFirewallVmName')]"
+		// 			},
+		// 			"vmSize": {
+		// 				"value": "[parameters('firewallVmSize')]"
+		// 			},
+		// 			"imageSku" : {
+		// 				"value": "[parameters('firewallModel')]"
+		// 			},
+		// 			"adminUsername": {
+		// 				"value": "[parameters('username')]"
+		// 			},
+		// 			"adminPassword": {
+		// 				"value": "[parameters('password')]"
+		// 			},
+		// 			"sshKey": {
+		// 				"value": "[parameters('sshPublicKey')]"
+		// 			},
+		// 		}
+		// 	}
+		// },
 
-		// Connect gateway Public IP to inbound load balancer
-		{ 
-			"apiVersion": "2015-05-01-preview",
-			"type": "Microsoft.Network/loadBalancers",
-			"name": "[parameters('inboundLoadBalancerName')]",
-			"dependsOn": [
-				"[concat('Microsoft.Network/publicIPAddresses/', variables('apGatewayPublicIPName'))]"
-			],
-			"location": "[variables('location')]",
-			"properties": {
-				"frontendIPConfigurations": [
-					{
-						"name": "Frontend",
-						"properties": {
-							"publicIPAddress": {
-								"id": "[resourceId('Microsoft.Network/publicIPAddresses', variables('apGatewayPublicIPName'))]"
-							}
-						}
-					}
-				]
-			}
-		}
+		// // Connect gateway Public IP to inbound load balancer
+		// { 
+		// 	"apiVersion": "2015-05-01-preview",
+		// 	"type": "Microsoft.Network/loadBalancers",
+		// 	"name": "[parameters('inboundLoadBalancerName')]",
+		// 	"dependsOn": [
+		// 		"[concat('Microsoft.Network/publicIPAddresses/', variables('apGatewayPublicIPName'))]"
+		// 	],
+		// 	"location": "[variables('location')]",
+		// 	"properties": {
+		// 		"frontendIPConfigurations": [
+		// 			{
+		// 				"name": "Frontend",
+		// 				"properties": {
+		// 					"publicIPAddress": {
+		// 						"id": "[resourceId('Microsoft.Network/publicIPAddresses', variables('apGatewayPublicIPName'))]"
+		// 					}
+		// 				}
+		// 			}
+		// 		]
+		// 	}
+		// }
 
 	],
 	"outputs": {}
