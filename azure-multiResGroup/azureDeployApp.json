@@ -220,7 +220,7 @@
 	},
 	
 	"variables": {
-		"baseUrl"                  : "http://raw.githubusercontent.com/fullscale180/PAN/master/azure-segmented",
+		"baseUrl"                  : "http://raw.githubusercontent.com/fullscale180/PAN/master/azure-multiResGroup",
 		"deployStorageURL"         : "[concat(variables('baseUrl'),'/deployStorage.json')]",
 		"deployBackendURL"         : "[concat(variables('baseUrl'),'/deployBackend.json')]",
 		"deployFirewallURL"        : "[concat(variables('baseUrl'),'/deployFirewall.json')]",

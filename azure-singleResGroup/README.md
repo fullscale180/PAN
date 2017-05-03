@@ -1,3 +1,3 @@
 # Obsolete
 
-Use /azure-segmented instead
+Use /azure-multiResGroup instead
