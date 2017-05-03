@@ -23,6 +23,13 @@
 		},
 
 		// Vnet parameters
+		"virtualNetworkRG": {
+			"type": "string",
+			"metadata": {
+				"description": "This is the name of the Virtual Network Resource Group"
+			},
+			"defaultValue": "PAN"
+		},
 		"virtualNetworkName": {
 			"type": "string",
 			"metadata": {
@@ -119,13 +126,12 @@
 			"metadata": {
 				"description": "ssh public key for admin user authentication"
 			}
-		},
+		}
 	},
 
 	"variables": {
-		// HACK rg name
-		"vnetId": "[resourceId('PAN', 'Microsoft.Network/virtualNetworks/', parameters('virtualNetworkName'))]",
-		"lbId": "[resourceId('Microsoft.Network/loadBalancers/', parameters('loadBalancerName'))]",
+		"vnetId": "[resourceId(parameters('virtualNetworkRG'), 'Microsoft.Network/virtualNetworks/', parameters('virtualNetworkName'))]",
+		"lbId": "[resourceId('Microsoft.Network/loadBalancers/', parameters('loadBalancerName'))]"
 	},
 
 	"resources": [

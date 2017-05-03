@@ -11,6 +11,13 @@
 		},
 
 		// vnet parameters
+		"virtualNetworkRG": {
+			"type": "string",
+			"metadata": {
+				"description": "This is the name of the Virtual Network Resource Group"
+			},
+			"defaultValue": "PAN"
+		},
 		"virtualNetworkName": {
 			"type": "string",
 			"metadata": {
@@ -34,8 +41,7 @@
 	},
 
 	"variables": {
-		// HACK rgname
-		"vnetId": "[resourceId('PAN', 'Microsoft.Network/virtualNetworks/', parameters('virtualNetworkName'))]",
+		"vnetId": "[resourceId(parameters('virtualNetworkRG'), 'Microsoft.Network/virtualNetworks/', parameters('virtualNetworkName'))]",
 		"lbId": "[resourceId('Microsoft.Network/loadBalancers/', parameters('loadBalancerName'))]"
 	},
 
