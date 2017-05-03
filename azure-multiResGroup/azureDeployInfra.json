@@ -381,6 +381,7 @@
 			"type": "Microsoft.Resources/deployments",
 			"apiVersion": "2015-01-01",
 			"dependsOn": [
+				"Microsoft.Resources/deployments/deployStorage",
 				"Microsoft.Resources/deployments/deployVNet",
 				"Microsoft.Resources/deployments/deployOutboundLoadBalancer"
 			],
@@ -401,7 +402,7 @@
 						"value": "[parameters('avsetName')]"
 					},
 					"storageName": {
-						"value": "[parameters('storageName')]"
+						"value": "[variables('storageName')]"
 					},
 					"virtualNetworkName": {
 						"value": "[parameters('virtualNetworkName')]"
