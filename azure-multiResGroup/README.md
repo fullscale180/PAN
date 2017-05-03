@@ -32,7 +32,7 @@ Only projects explicitly tagged with "Supported" information are officially supp
 
 [<img src="http://azuredeploy.net/deploybutton.png"/>](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Ffullscale180%2FPAN%2Fmaster%2Fazure-multiResGroup%2FazureDeployInfra.json)
 
-***Deploy a sample Application with separate load balancer inbound firewall and backend***
+***Deploy a sample Application with separate inbound firewall and backend***
 
 [<img src="http://azuredeploy.net/deploybutton.png"/>](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Ffullscale180%2FPAN%2Fmaster%2Fazure-multiResGroup%2FazureDeployApp.json)
 

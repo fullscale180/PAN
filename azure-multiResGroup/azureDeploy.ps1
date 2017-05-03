@@ -4,12 +4,6 @@
 Import-module AzureRM.Compute
 Import-module AzureRM.Storage
 Import-module AzureRM.Network
-#Import-module AzureRM.ApiManagement
-#Import-module AzureRM.Automation
-#Import-module AzureRM.Backup
-#Import-module AzureRM.KeyVault
-#Import-module AzureRM.WebSites
-#Import-module AzureRM.Resources
 
 #-----------------------------------------------------
 # Authenticate
