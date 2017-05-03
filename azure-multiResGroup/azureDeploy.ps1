@@ -14,7 +14,7 @@ Import-module AzureRM.Network
 #-----------------------------------------------------
 # Authenticate
 #-----------------------------------------------------
-Login-AzureRmAccount
+#Login-AzureRmAccount
 
 #-----------------------------------------------------
 # Select the Subscription by subscriptionId or by Tenant Id

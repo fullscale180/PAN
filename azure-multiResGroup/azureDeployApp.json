@@ -426,7 +426,7 @@
 						"value": "[variables('apFirewallAvsetName')]"
 					},
 					"storageName": {
-						"value": "[parameters('storageName')]"
+						"value": "[variables('apStorageName')]"
 					},
 					"virtualNetworkName": {
 						"value": "[parameters('virtualNetworkName')]"
