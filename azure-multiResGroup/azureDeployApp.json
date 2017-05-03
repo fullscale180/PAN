@@ -188,6 +188,7 @@
 		},
 		"username": {
 			"type": "string",
+			"defaultValue": "ENTER THE USERNAME FOR THE ADMIN ACCOUNT",
 			"metadata": {
 				"description": "Username of the administrator account of VM instances"
 			}
@@ -205,7 +206,7 @@
 		},
 		"password": {
 			"type": "securestring",
-			"defaultValue": "",
+			"defaultValue": "ENTER THE PASSWORD FOR THE ADMIN ACCOUNT",
 			"metadata": {
 				"description": "Password for the administrator account of all VM instances. Must be specified if Authentication Type is 'password'."
 			}
