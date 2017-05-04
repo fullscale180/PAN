@@ -25,7 +25,7 @@
 				"description": "Network Security Group Name"
 			}
 		},
-		"networkSecurityGroupInboundSrcIP": {
+		"networkSecurityGroupInboundIP": {
 			"type": "string",
 			"metadata": {
 				"description": "Your source public IP address. Added to the inbound NSG on eth0 (MGMT), to restrict access to the deployment."
@@ -284,7 +284,7 @@
 						"value": "[parameters('networkSecurityGroupName')]"
 					},
 					"srcIPInboundNSG": {
-						"value": "[parameters('networkSecurityGroupInboundSrcIP')]"
+						"value": "[parameters('networkSecurityGroupInboundIP')]"
 					},
 					"virtualNetworkAddressPrefix": {
 						"value": "[parameters('virtualNetworkAddressPrefix')]"
