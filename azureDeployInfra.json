@@ -2,6 +2,21 @@
 	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
 	"contentVersion": "1.0.0.0",
 	"parameters": {
+		"storageName": {
+			"type": "string",
+			"metadata": {
+				"description": "Name of the storage account created to store the VM's disks.  Storage account name must be globally unique."
+			},
+			"defaultValue": "ENTER A GLOBALLY UNIQUE NAME HERE"
+		},
+		"mgmtPublicIPDnsName": {
+			"type": "string",
+			"metadata": {
+				"description": "DNS Name prefix of public IP resource for Management interface of VM-Series firewall.  Name must be globally unique."
+			},
+			"defaultValue": "ENTER A GLOBALLY UNIQUE NAME HERE"
+		},
+
 		// NSG Settings
 		"networkSecurityGroupName": {
 			"type": "string",
@@ -28,13 +43,6 @@
 		},
 
 		// Storage Settings
-		"storageName": {
-			"type": "string",
-			"metadata": {
-				"description": "Name of the storage account created to store the VM's disks.  Storage account name must be globally unique."
-			},
-			"defaultValue": "ENTER A GLOBALLY UNIQUE NAME HERE"
-		},
 		"storageType": {
 			"type": "string",
 			"allowedValues": [
@@ -129,13 +137,6 @@
 			},
 			"defaultValue": "mgmt-pip"
 		},
-		"mgmtPublicIPDnsName": {
-			"type": "string",
-			"metadata": {
-				"description": "DNS Name prefix of public IP resource for Management interface of VM-Series firewall.  Name must be globally unique."
-			},
-			"defaultValue": "ENTER A GLOBALLY UNIQUE NAME HERE"
-		},
 		
 		// Load Balancers setttings
 		"loadBalancerName": {
@@ -190,13 +191,6 @@
 			},
 			"defaultValue": "Standard_D3_v2"
 		},
-		"username": {
-			"type": "string",
-			"defaultValue": "ENTER THE USERNAME FOR THE ADMIN ACCOUNT",
-			"metadata": {
-				"description": "Username of the administrator account of VM instances"
-			}
-		},
 		"authenticationType": {
 			"type": "string",
 			"metadata": {
@@ -208,9 +202,16 @@
 			],
 			"defaultValue": "password"
 		},
+		"username": {
+			"type": "string",
+			"defaultValue": "AdminUser",
+			"metadata": {
+				"description": "Username of the administrator account of VM instances"
+			}
+		},
 		"password": {
 			"type": "securestring",
-			"defaultValue": "ENTER THE PASSWORD FOR THE ADMIN ACCOUNT",
+			"defaultValue": "P@ssword1234",
 			"metadata": {
 				"description": "Password for the administrator account of all VM instances. Must be specified if Authentication Type is 'password'."
 			}
