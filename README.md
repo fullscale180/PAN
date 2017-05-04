@@ -1,4 +1,4 @@
-# Using VM-Series Firewalls and the Azure Application Gateway to Secure Internet-Facing Web Workloads
+# Using VM-Series Firewalls to Secure Internet-Facing Web Workloads
 
 ![VM Series Firewall](https://raw.githubusercontent.com/fullscale180/PAN/master/archdiagram.png "VM Series Firewall")
 
