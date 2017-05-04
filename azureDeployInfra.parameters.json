@@ -3,16 +3,16 @@
   "contentVersion": "1.0.0.0",
   "parameters": {
     "username": {
-      "value": "dennisan"
+      "value": "AdminUser"
     },
     "password": {
       "value": "P@ssword1234"
     },
     "storageName": {
-      "value": "dapan4storage"
+      "value": "panstorage"
     },
 	"mgmtPublicIPDnsName" : {
-		"value" : "dapan4mgmt"
+		"value" : "panmgmt"
 	}
   }
 }
