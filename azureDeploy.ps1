@@ -18,7 +18,7 @@ Get-AzureRmSubscription -SubscriptionName "Visual Studio Enterprise" | Select-Az
 #-----------------------------------------------------
 # Create a new deployment
 #-----------------------------------------------------
-cd 'D:\All Projects\FS180 Clients\PAN\azure-multiResGroup'
+cd 'D:\All Projects\FS180 Clients\PAN'
 
 $deployName = "AzureDeploy"
 $location = "westus2"

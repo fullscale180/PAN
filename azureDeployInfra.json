@@ -225,7 +225,7 @@
 	},
 	
 	"variables": {
-		"baseUrl"              : "http://raw.githubusercontent.com/fullscale180/PAN/master/azure-multiResGroup",
+		"baseUrl"              : "http://raw.githubusercontent.com/fullscale180/PAN/master",
 		"deployStorageURL"     : "[concat(variables('baseUrl'),'/deployStorage.json')]",
 		"deployNsgURL"         : "[concat(variables('baseUrl'),'/deployNsg.json')]",
 		"deployVnetURL"        : "[concat(variables('baseUrl'),'/deployVnet.json')]",
