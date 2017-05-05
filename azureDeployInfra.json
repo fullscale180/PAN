@@ -67,7 +67,7 @@
 		},
 		"virtualNetworkAddressPrefix": {
 			"type": "string",
-			"defaultValue": "192.168.0.0/16",
+			"defaultValue": "10.0.0.0/16",
 			"metadata": {
 				"description": "CIDR for Virtual Network"
 			}
@@ -81,7 +81,7 @@
 		},
 		"mgmtSubnetPrefix": {
 			"type": "string",
-			"defaultValue": "192.168.0.0/24",
+			"defaultValue": "10.0.0.0/24",
 			"metadata": {
 				"description": "CIDR for Management Network"
 			}
@@ -95,7 +95,7 @@
 		},
 		"untrustedSubnetPrefix": {
 			"type": "string",
-			"defaultValue": "192.168.1.0/24",
+			"defaultValue": "10.0.1.0/24",
 			"metadata": {
 				"description": "CIDR for Untrusted Network"
 			}
@@ -109,7 +109,7 @@
 		},
 		"trustedSubnetPrefix": {
 			"type": "string",
-			"defaultValue": "192.168.2.0/24",
+			"defaultValue": "10.0.2.0/24",
 			"metadata": {
 				"description": "CIDR for Trusted Network"
 			}
@@ -123,7 +123,7 @@
 		},
 		"backendSubnetPrefix": {
 			"type": "string",
-			"defaultValue": "192.168.4.0/24",
+			"defaultValue": "10.0.3.0/24",
 			"metadata": {
 				"description": "CIDR for Backend WWW Network"
 			}
