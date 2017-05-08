@@ -18,19 +18,31 @@ $projectpath = "D:\All Projects\FS180 Clients\PAN"
 #-----------------------------------------------------
 # Deploy an outbound firewall using parameter file
 #-----------------------------------------------------
-$rgName = "PAN" 
+$infaRGName = "DATEST" 
+$rg = New-AzureRMResourceGroup -name $infaRGName -location $location
+
 $templateFile = "$projectPath\azureDeployInfra.json"
-$parameterFile = "$projectPath\azureDeployInfra.parameters.json"
-$rg = New-AzureRMResourceGroup -name $rgName -location $location
-New-AzureRMResourceGroupDeployment -ResourceGroupName $rgName -Name $deployName -TemplateFile $templateFile -TemplateParameterFile $parameterFile
+$parameterObject = @{
+    "storageName" = "dapanstorage";
+	"mgmtPublicIPDnsName" = "dapanmgmt";
+    "virtualNetworkName" = "panvnet";
+ }
+
+New-AzureRMResourceGroupDeployment -ResourceGroupName $infaRGName -Name $deployName -TemplateFile $templateFile -TemplateParameterObject $parameterObject 
 
 #-----------------------------------------------------
-# Deploy inbound firewall and backend for app1 use parameter object
+# Deploy inbound firewall and backend for app1 use parameter file
 #-----------------------------------------------------
-$rgName = "APP1" 
+$appRGName = "DAAPP2"
+$rg = New-AzureRMResourceGroup -name $appRGName -location $location
+
 $templateFile = "$projectPath\azureDeployApp.json"
-$parameterFile = "$projectPath\azureDeployApp.parameters.json"
-$rg = New-AzureRMResourceGroup -name $rgName -location $location
-New-AzureRMResourceGroupDeployment -ResourceGroupName $rgName -Name $deployName -TemplateFile $templateFile -TemplateParameterObject $parameterFile
+$parameterObject = @{
+    "appPrefix"          = "a2";
+    "virtualNetworkRG"   = $infaRGName;
+    "virtualNetworkName" = "panvnet";
+}
+
+New-AzureRMResourceGroupDeployment -ResourceGroupName $appRGName -Name $deployName -TemplateFile $templateFile -TemplateParameterObject $parameterObject 
 
 
