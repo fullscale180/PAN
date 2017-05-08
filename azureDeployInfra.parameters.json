@@ -11,7 +11,7 @@
     "storageName": {
       "value": "panstorage"
     },
-	"mgmtPublicIPDnsName" : {
+	"mgmtPublicIPDns" : {
 		"value" : "panmgmt"
 	}
   }

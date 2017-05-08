@@ -170,7 +170,7 @@
 			}
 		},	
 		// public IP parameters
-		"mgmtPublicIPDnsName": {
+		"mgmtPublicIPDns": {
 			"type": "string",
 			"defaultValue": "panmgmt",
 			"metadata": {
@@ -219,7 +219,7 @@
 			"properties": {
 				"publicIPAllocationMethod": "Dynamic",
 				"dnsSettings": {
-					"domainNameLabel":  "[concat(parameters('mgmtPublicIPDnsName'), copyindex())]"
+					"domainNameLabel":  "[concat(parameters('mgmtPublicIPDns'), copyindex())]"
 				}
 			}
 		},

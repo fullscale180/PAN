@@ -9,7 +9,7 @@
 			},
 			"defaultValue": "ENTER A GLOBALLY UNIQUE NAME HERE"
 		},
-		"mgmtPublicIPDnsName": {
+		"mgmtPublicIPDns": {
 			"type": "string",
 			"metadata": {
 				"description": "DNS Name prefix of public IP resource for Management interface of VM-Series firewall.  Name must be globally unique."
@@ -429,8 +429,8 @@
 					"mgmtPublicIPName": {
 						"value": "[concat('out', parameters('mgmtPublicIPName'))]"
 					},
-					"mgmtPublicIPDnsName":{
-						"value": "[concat('out', parameters('mgmtPublicIPDnsName'))]"
+					"mgmtPublicIPDns":{
+						"value": "[concat('out', parameters('mgmtPublicIPDns'))]"
 					},
 					"virtualMachineName": {
 						"value": "[concat('out', parameters('firewallVmName'))]"

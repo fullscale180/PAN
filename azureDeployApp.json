@@ -464,7 +464,7 @@
 					"mgmtPublicIPName": {
 						"value": "[variables('apMgmtPublicIPName')]"
 					},
-					"mgmtPublicIPDnsName":{
+					"mgmtPublicIPDns":{
 						"value": "[variables('apMgmtPublicIPDns')]"
 					},
 					"virtualMachineName": {

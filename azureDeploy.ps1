@@ -24,8 +24,7 @@ $rg = New-AzureRMResourceGroup -name $infaRGName -location $location
 $templateFile = "$projectPath\azureDeployInfra.json"
 $parameterObject = @{
     "storageName" = "dapanstorage";
-	"mgmtPublicIPDnsName" = "dapanmgmt";
-    "virtualNetworkName" = "panvnet";
+	"mgmtPublicIPDns" = "dapanmgmt";
  }
 
 New-AzureRMResourceGroupDeployment -ResourceGroupName $infaRGName -Name $deployName -TemplateFile $templateFile -TemplateParameterObject $parameterObject 
@@ -33,14 +32,13 @@ New-AzureRMResourceGroupDeployment -ResourceGroupName $infaRGName -Name $deployN
 #-----------------------------------------------------
 # Deploy inbound firewall and backend for app1 use parameter file
 #-----------------------------------------------------
-$appRGName = "DAAPP2"
+$appRGName = "DAAPP1"
 $rg = New-AzureRMResourceGroup -name $appRGName -location $location
 
 $templateFile = "$projectPath\azureDeployApp.json"
 $parameterObject = @{
-    "appPrefix"          = "a2";
+    "appPrefix"          = "a1";
     "virtualNetworkRG"   = $infaRGName;
-    "virtualNetworkName" = "panvnet";
 }
 
 New-AzureRMResourceGroupDeployment -ResourceGroupName $appRGName -Name $deployName -TemplateFile $templateFile -TemplateParameterObject $parameterObject 
