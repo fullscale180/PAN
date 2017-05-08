@@ -134,9 +134,8 @@
 		"virtualNetworkRG": {
 			"type": "string",
 			"metadata": {
-				"description": "This is the name of the Virtual Network Resource Group"
-			},
-			"defaultValue": "PAN"
+				"description": "Name of the Virtual Network Resource Group"
+			}
 		},
 		"virtualNetworkName": {
 			"type": "string",
@@ -147,19 +146,19 @@
 		"mgmtSubnetName": {
 			"type": "string",
 			"metadata": {
-				"description": "Subnet for Management"
+				"description": "Name of the Management subnet"
 			}
 		},
 		"outboundSubnetName": {
 			"type": "string",
 			"metadata": {
-				"description": "Subnet for Untrust"
+				"description": "Name of the Untrust subnet"
 			}
 		},
 		"inboundSubnetName": {
 			"type": "string",
 			"metadata": {
-				"description": "Subnet for Trust"
+				"description": "Name of the Trust subnet"
 			}
 		},
 
@@ -167,7 +166,7 @@
 		"loadBalancerName": {
 			"type": "string",
 			"metadata": {
-				"description": "This is the name of the inbound load balancer"
+				"description": "Name of the inbound load balancer"
 			}
 		},	
 		// public IP parameters

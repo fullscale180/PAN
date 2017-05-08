@@ -26,28 +26,27 @@
 		"virtualNetworkRG": {
 			"type": "string",
 			"metadata": {
-				"description": "This is the name of the Virtual Network Resource Group"
-			},
-			"defaultValue": "PAN"
+				"description": "Name of the Virtual Network Resource Group"
+			}
 		},
 		"virtualNetworkName": {
 			"type": "string",
 			"metadata": {
-				"description": "This is the name of the Virtual Network"
+				"description": "Name of the Virtual Network"
 			}
 		},
 		"backendSubnetName": {
 			"type": "string",
 			"defaultValue": "backend",
 			"metadata": {
-				"description": "This is the name of the backend subnet"
+				"description": "Name of the backend subnet"
 			}
 		},
 		"frontendSubnetName": {
 			"type": "string",
 			"defaultValue": "frontend",
 			"metadata": {
-				"description": "This is the name of the frontend subnet"
+				"description": "Name of the frontend subnet"
 			}
 		},
 
@@ -55,7 +54,7 @@
 		"loadBalancerName": {
 			"type": "string",
 			"metadata": {
-				"description": "This is the name of the inbound load balancer"
+				"description": "Name of the inbound load balancer"
 			}
 		},
 
@@ -66,14 +65,14 @@
 			"minValue": 1,
 			"defaultValue": 2,
 			"metadata": {
-				"description": "The number of backend VM instances"
+				"description": "Number of backend VM instances"
 			}
 		},
 		"virtualMachineName": {
 			"type": "string",
 			"defaultValue": "backendVm",
 			"metadata": {
-				"description": "This is the prefix name for the virtual machines"
+				"description": "Prefix name for the virtual machines"
 			}
 		},
 		"imagePublisher": {

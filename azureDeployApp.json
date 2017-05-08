@@ -80,11 +80,17 @@
 		},
 
 		// VNet settings
+		"virtualNetworkRG": {
+			"type": "string",
+			"metadata": {
+				"description": "Resource Group of existing Virtual Network"
+			}
+		},
 		"virtualNetworkName": {
 			"type": "string",
 			"defaultValue": "vnet",
 			"metadata": {
-				"description": "Virtual Network Name"
+				"description": "Existing Virtual Network Name"
 			}
 		},
 		"mgmtSubnetName": {
@@ -240,7 +246,8 @@
 		"apBackendLoadBalancerName": "[concat(parameters('appPrefix'), '-', parameters('backendLoadBalancerName'))]",
 		"apGatewayPublicIpName"    : "[concat(parameters('appPrefix'), '-', parameters('gatewayPublicIPName'))]",
 		"apMgmtPublicIpName"       : "[concat(parameters('appPrefix'), '-', parameters('mgmtPublicIPName'))]",
-		"location"                 : "[resourceGroup().location]"
+		"location"                 : "[resourceGroup().location]",
+		"rgname"                   : "[resourceGroup().name]"
 	},
 
 	"resources": [
@@ -301,11 +308,14 @@
 					"location": {
 						"value": "[variables('location')]"
 					},
+					"virtualNetworkRG": {
+						"value": "[parameters('virtualNetworkRG')]"
+					},
 					"virtualNetworkName": {
 						"value": "[parameters('virtualNetworkName')]"
 					},
 					"subnetName": {
-						"value": "[parameters('trustedSubnetName')]"
+						"value": "[parameters('untrustedSubnetName')]"
 					},
 					"loadBalancerName": {
 						"value": "[variables('apInboundLoadBalancerName')]"
@@ -331,11 +341,14 @@
 					"location": {
 						"value": "[variables('location')]"
 					},
+					"virtualNetworkRG": {
+						"value": "[parameters('virtualNetworkRG')]"
+					},
 					"virtualNetworkName": {
 						"value": "[parameters('virtualNetworkName')]"
 					},
 					"subnetName": {
-						"value": "[parameters('untrustedSubnetName')]"
+						"value": "[parameters('trustedSubnetName')]"
 					},
 					"loadBalancerName": {
 						"value": "[variables('apBackendLoadBalancerName')]"
@@ -369,7 +382,9 @@
 					"avSetName": {
 						"value": "[variables('apBackendAvsetName')]"
 					},
-				
+					"virtualNetworkRG": {
+						"value": "[parameters('virtualNetworkRG')]"
+					},
 					"virtualNetworkName": {
 						"value": "[parameters('virtualNetworkName')]"
 					},
@@ -427,6 +442,9 @@
 					},
 					"storageName": {
 						"value": "[variables('apStorageName')]"
+					},
+					"virtualNetworkRG": {
+						"value": "[parameters('virtualNetworkRG')]"
 					},
 					"virtualNetworkName": {
 						"value": "[parameters('virtualNetworkName')]"

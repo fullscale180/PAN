@@ -363,6 +363,9 @@
 					"location": {
 						"value": "[variables('location')]"
 					},
+					"virtualNetworkRG": {
+						"value": "[variables('rgName')]"
+					},
 					"virtualNetworkName": {
 						"value": "[parameters('virtualNetworkName')]"
 					},
@@ -404,6 +407,9 @@
 					},
 					"storageName": {
 						"value": "[variables('storageName')]"
+					},
+					"virtualNetworkRG": {
+						"value": "[variables('rgName')]"
 					},
 					"virtualNetworkName": {
 						"value": "[parameters('virtualNetworkName')]"

@@ -14,9 +14,8 @@
 		"virtualNetworkRG": {
 			"type": "string",
 			"metadata": {
-				"description": "This is the name of the Virtual Network Resource Group"
-			},
-			"defaultValue": "PAN"
+				"description": "Name of the Virtual Network Resource Group"
+			}
 		},
 		"virtualNetworkName": {
 			"type": "string",
@@ -27,7 +26,7 @@
 		"subnetName": {
 			"type": "string",
 			"metadata": {
-				"description": "Subnet for Trust"
+				"description": "Name of the subnet"
 			}
 		},
 		
@@ -35,7 +34,7 @@
 		"loadBalancerName": {
 			"type": "string",
 			"metadata": {
-				"description": "This is the name of the inbound load balancer"
+				"description": "Name of the inbound load balancer"
 			}
 		}
 	},
