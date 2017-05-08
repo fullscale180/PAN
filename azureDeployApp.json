@@ -49,23 +49,6 @@
 			"defaultValue": "Standard_LRS"
 		},
 
-
-		// NSG Settings
-		"networkSecurityGroupName": {
-			"type": "string",
-			"defaultValue": "mgmt-nsg",
-			"metadata": {
-				"description": "Network Security Group Name"
-			}
-		},
-		"networkSecurityGroupInboundIP": {
-			"type": "string",
-			"metadata": {
-				"description": "Your source public IP address. Added to the inbound NSG on nic0 (MGMT), to restrict access to the deployment."
-			},
-			"defaultValue": "0.0.0.0/0"
-		},
-		
 		// Public Ip Settings
 		"gatewayPublicIPName": {
 			"type": "string",
@@ -104,25 +87,11 @@
 				"description": "Virtual Network Name"
 			}
 		},
-		"virtualNetworkAddressPrefix": {
-			"type": "string",
-			"defaultValue": "10.0.0.0/16",
-			"metadata": {
-				"description": "CIDR for Virtual Network"
-			}
-		},
 		"mgmtSubnetName": {
 			"type": "string",
 			"defaultValue": "Mgmt",
 			"metadata": {
 				"description": "Subnet for Management Network"
-			}
-		},
-		"mgmtSubnetPrefix": {
-			"type": "string",
-			"defaultValue": "10.0.0.0/24",
-			"metadata": {
-				"description": "CIDR for Management Network"
 			}
 		},
 		"untrustedSubnetName": {
@@ -132,25 +101,11 @@
 				"description": "Subnet for Untrusted Network"
 			}
 		},
-		"untrustedSubnetPrefix": {
-			"type": "string",
-			"defaultValue": "10.0.1.0/24",
-			"metadata": {
-				"description": "CIDR for Untrusted Network"
-			}
-		},
 		"trustedSubnetName": {
 			"type": "string",
 			"defaultValue": "Trust",
 			"metadata": {
 				"description": "Subnet for Trusted Network"
-			}
-		},
-		"trustedSubnetPrefix": {
-			"type": "string",
-			"defaultValue": "10.0.2.0/24",
-			"metadata": {
-				"description": "CIDR for Trusted Network"
 			}
 		},
 		"backendSubnetName": {
@@ -160,14 +115,6 @@
 				"description": "Subnet for Backend WWW Network"
 			}
 		},
-		"backendSubnetPrefix": {
-			"type": "string",
-			"defaultValue": "10.0.3.0/24",
-			"metadata": {
-				"description": "CIDR for Backend WWW Network"
-			}
-		},
-
 
 		// Load Balancer Settings
 		"inboundLoadBalancerName": {
@@ -278,8 +225,6 @@
 		"baseUrl"                  : "http://raw.githubusercontent.com/fullscale180/PAN/master",
 		"deployStorageURL"         : "[concat(variables('baseUrl'),'/deployStorage.json')]",
 		"deployBackendURL"         : "[concat(variables('baseUrl'),'/deployBackend.json')]",
-		"deployNsgURL"             : "[concat(variables('baseUrl'),'/deployNsg.json')]",
-		"deployVnetURL"            : "[concat(variables('baseUrl'),'/deployVnet.json')]",
 		"deployFirewallURL"        : "[concat(variables('baseUrl'),'/deployFirewall.json')]",
 		"deployLoadBalancerURL"    : "[concat(variables('baseUrl'),'/deployLoadBalancer.json')]",
 
@@ -339,93 +284,12 @@
 			}
 		},
 
-		// Deploy NSG
-		{	
-			"name": "deployNsg",
-			"type": "Microsoft.Resources/deployments",
-			"apiVersion": "2015-01-01",
-			"properties": {
-				"mode": "Incremental",
-				"templateLink": {
-					"uri": "[variables('deployNsgURL')]",
-					"contentVersion": "1.0.0.0"
-				},
-				"parameters": {
-					"location": {
-						"value": "[variables('location')]"
-					},
-					"nsgName": {
-						"value": "[parameters('networkSecurityGroupName')]"
-					},
-					"srcIPInboundNSG": {
-						"value": "[parameters('networkSecurityGroupInboundIP')]"
-					},
-					"virtualNetworkAddressPrefix": {
-						"value": "[parameters('virtualNetworkAddressPrefix')]"
-					}
-				}
-			}
-		},
-
-		// Deploy VNet
-		{	
-			"name": "deployVnet",
-			"type": "Microsoft.Resources/deployments",
-			"apiVersion": "2015-01-01",
-			"dependsOn": [
-				"Microsoft.Resources/deployments/deployNsg"
-			],
-			"properties": {
-				"mode": "Incremental",
-				"templateLink": {
-					"uri": "[variables('deployVnetURL')]",
-					"contentVersion": "1.0.0.0"
-				},
-				"parameters": {
-					"nsgName": {
-						"value": "[parameters('networkSecurityGroupName')]"
-					},
-					"virtualNetworkName": {
-						"value": "[parameters('virtualNetworkName')]"
-					},
-					"virtualNetworkAddressPrefix": {
-						"value": "[parameters('virtualNetworkAddressPrefix')]"
-					},
-					"mgmtSubnetName": {
-						"value": "[parameters('MgmtSubnetName')]"
-					},
-					"untrustSubnetName": {
-						"value": "[parameters('untrustedSubnetName')]"
-					},
-					"trustSubnetName": {
-						"value": "[parameters('trustedSubnetName')]"
-					},
-					"backendSubnetName": {
-						"value": "[parameters('backendSubnetName')]"
-					},
-					"mgmtSubnetPrefix": {
-						"value": "[parameters('mgmtSubnetPrefix')]"
-					},
-					"untrustSubnetPrefix": {
-						"value": "[parameters('untrustedSubnetPrefix')]"
-					},
-					"trustSubnetPrefix": {
-						"value": "[parameters('trustedSubnetPrefix')]"
-					},
-					"backendSubnetPrefix": {
-						"value": "[parameters('backendSubnetPrefix')]"
-					}
-				}
-			}
-		},
-
 		// Deploy inbound load balancer
 		{	
 			"name": "deployInboundLoadBalancer",
 			"type": "Microsoft.Resources/deployments",
 			"apiVersion": "2015-01-01",
 			"dependsOn": [
-				"Microsoft.Resources/deployments/deployVnet"
 			],
 			"properties": {
 				"mode": "Incremental",
@@ -456,7 +320,6 @@
 			"type": "Microsoft.Resources/deployments",
 			"apiVersion": "2015-01-01",
 			"dependsOn": [
-				"Microsoft.Resources/deployments/deployVnet"
 			],
 			"properties": {
 				"mode": "Incremental",
