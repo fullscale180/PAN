@@ -1,11 +1,4 @@
 ﻿#-----------------------------------------------------
-# Import utilities module
-#-----------------------------------------------------
-Import-module AzureRM.Compute
-Import-module AzureRM.Storage
-Import-module AzureRM.Network
-
-#-----------------------------------------------------
 # Authenticate
 #-----------------------------------------------------
 Login-AzureRmAccount
@@ -18,22 +11,26 @@ Get-AzureRmSubscription -SubscriptionName "Visual Studio Enterprise" | Select-Az
 #-----------------------------------------------------
 # Create a new deployment
 #-----------------------------------------------------
-cd 'D:\All Projects\FS180 Clients\PAN'
-
-$deployName = "AzureDeploy"
 $location = "westus2"
+$deployName = "AzureDeploy"
+$projectpath = "D:\All Projects\FS180 Clients\PAN"
 
 #-----------------------------------------------------
-# Deploy an outbound firewall
+# Deploy an outbound firewall using parameter file
 #-----------------------------------------------------
 $rgName = "PAN" 
+$templateFile = "$projectPath\azureDeployInfra.json"
+$parameterFile = "$projectPath\azureDeployInfra.parameters.json"
 $rg = New-AzureRMResourceGroup -name $rgName -location $location
-New-AzureRMResourceGroupDeployment -ResourceGroupName $rgName -Name $deployName -TemplateFile .\azureDeployInfra.json -TemplateParameterFile .\azureDeployInfra.parameters.json 
+New-AzureRMResourceGroupDeployment -ResourceGroupName $rgName -Name $deployName -TemplateFile $templateFile -TemplateParameterFile $parameterFile
 
 #-----------------------------------------------------
-# Deploy inbound firewall and backend for app1
+# Deploy inbound firewall and backend for app1 use parameter object
 #-----------------------------------------------------
 $rgName = "APP1" 
+$templateFile = "$projectPath\azureDeployApp.json"
+$parameterObject = @{ "appPrefix" = "a1"; "storageName" = "panstorage"; "gatewayPublicIPDns" = "pangateway"; }
 $rg = New-AzureRMResourceGroup -name $rgName -location $location
-New-AzureRMResourceGroupDeployment -ResourceGroupName $rgName -Name $deployName -TemplateFile .\azureDeployApp.json -TemplateParameterFile .\azureDeployApp.parameters.json 
+New-AzureRMResourceGroupDeployment -ResourceGroupName $rgName -Name $deployName -TemplateFile $templateFile -TemplateParameterObject $parameterObject
+
 
