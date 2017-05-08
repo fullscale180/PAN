@@ -425,6 +425,7 @@
 			"type": "Microsoft.Resources/deployments",
 			"apiVersion": "2015-01-01",
 			"dependsOn": [
+				"Microsoft.Resources/deployments/deployVnet"
 			],
 			"properties": {
 				"mode": "Incremental",
@@ -455,6 +456,7 @@
 			"type": "Microsoft.Resources/deployments",
 			"apiVersion": "2015-01-01",
 			"dependsOn": [
+				"Microsoft.Resources/deployments/deployVnet"
 			],
 			"properties": {
 				"mode": "Incremental",
