@@ -49,6 +49,23 @@
 			"defaultValue": "Standard_LRS"
 		},
 
+
+		// NSG Settings
+		"networkSecurityGroupName": {
+			"type": "string",
+			"defaultValue": "mgmt-nsg",
+			"metadata": {
+				"description": "Network Security Group Name"
+			}
+		},
+		"networkSecurityGroupInboundIP": {
+			"type": "string",
+			"metadata": {
+				"description": "Your source public IP address. Added to the inbound NSG on nic0 (MGMT), to restrict access to the deployment."
+			},
+			"defaultValue": "0.0.0.0/0"
+		},
+		
 		// Public Ip Settings
 		"gatewayPublicIPName": {
 			"type": "string",
@@ -278,37 +295,7 @@
 		"apBackendLoadBalancerName": "[concat(parameters('appPrefix'), '-', parameters('backendLoadBalancerName'))]",
 		"apGatewayPublicIpName"    : "[concat(parameters('appPrefix'), '-', parameters('gatewayPublicIPName'))]",
 		"apMgmtPublicIpName"       : "[concat(parameters('appPrefix'), '-', parameters('mgmtPublicIPName'))]",
-		"location"                 : "[resourceGroup().location]",
-
-		"subnets" : [
-			{
-				"name": "[parameters('mgmtSubnetName')]",
-				"properties": {
-					"addressPrefix": "[parameters('mgmtSubnetPrefix')]",
-					"networkSecurityGroup": {
-						"id": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('nsgName'))]"
-					}
-				}
-			},
-			{
-				"name": "[parameters('untrustSubnetName')]",
-				"properties": {
-					"addressPrefix": "[parameters('untrustSubnetPrefix')]"
-				}
-			},
-			{
-				"name": "[parameters('trustSubnetName')]",
-				"properties": {
-					"addressPrefix": "[parameters('trustSubnetPrefix')]"
-				}
-			},
-			{
-				"name": "[parameters('backendSubnetName')]",
-				"properties": {
-					"addressPrefix": "[parameters('backendSubnetPrefix')]"
-				}
-			},
-		]
+		"location"                 : "[resourceGroup().location]"
 	},
 
 	"resources": [
