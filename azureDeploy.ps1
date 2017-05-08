@@ -29,8 +29,8 @@ New-AzureRMResourceGroupDeployment -ResourceGroupName $rgName -Name $deployName 
 #-----------------------------------------------------
 $rgName = "APP1" 
 $templateFile = "$projectPath\azureDeployApp.json"
-$parameterObject = @{ "appPrefix" = "a1"; "storageName" = "panstorage"; "gatewayPublicIPDns" = "pangateway"; }
+$parameterFile = "$projectPath\azureDeployApp.parameters.json"
 $rg = New-AzureRMResourceGroup -name $rgName -location $location
-New-AzureRMResourceGroupDeployment -ResourceGroupName $rgName -Name $deployName -TemplateFile $templateFile -TemplateParameterObject $parameterObject
+New-AzureRMResourceGroupDeployment -ResourceGroupName $rgName -Name $deployName -TemplateFile $templateFile -TemplateParameterObject $parameterFile
 
 
